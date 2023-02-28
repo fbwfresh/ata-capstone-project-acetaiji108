@@ -1,0 +1,30 @@
+
+dependencies {
+  implementation 'com.google.dagger:dagger:2.+'
+  annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
+}
+
+/*
+ Copy dagger generated classes into annotation-generated-src
+ which BlackCaiman will pick up when running Brazil->Sync from Workspace
+ in IntelliJ. Adds as a generated sources root, so we can use the
+ Dagger classes in our IntelliJ project.
+*/
+task copyDaggerGeneratedClasses(type: Copy) {
+  includeEmptyDirs = false
+  from "${buildDir}/private/gradle/classes/java/main"
+  include '**/Dagger*Component*.java'
+  include '**/*Module_*Factory.java'
+  include '**/*Module.java'
+  include '**/*_Factory.java'
+  into "${project.projectDir}/annotation-generated-src"
+}
+build.dependsOn copyDaggerGeneratedClasses
+
+/*
+ Clean up the folder we make in copyDaggerGeneratedClasses
+*/
+task cleanDaggerGeneratedClasses(type: Delete) {
+  delete "${project.projectDir}/annotation-generated-src"
+}
+clean.dependsOn cleanDaggerGeneratedClasses

@@ -1,0 +1,64 @@
+plugins {
+  id 'idea'
+}
+
+dependencies {
+  implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
+  testImplementation files('../gradle/lib/testinfrastructure-1.0.1.jar')
+}
+
+sourceSets {
+  integrationTest {
+    java {
+      compileClasspath += sourceSets.main.output
+      runtimeClasspath += sourceSets.main.output
+    }
+  }
+}
+
+configurations {
+  integrationTestImplementation.extendsFrom testImplementation
+  integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task integrationTest(type: Test) {
+  description = 'Runs integration tests'
+  group = 'verification'
+
+  useJUnitPlatform()
+
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
+  classpath = sourceSets.integrationTest.runtimeClasspath
+  shouldRunAfter test
+}
+
+idea {
+  module {
+    testSourceDirs += project.sourceSets.integrationTest.java.srcDirs
+    testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
+  }
+}
+
+/*
+ Sets up TestNG targets for Deploying classroom activity
+ */
+def testNGTestTask(taskName, fileName) {
+  task(taskName, type: Test) {
+    description = "Running TestNG integration tests"
+    useTestNG() {
+      suites fileName
+    }
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    // We don't want to run this with 'brazil-build release'.
+    onlyIf { gradle.startParameter.taskNames == [taskName] }
+  }
+}
+
+testNGTestTask('testng-project', 'src/integrationTest/java/com/amazon/ata/deploying/classroom/testng-project.xml')
+testNGTestTask('testng-solution', 'src/integrationTest/java/com/amazon/ata/deploying/classroom/testng-solution.xml')
+
+/*
+ Only run spotbugs on source code
+ */
+spotbugsIntegrationTest.enabled = false

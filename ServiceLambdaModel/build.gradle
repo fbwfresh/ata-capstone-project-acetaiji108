@@ -1,0 +1,47 @@
+plugins {
+    id 'ata-curriculum.snippets-conventions'
+}
+
+checkstyle {
+    def suppressionFile = rootProject.file('Utilities/ATACheckstyle/configuration/checkstyle/unit3/suppressions.xml')
+    configProperties.put('checkstyle.suppression.filter', suppressionFile)
+}
+
+dependencies {
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.15'
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.5'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.49'
+
+    implementation 'com.amazonaws:aws-java-sdk-bom:1.12.47'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.6.0'
+    implementation 'com.google.dagger:dagger:2.30'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.30'
+
+
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testImplementation 'net.andreinc:mockneat:0.4.7'
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+build.dependsOn buildZip

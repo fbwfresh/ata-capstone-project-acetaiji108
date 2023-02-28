@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="examplePage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body class="background">
+    <header class="header" id="header">
+        <div class="site-title">
+            <a class="header_home" href="index.html">Example App</a>
+        </div>
+    </header>
+    <div class="card">
+        <h2>Create Example</h2>
+        <form class="card-content" id="create-form">
+            <p class="form-field">
+                <label>Name</label>
+                <input type="text" required class="validated-field" id="create-name-field">
+            </p>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <div class="card">
+        <h2>Get By ID</h2>
+        <form class="card-content" id="get-by-id-form">
+            <p class="form-field">
+                <label>ID</label>
+                <input type="text" required class="validated-field" id="id-field">
+            </p>
+            <button type="submit">Get</button>
+        </form>
+    </div>
+    <div class="card" id="result">
+        <h2>Result:</h2>
+        <p id="result-info"></p>
+    </div>
+
+</body>
+</html>

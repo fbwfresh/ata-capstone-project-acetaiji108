@@ -1,0 +1,28 @@
+{
+  "name": "capstone-static-website",
+  "description": "Website for the SEBD capstone project",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "main": "js/index.js",
+  "npm-pretty-much": {
+    "consumeLibCommonJs": true,
+    "runTest": "never"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "webpack -p --mode=production --devtool=source-map",
+    "start": "webpack-dev-server -d --mode=development --hot --inline"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "toastify-js": "^1.11.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.4.1",
+    "html-webpack-plugin": "4"
+  }
+}

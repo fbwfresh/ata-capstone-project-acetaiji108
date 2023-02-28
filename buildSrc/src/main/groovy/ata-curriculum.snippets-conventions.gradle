@@ -1,0 +1,123 @@
+plugins {
+  id 'ata-curriculum.java-conventions'
+  id 'maven-publish'
+  id 'com.github.spotbugs'
+  id 'checkstyle'
+  id 'jacoco'
+}
+
+def brazilOutputDir = "${buildDir}/private/"
+
+repositories {
+  maven {
+    url 'https://plugins.gradle.org/m2/'
+  }
+}
+
+task copyConfiguration(type: Copy) {
+  from 'configuration'
+  into brazilOutputDir
+}
+
+test {
+  dependsOn(publish, copyConfiguration)
+  testLogging {
+    showStandardStreams = true
+    exceptionFormat = 'full'
+    events "passed", "skipped", "failed"
+  }
+  finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+  dependsOn test // tests are required to run before generating the report
+  reports {
+    xml.enabled true
+    html.enabled true
+  }
+}
+
+/*
+ Custom task for running 'check' task. The presence of this task in the taskGraph is used to turn on failures.
+ */
+tasks.register("staticchecks") {
+  dependsOn check
+  group = 'Verification'
+  description = 'Runs check, ensuring failures for spotbugs, and checkstyle.'
+}
+
+/*
+ Applies Checkstyle plugin quality checks on project’s Java source files and
+ generates reports from these checks.
+*/
+checkstyle {
+  toolVersion '8.17'
+  configFile = rootProject.file('Utilities/ATACheckstyle/configuration/checkstyle/checkstyle.xml')
+  sourceSets = [sourceSets.main]
+}
+
+/*
+ If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
+ */
+checkstyleMain.doFirst {
+  ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
+
+/*
+ Only run spotbugs on source code
+ */
+spotbugsTest.enabled = false
+
+spotbugsMain.reports {
+  xml.enabled = false
+  html.enabled = true
+}
+
+/*
+ Don't use the cached results of the spotbugs task in case the build task was just run. With cached results you may get false positives.
+ */
+spotbugsMain.outputs.upToDateWhen { false }
+
+/*
+ Only run spotbugs if the main sourceset is not empty, else it will throw an error
+ * What went wrong:
+   Execution failed for task ':spotbugsMain'.
+   > No classes configured for SpotBugs analysis.
+ */
+spotbugsMain.onlyIf {
+  return null != sourceSets.main &&
+          0 < sourceSets.main.allJava.getFiles().size()
+}
+
+/*
+ If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
+ */
+spotbugsMain.doFirst {
+  ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
+
+/*
+ If we are running the task 'wflowtest', do not ignore failures, otherwise ignore.
+ */
+test.doFirst {
+  ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*wflowtest/ })
+}
+
+// For running subsets of unit tests that will fail the build if a test fails
+task wflowtest {
+  dependsOn test
+  group = 'Verification'
+}
+
+task runMain(type: JavaExec) {
+  group = "Execution"
+  description = "Run the main class with JavaExecTask"
+  classpath = sourceSets.main.runtimeClasspath
+  main = findProperty("mainClass")
+  // Connect standard in so that classes run from main() can provide user input (see
+  // com.amazon.ata.dynamodbannotationsload.classroom, for example)
+  standardInput = System.in
+}
+
+dependencies {
+  implementation project(':Utilities')
+}

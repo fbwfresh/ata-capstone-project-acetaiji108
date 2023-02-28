@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+defaultTasks 'clean', 'build'
+
+dependencies {
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.11.+'
+    implementation 'commons-lang:commons-lang:2.6'
+    implementation 'org.apache.commons:commons-lang3:3.+'
+    implementation 'commons-io:commons-io:2.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.+'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.+'
+    implementation 'com.google.guava:guava:20.+'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.+'
+}
+
+test {
+    useJUnitPlatform()
+}
