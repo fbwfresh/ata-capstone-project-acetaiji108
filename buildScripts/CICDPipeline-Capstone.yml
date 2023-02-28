@@ -1,0 +1,318 @@
+Parameters:
+  ProjectName:
+    Type: String
+  GithubUserName:
+    Type: String
+  GithubGroupName:
+    Type: String
+  Repo:
+    Type: String
+  Branch:
+    Type: String
+    Default: main
+  GithubToken:
+    Type: String
+Resources:
+  DeployCloudFormationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: ['sts:AssumeRole']
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudformation.amazonaws.com
+                - codepipeline.amazonaws.com
+      Path: /
+      Policies:
+        - PolicyName: deploy-cloudformation
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - '*'
+                Effect: Allow
+                Resource: '*'
+  BuildExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: ['sts:AssumeRole']
+            Effect: Allow
+            Principal:
+              Service: [codebuild.amazonaws.com]
+      Path: /
+      Policies:
+        - PolicyName: build-execution
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - "ssm:*"
+                  - "lambda:*"
+                  - "apigateway:*"
+                  - "cloudformation:*"
+                  - "codebuild:*"
+                  - "dynamodb:*"
+                  - "iam:*"
+                  - "s3:*"
+                  - "certificatemanager:*"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Effect: Allow
+                Resource: '*'
+  PipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: ['sts:AssumeRole']
+            Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+                - cloudformation.amazonaws.com
+      Path: /
+      Policies:
+        - PolicyName: CodePipelineAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - 's3:*'
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:DescribeStacks'
+                  - 'cloudformation:DeleteStack'
+                  - 'cloudformation:UpdateStack'
+                  - 'cloudformation:CreateChangeSet'
+                  - 'cloudformation:ExecuteChangeSet'
+                  - 'cloudformation:DeleteChangeSet'
+                  - 'cloudformation:DescribeChangeSet'
+                  - 'cloudformation:SetStackPolicy'
+                  - 'codebuild:*'
+                  - 'codecommit:*'
+                  - 'codestar-connections:UseConnection'
+                  - 'iam:PassRole'
+                  - 'sns:Publish'
+                Effect: Allow
+                Resource: '*'
+  ArtifactStoreBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join
+        - ''
+        - - !Ref ProjectName
+          - '-'
+          - !Ref GithubGroupName
+          - '-artifacts'
+      VersioningConfiguration:
+        Status: Enabled
+  BuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Modes:
+          - LOCAL_SOURCE_CACHE
+          - LOCAL_DOCKER_LAYER_CACHE
+        Type: LOCAL
+      Environment:
+        Type: LINUX_CONTAINER
+        Image: aws/codebuild/standard:4.0
+        ComputeType: BUILD_GENERAL1_SMALL
+        EnvironmentVariables:
+          - Name: BucketName
+            Type: PLAINTEXT
+            Value: !Join
+              - ''
+              - - !Ref ProjectName
+                - '-'
+                - !Ref GithubGroupName
+                - '-datastore'
+          - Name: ARTIFACT_BUCKET
+            Type: PLAINTEXT
+            Value: !Ref ArtifactStoreBucket
+      Name: !Join
+        - ''
+        - - !Ref ProjectName
+          - '-'
+          - !Ref GithubGroupName
+          - '-Build'
+      ServiceRole: !GetAtt BuildExecutionRole.Arn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: buildScripts/buildspec.yml
+  IntegrationTestProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Modes:
+          - LOCAL_SOURCE_CACHE
+          - LOCAL_DOCKER_LAYER_CACHE
+        Type: LOCAL
+      Environment:
+        Type: LINUX_CONTAINER
+        Image: aws/codebuild/standard:4.0
+        ComputeType: BUILD_GENERAL1_SMALL
+        EnvironmentVariables:
+          - Name: STACK_NAME
+            Type: PLAINTEXT
+            Value: !Join
+              - ''
+              - - !Ref ProjectName
+                - '-'
+                - !Ref GithubGroupName
+                - '-application'
+          - Name: SERVICE_STACK_NAME
+            Type: PLAINTEXT
+            Value: !Join
+              - ''
+              - - !Ref ProjectName
+                - '-'
+                - !Ref GithubGroupName
+                - '-service'
+      Name: !Join
+        - ''
+        - - !Ref ProjectName
+          - '-'
+          - !Ref GithubGroupName
+          - '-IntegrationTestBuild'
+      ServiceRole: !GetAtt BuildExecutionRole.Arn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: buildScripts/integrationspec.yml
+  AppPipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GithubToken
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: refs/heads/{Branch}
+      TargetPipeline: !Ref Pipeline
+      TargetAction: GitHubSource
+      Name: !Join
+        - ''
+        - - !Ref ProjectName
+          - '-'
+          - !Ref GithubGroupName
+          - '-Webhook'
+      TargetPipelineVersion: !GetAtt Pipeline.Version
+      RegisterWithThirdParty: true
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location: !Ref 'ArtifactStoreBucket'
+        Type: S3
+      Name: !Join
+        - ''
+        - - !Ref ProjectName
+          - '-'
+          - !Ref GithubGroupName
+          - '-Pipeline'
+      RoleArn: !GetAtt PipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: GitHubSource
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Repo: !Ref Repo
+                Branch: !Ref Branch
+                Owner: 'KenzieAcademy-SoftwareEngineering'
+                OAuthToken: !Ref GithubToken
+                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: BuildArtifact
+        - Name: BuildAndTest
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName: !Ref BuildProject
+              InputArtifacts:
+                - Name: BuildArtifact
+              OutputArtifacts:
+                - Name: CompiledArtifact
+        - Name: DeployLambda
+          Actions:
+            - Name: ExecuteChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+                ChangeSetName: pipeline-changeset
+                RoleArn: !GetAtt DeployCloudFormationRole.Arn
+                StackName: !Join
+                  - ''
+                  - - !Ref ProjectName
+                    - '-'
+                    - !Ref GithubGroupName
+                    - '-service'
+                TemplatePath: 'CompiledArtifact::lambda-service.yml'
+              InputArtifacts:
+                - Name: CompiledArtifact
+        - Name: DeployApplication
+          Actions:
+            - Name: ExecuteChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              Configuration:
+                ActionMode: REPLACE_ON_FAILURE
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+                ChangeSetName: pipeline-changeset
+                ParameterOverrides: !Sub
+                  - |
+                    {
+                      "ProjectName": "${FullProjectName}"
+                    }
+                  - FullProjectName: !Join
+                      - ''
+                      - - !Ref ProjectName
+                        - '-'
+                        - !Ref GithubGroupName
+                RoleArn: !GetAtt DeployCloudFormationRole.Arn
+                StackName: !Join
+                  - ''
+                  - - !Ref ProjectName
+                    - '-'
+                    - !Ref GithubGroupName
+                    - '-application'
+                TemplatePath: 'CompiledArtifact::application.yml'
+              InputArtifacts:
+                - Name: CompiledArtifact
+        - Name: IntegrationTest
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName: !Ref IntegrationTestProject
+              InputArtifacts:
+                - Name: CompiledArtifact

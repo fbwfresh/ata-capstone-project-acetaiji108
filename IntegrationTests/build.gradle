@@ -1,0 +1,66 @@
+plugins {
+    id 'ata-curriculum.snippets-conventions'
+    id 'ata-curriculum.integration-test-conventions'
+}
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+    implementation project(":Application")
+    testImplementation('org.springframework.boot:spring-boot-starter-web:2.6.3')
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.6.3')
+
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.16.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+    testImplementation 'net.andreinc:mockneat:0.4.7'
+
+    testImplementation group: 'io.micrometer', name: 'micrometer-core', version: '1.8.3'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
+    testImplementation("org.springframework.data:spring-data-commons:2.6.2")
+    testImplementation("org.springframework:spring-tx:5.3.16")
+
+
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+build.dependsOn buildZip
+
+def wflowToTestsMap = [
+        'run-integration-tests': [
+                'com.kenzie.appserver.controller.*',
+        ]
+]
+
+wflowToTestsMap.forEach { wflowName, testList ->
+    tasks.register(wflowName) {
+        dependsOn wflowtest
+        test {
+            reports.html.destination = file("$reports.html.destination/../${wflowName}")
+            reports.junitXml.destination = file("$reports.junitXml.destination/${wflowName}")
+            doFirst {
+                filter {
+                    testList.each { includeTestsMatching it }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "build phase"
+      - ./gradlew :ServiceLambda:build
+      - ./gradlew :Application:build
+  post_build:
+    commands:
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+      - echo "post-build phase"
+      - aws cloudformation package --template-file LambdaService-template.yml --s3-bucket $ARTIFACT_BUCKET --output-template-file lambda-service.yml
+      - aws s3 cp Application/build/libs/Application-0.0.1-SNAPSHOT.jar s3://$ARTIFACT_BUCKET/
+      - aws cloudformation package --template-file Application-template.yml --s3-bucket $ARTIFACT_BUCKET --output-template-file application.yml
+      - rm -rf Frontend/node_modules
+      - rm -rf Frontend/.gradle
+reports:
+  app-jacoco-report:
+    files:
+      - 'Application/build/reports/jacoco/test/jacocoTestReport.xml'
+    file-format: 'JACOCOXML'
+  app-junit-reports:
+    files:
+      - 'Application/build/test-results/test/*.xml'
+    file-format: "JUNITXML"
+  service-jacoco-report:
+    files:
+      - 'ServiceLambda/build/reports/jacoco/test/jacocoTestReport.xml'
+    file-format: 'JACOCOXML'
+  service-junit-reports:
+    files:
+      - 'ServiceLambda/build/test-results/test/*.xml'
+    file-format: "JUNITXML"
+artifacts:
+  files:
+    - '**/*'
