@@ -33,6 +33,8 @@ dependencies {
     testImplementation 'net.andreinc:mockneat:0.4.7'
 
     implementation group: 'redis.clients', name: 'jedis', version: '3.0.1'
+
+    implementation 'com.google.guava:guava:31.1-jre'
 }
 
 task buildZip(type: Zip) {
