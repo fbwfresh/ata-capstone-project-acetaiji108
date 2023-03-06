@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eo pipefail
+source ./setupEnvironment.sh
 
 echo "Deleting Application CAPSTONE_APPLICATION_STACK"
 aws cloudformation delete-stack --stack-name $CAPSTONE_APPLICATION_STACK
