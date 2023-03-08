@@ -18,11 +18,11 @@ public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
     // functionality
     private VideoGameRepository videoGameRepository;
-    private LambdaServiceClient lambdaServiceClient;
+    //private LambdaServiceClient lambdaServiceClient;
 
-    public VideoGameService(VideoGameRepository videoGameRepository, LambdaServiceClient lambdaServiceClient) {
+    public VideoGameService(VideoGameRepository videoGameRepository) {
         this.videoGameRepository = videoGameRepository;
-        this.lambdaServiceClient = lambdaServiceClient;
+     //   this.lambdaServiceClient = lambdaServiceClient;
     }
 
     public VideoGameResponse findByName(String name) {
