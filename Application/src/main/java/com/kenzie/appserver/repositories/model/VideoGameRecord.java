@@ -12,7 +12,7 @@ import java.util.List;
 public class VideoGameRecord {
     private String name;
     private String description;
-    private Consoles[] consoles;
+    private List<String> consoles;
 
     @DynamoDBHashKey(attributeName = "name")
     public String getName() {
@@ -24,10 +24,22 @@ public class VideoGameRecord {
     }
     @DynamoDBAttribute(attributeName = "Consoles")
     public List<String> getConsoles() {
-        List<String> listOfConsoles = new ArrayList<>();
-        for(Consoles console : consoles){
-            listOfConsoles.add(console.getName());
-        }
-        return listOfConsoles;
+//        List<String> listOfConsoles = new ArrayList<>();
+//        for(Consoles console : consoles){
+//            listOfConsoles.add(console.getName());
+//        }
+        return consoles;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setConsoles(List<String> consoles) {
+        this.consoles = consoles;
     }
 }
