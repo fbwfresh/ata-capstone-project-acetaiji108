@@ -3,17 +3,31 @@ package com.kenzie.appserver.service.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class VideoGame {
     private String name;
     private String description;
     private List<String> consoles  = new ArrayList<>();
+    private int upwardVote = 0;
+    private int downwardVote = 0;
+    private int votingPercentage = 0;
     public VideoGame(String name, String description, Consoles... listOfConsoles){
         this.name = name;
         this.description = description;
         for (Consoles console : listOfConsoles){
             this.consoles.add(console.getName());
         }
+    }
+
+    public int getUpwardVote() {
+        return upwardVote;
+    }
+
+    public int getDownwardVote() {
+        return downwardVote;
+    }
+
+    public int getVotingPercentage() {
+        return votingPercentage;
     }
 
     public String getName() {

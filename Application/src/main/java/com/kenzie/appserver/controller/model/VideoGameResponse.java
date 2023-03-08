@@ -13,6 +13,12 @@ public class VideoGameResponse {
     private List<String> consoles;
     @JsonProperty("Description")
     private String description;
+    @JsonProperty("UpwardVote")
+    private int upwardVote;
+    @JsonProperty("DownwardVote")
+    private int downwardVote;
+    @JsonProperty("TotalVote")
+    private int totalVote;
 
    public List<String> getConsoles(){return consoles;}
     public void setConsoles(List<String> consoles){this.consoles = consoles;}
@@ -30,5 +36,29 @@ public class VideoGameResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getUpwardVote() {
+        return upwardVote;
+    }
+
+    public void setUpwardVote(int upwardVote) {
+        this.upwardVote = upwardVote;
+    }
+
+    public int getDownwardVote() {
+        return downwardVote;
+    }
+
+    public void setDownwardVote(int downwardVote) {
+        this.downwardVote = downwardVote;
+    }
+
+    public int getTotalVote() {
+        return totalVote;
+    }
+
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
     }
 }

@@ -9,10 +9,8 @@ import com.kenzie.capstone.service.client.LambdaServiceClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
@@ -33,7 +31,6 @@ public class VideoGameService {
         return toVideoGameResponse(dataFromDynamo);
         //TODO Example getting data from the lambda
         //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
-
     }
 
     public VideoGameResponse addNewVideoGame(String name, String description, Consoles... consoles) {
@@ -43,6 +40,9 @@ public class VideoGameService {
         videoGameRecord.setName(videoGame.getName());
         videoGameRecord.setDescription(videoGame.getDescription());
         videoGameRecord.setConsoles(videoGame.getConsoles());
+        videoGameRecord.setDownwardVote(videoGame.getDownwardVote());
+        videoGameRecord.setUpwardVote(videoGame.getUpwardVote());
+        videoGameRecord.setVotingPercentage(videoGame.getVotingPercentage());
         videoGameRepository.save(videoGameRecord);
         //TODO the code below is how to save the videogame utilizing lambda functionality
         //Example sending data to the lambda
@@ -73,6 +73,7 @@ public class VideoGameService {
         videoGameRepository.save(gameExists.get());
         return toVideoGameResponse(gameExists.get());
     }
+
     public VideoGameResponse updateVideoGameDescription(String name,String description) {
         Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
         if (!gameExists.isPresent()){
@@ -90,6 +91,13 @@ public class VideoGameService {
       }
       return "Game Not Found. Try Checking The Spelling, And Try Again";
     }
+
+    public List<VideoGameResponse> top5RatingLeaderboard(){
+       List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
+       List<VideoGameResponse> top5 =  videoGameResponsesList.stream().sorted(Comparator.comparing(x -> x.getUpwardVote())).limit(5).collect(Collectors.toList());
+    return top5;
+    }
+
     private VideoGameResponse toVideoGameResponse(VideoGameRecord record){
         if (record == null){
             return null;
@@ -98,6 +106,9 @@ public class VideoGameService {
         videoGameResponse.setConsoles(record.getConsoles());
         videoGameResponse.setName(record.getName());
         videoGameResponse.setDescription(record.getDescription());
+        videoGameResponse.setDownwardVote(record.getDownwardVote());
+        videoGameResponse.setTotalVote(record.getVotingPercentage());
+        videoGameResponse.setUpwardVote(record.getUpwardVote());
         return videoGameResponse;
     }
 }
