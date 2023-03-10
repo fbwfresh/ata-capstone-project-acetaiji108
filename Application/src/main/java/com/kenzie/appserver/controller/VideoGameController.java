@@ -30,8 +30,12 @@ public class VideoGameController {
     }
 
     @GetMapping
-    public List<VideoGameResponse> getAllGames() {
-        return videoGameService.listAllVideoGames();
+    public ResponseEntity<List<VideoGameResponse>> getAllGames() {
+        List<VideoGameResponse> videoGameResponses = videoGameService.listAllVideoGames();
+        if (videoGameResponses == null || videoGameResponses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(videoGameResponses);
     }
 
     @PostMapping
