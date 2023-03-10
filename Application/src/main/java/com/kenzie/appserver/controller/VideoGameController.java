@@ -3,6 +3,8 @@ package com.kenzie.appserver.controller;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
 import com.kenzie.appserver.service.VideoGameService;
 import com.kenzie.appserver.service.model.Consoles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/games")
 public class VideoGameController {
-
     private final VideoGameService videoGameService;
 
     VideoGameController(VideoGameService videoGameService) {
