@@ -1,6 +1,9 @@
 package com.kenzie.appserver.controller;
 
+import com.kenzie.appserver.controller.model.CreateVideoGameRequest;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
+import com.kenzie.appserver.repositories.VideoGameRepository;
+import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.VideoGameService;
 import com.kenzie.appserver.service.model.Consoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/games")
@@ -39,11 +43,12 @@ public class VideoGameController {
     }
 
     @PostMapping
-    public ResponseEntity<VideoGameResponse> addGame(@RequestParam String name, @RequestParam String description, @RequestParam Consoles[] consoles) {
-        VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(name, description, consoles);
+    public ResponseEntity<VideoGameResponse> addGame(@RequestBody CreateVideoGameRequest request) {
+        VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(request.getVideoGameName(), request.getDescription(),request.getConsoles());
         return ResponseEntity.status(HttpStatus.CREATED).body(videoGameResponse);
     }
 
+    //TODO Create updateRequestClass and replace the pathVariable with the RequestBody
     @PutMapping("/{name}/consoles")
     public ResponseEntity<VideoGameResponse> updateConsoles(@PathVariable String name, @RequestParam Consoles[] consoles) {
         VideoGameResponse videoGameResponse = videoGameService.updateVideoGameConsoles(name, consoles);
@@ -52,7 +57,7 @@ public class VideoGameController {
         }
         return ResponseEntity.ok(videoGameResponse);
     }
-
+    //TODO Create updateRequestClass and replace the pathVariable with the RequestBody
     @PutMapping("/{name}/description")
     public ResponseEntity<VideoGameResponse> updateDescription(@PathVariable String name, @RequestParam String description) {
         VideoGameResponse videoGameResponse = videoGameService.updateVideoGameDescription(name, description);
@@ -72,7 +77,12 @@ public class VideoGameController {
     }
 
     @GetMapping("/leaderboard")
-    public List<VideoGameResponse> getTop5Leaderboard() {
-        return videoGameService.top5RatingLeaderboard();
+    public ResponseEntity<List<VideoGameResponse>> getTop5Leaderboard() {
+        List<VideoGameResponse> videoGameList = videoGameService.top5RatingLeaderboard();
+        if (videoGameList == null || videoGameList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(videoGameList);
     }
+
 }
