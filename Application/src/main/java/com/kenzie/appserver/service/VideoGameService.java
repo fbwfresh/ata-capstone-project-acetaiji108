@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
 public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
