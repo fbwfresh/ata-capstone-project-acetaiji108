@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+
 @Service
 public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
@@ -21,14 +23,18 @@ public class VideoGameService {
 
     public VideoGameService(VideoGameRepository videoGameRepository) {
         this.videoGameRepository = videoGameRepository;
+
      //   this.lambdaServiceClient = lambdaServiceClient;
+
     }
 
     public VideoGameResponse findByName(String name) {
         // Example getting data from the local repository
         VideoGameRecord dataFromDynamo = videoGameRepository
                 .findById(name).orElse(null);
+
               //  .map(game -> new VideoGame(game.getName(), game.getDescription(),))
+              
         return toVideoGameResponse(dataFromDynamo);
         //TODO Example getting data from the lambda
         //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
@@ -36,7 +42,9 @@ public class VideoGameService {
 
     public VideoGameResponse addNewVideoGame(String name, String description, Consoles... consoles) {
         // Example sending data to the local repository
+
         VideoGame videoGame = new VideoGame(name,description,consoles);
+
         VideoGameRecord videoGameRecord = new VideoGameRecord();
         videoGameRecord.setName(videoGame.getName());
         videoGameRecord.setDescription(videoGame.getDescription());
@@ -50,19 +58,24 @@ public class VideoGameService {
         // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
         //videoGameRecord.setId(dataFromLambda.getId());
         // videoGameRecord.setName(dataFromLambda.getData());
+
        // videoGameRepository.save(exampleRecord);
+
         //Example example = new Example(dataFromLambda.getId(), name);
         return toVideoGameResponse(videoGameRecord);
     }
+
 
     public List<VideoGameResponse> listAllVideoGames(){
         List<VideoGameResponse> videoGameResponses = new ArrayList<>();
         Iterator<VideoGameRecord> videoGameRecordList =  videoGameRepository.findAll().iterator();
         while(videoGameRecordList.hasNext()){
+
             videoGameResponses.add(toVideoGameResponse(videoGameRecordList.next()));
         }
         return videoGameResponses;
     }
+
 
     public VideoGameResponse updateVideoGameConsoles(String name,Consoles... consoles) {
         Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
@@ -75,6 +88,7 @@ public class VideoGameService {
         return toVideoGameResponse(gameExists.get());
     }
 
+
     public VideoGameResponse updateVideoGameDescription(String name,String description) {
         Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
         if (!gameExists.isPresent()){
@@ -85,19 +99,36 @@ public class VideoGameService {
         return toVideoGameResponse(gameExists.get());
     }
 
-    public String deleteVideoGame(String name){
-      if (videoGameRepository.findById(name).isPresent()) {
-          videoGameRepository.delete((videoGameRepository.findById(name).get()));
-          return "Deleted Game";
-      }
-      return "Game Not Found. Try Checking The Spelling, And Try Again";
+
+    public String deleteVideoGame(String name) {
+        if (videoGameRepository.findById(name).isPresent()) {
+            videoGameRepository.delete((videoGameRepository.findById(name).get()));
+            return "Deleted Game";
+        }
+        return "Game Not Found. Try Checking The Spelling, And Try Again";
     }
 
-    public List<VideoGameResponse> top5RatingLeaderboard(){
-       List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
-       List<VideoGameResponse> top5 =  videoGameResponsesList.stream().sorted(Comparator.comparing(x -> x.getUpwardVote())).limit(5).collect(Collectors.toList());
-    return top5;
+//    public List<VideoGameResponse> top5RatingLeaderboard(){
+//        List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
+//        List<VideoGameResponse> top5 =  videoGameResponsesList.stream()
+//                .sorted(Comparator.comparing(x -> x.getUpwardVote()))
+//                .limit(5)
+//                .collect(Collectors.toList());
+//        return top5;
+//    }
+
+    public List<VideoGameResponse> top5RatingLeaderboard() {
+        List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
+        List<VideoGameResponse> top5 =  videoGameResponsesList.stream()
+                .sorted(Comparator.comparing(VideoGameResponse::getUpwardVote).reversed())
+                .limit(5)
+                .collect(Collectors.toList());
+        return top5;
     }
+
+
+
+
 
     private VideoGameResponse toVideoGameResponse(VideoGameRecord record){
         if (record == null){
@@ -112,4 +143,7 @@ public class VideoGameService {
         videoGameResponse.setUpwardVote(record.getUpwardVote());
         return videoGameResponse;
     }
+
+
+
 }

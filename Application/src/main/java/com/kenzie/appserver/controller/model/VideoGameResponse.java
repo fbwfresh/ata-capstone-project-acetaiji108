@@ -20,7 +20,9 @@ public class VideoGameResponse {
     @JsonProperty("TotalVote")
     private int totalVote;
 
+
    public List<String> getConsoles(){return consoles;}
+
     public void setConsoles(List<String> consoles){this.consoles = consoles;}
     public String getDescription() {
         return description;

@@ -64,5 +64,14 @@ public class VideoGameRecord {
 
     public void setConsoles(List<String> consoles) {
         this.consoles = consoles;
+
+    }
+
+    public void setConsoles(Consoles[] consoles) {
+        this.consoles = new ArrayList<>();
+        for (Consoles console : consoles) {
+            this.consoles.add(console.toString());
+        }
+
     }
 }
