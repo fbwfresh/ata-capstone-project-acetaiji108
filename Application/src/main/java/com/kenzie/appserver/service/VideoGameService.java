@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+
 @Service
 public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
@@ -40,18 +41,18 @@ public class VideoGameService {
         //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
     }
 
-    public VideoGameResponse addNewVideoGame(String name, String description, Consoles... consoles) {
+    public VideoGameResponse addNewVideoGame(String name, String description, List<String> consoles) {
         // Example sending data to the local repository
 
-        VideoGame videoGame = new VideoGame(name,description,consoles);
+       // VideoGameRecord videoGame = new VideoGameRecord();
 
         VideoGameRecord videoGameRecord = new VideoGameRecord();
-        videoGameRecord.setName(videoGame.getName());
-        videoGameRecord.setDescription(videoGame.getDescription());
-        videoGameRecord.setConsoles(videoGame.getConsoles());
-        videoGameRecord.setDownwardVote(videoGame.getDownwardVote());
-        videoGameRecord.setUpwardVote(videoGame.getUpwardVote());
-        videoGameRecord.setVotingPercentage(videoGame.getVotingPercentage());
+        videoGameRecord.setName(name);
+        videoGameRecord.setDescription(description);
+        videoGameRecord.setConsoles(consoles);
+        videoGameRecord.setDownwardVote(0);
+        videoGameRecord.setUpwardVote(0);
+        videoGameRecord.setVotingPercentage(0);
         videoGameRepository.save(videoGameRecord);
         //TODO the code below is how to save the videogame utilizing lambda functionality
         //Example sending data to the lambda
@@ -124,6 +125,12 @@ public class VideoGameService {
                 .limit(5)
                 .collect(Collectors.toList());
         return top5;
+    }
+
+    public VideoGameResponse gamingSuggestion(){
+        Random random = new Random();
+       List<VideoGameResponse> top5 =  top5RatingLeaderboard();
+       return top5.get(random.nextInt(5));
     }
 
 

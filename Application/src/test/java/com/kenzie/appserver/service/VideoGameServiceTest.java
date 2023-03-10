@@ -8,20 +8,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class VideoGameServieTest {
+public class VideoGameServiceTest {
     private VideoGameRepository videoGameRepository;
     private VideoGame videoGame;
     //private ReferralServiceClient referralServiceClient;
@@ -91,10 +88,10 @@ public class VideoGameServieTest {
         // GIVEN
         String gameName = "testGame";
         String gameDescription = "testDescription";
-        Consoles[] gameConsoles = new Consoles[]{Consoles.PC, Consoles.PS2};
-
+        ///Consoles[] gameConsoles = new Consoles[]{Consoles.PC, Consoles.PS2};
+        VideoGame videoGame1 = new VideoGame(gameName,gameDescription,Consoles.PS2, Consoles.PC);
         // WHEN
-        VideoGameResponse videoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(gameName, gameDescription, gameConsoles);
+        VideoGameResponse videoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(gameName, gameDescription,videoGame1.getConsoles());
 
         // THEN
         assertNotNull(videoGameResponse, "The video game is returned");
@@ -183,12 +180,14 @@ public class VideoGameServieTest {
         // GIVEN
         String videoGameName = "videoGameName";
         String description = "description";
-        Consoles[] consoles = {Consoles.PS5, Consoles.WII};
+       // Consoles[] consoles = {Consoles.PS5, Consoles.WII};
+
+        VideoGame videoGame1 = new VideoGame(videoGameName,description,Consoles.PS5,Consoles.WII);
 
         VideoGameResponse expectedVideoGameResponse = new VideoGameResponse();
         expectedVideoGameResponse.setName(videoGameName);
         expectedVideoGameResponse.setDescription(description);
-        //expectedVideoGameResponse.setConsoles(consoles);
+        expectedVideoGameResponse.setConsoles(videoGame1.getConsoles());
         expectedVideoGameResponse.setUpwardVote(0);
         expectedVideoGameResponse.setDownwardVote(0);
         expectedVideoGameResponse.setTotalVote(0);
@@ -196,7 +195,9 @@ public class VideoGameServieTest {
         VideoGameRecord expectedVideoGameRecord = new VideoGameRecord();
         expectedVideoGameRecord.setName(videoGameName);
         expectedVideoGameRecord.setDescription(description);
-        expectedVideoGameRecord.setConsoles(consoles);
+        //expectedVideoGameRecord.setConsoles(consoles);
+        expectedVideoGameRecord.setConsoles(videoGame1.getConsoles());
+
         expectedVideoGameRecord.setUpwardVote(0);
         expectedVideoGameRecord.setDownwardVote(0);
         expectedVideoGameRecord.setVotingPercentage(0);
@@ -204,7 +205,7 @@ public class VideoGameServieTest {
         ArgumentCaptor<VideoGameRecord> videoGameRecordCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
 
         // WHEN
-        VideoGameResponse returnedVideoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(videoGameName, description, consoles);
+        VideoGameResponse returnedVideoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(videoGameName, description,videoGame1.getConsoles());
 
         // THEN
         assertNotNull(returnedVideoGameResponse);
@@ -217,7 +218,7 @@ public class VideoGameServieTest {
         assertNotNull(record.getName(), "The video game name is returned");
         assertEquals(record.getName(), videoGameName, "The video game name matches");
         assertEquals(record.getDescription(), description, "The video game description matches");
-        //Assertions.assertArrayEquals(record.getConsoles(), consoles, "The video game consoles match");
+        Assertions.assertEquals(record.getConsoles(), videoGame1.getConsoles(), "The video game consoles match");
         assertEquals(record.getUpwardVote(), expectedVideoGameRecord.getUpwardVote(), "The video game upward vote matches");
         assertEquals(record.getDownwardVote(), expectedVideoGameRecord.getDownwardVote(), "The video game downward vote matches");
         assertEquals(record.getVotingPercentage(), expectedVideoGameRecord.getVotingPercentage(), "The video game voting percentage matches");
@@ -308,10 +309,11 @@ public class VideoGameServieTest {
         // GIVEN
         String name = "gameName";
         String description = "gameDescription";
-        Consoles[] consoles = {Consoles.WIIU, Consoles.PS5};
+       // Consoles[] consoles = {Consoles.WIIU, Consoles.PS5};
+        VideoGame videoGame1 = new VideoGame(name,description,Consoles.PS5,Consoles.WIIU);
 
         // WHEN
-        VideoGameResponse response = new VideoGameService(videoGameRepository).addNewVideoGame(name, description, consoles);
+        VideoGameResponse response = new VideoGameService(videoGameRepository).addNewVideoGame(name, description, videoGame1.getConsoles());
 
         // THEN
         assertEquals(name, response.getName(), "Name should match");
