@@ -7,11 +7,12 @@ import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Service
 public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
     // functionality
