@@ -12,7 +12,10 @@ import java.util.List;
 public class VideoGameRecord {
     private String name;
     private String description;
-    private Consoles[] consoles;
+    private List<String> consoles;
+    private int upwardVote;
+    private int downwardVote;
+    private int votingPercentage;
 
     @DynamoDBHashKey(attributeName = "name")
     public String getName() {
@@ -24,10 +27,49 @@ public class VideoGameRecord {
     }
     @DynamoDBAttribute(attributeName = "Consoles")
     public List<String> getConsoles() {
-        List<String> listOfConsoles = new ArrayList<>();
-        for(Consoles console : consoles){
-            listOfConsoles.add(console.getName());
+        return consoles;
+    }
+    @DynamoDBAttribute(attributeName = "DownwardVote")
+    public int getDownwardVote(){
+        return downwardVote;
+    }
+    @DynamoDBAttribute(attributeName = "UpwardVote")
+    public int getUpwardVote(){
+        return upwardVote;
+    }
+    @DynamoDBAttribute(attributeName = "TotalVote")
+    public int getVotingPercentage(){
+        return votingPercentage;
+    }
+
+    public void setUpwardVote(int upwardVote) {
+        this.upwardVote = upwardVote;
+    }
+
+    public void setDownwardVote(int downwardVote) {
+        this.downwardVote = downwardVote;
+    }
+
+    public void setVotingPercentage(int votingPercentage) {
+        this.votingPercentage = votingPercentage;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setConsoles(List<String> consoles) {
+        this.consoles = consoles;
+    }
+
+    public void setConsoles(Consoles[] consoles) {
+        this.consoles = new ArrayList<>();
+        for (Consoles console : consoles) {
+            this.consoles.add(console.toString());
         }
-        return listOfConsoles;
     }
 }
