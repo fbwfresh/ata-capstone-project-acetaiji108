@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class VideoGameController {
         return ResponseEntity.ok(videoGameResponse);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<VideoGameResponse>> getAllGames() {
         List<VideoGameResponse> videoGameResponses = videoGameService.listAllVideoGames();
         if (videoGameResponses == null || videoGameResponses.isEmpty()) {
@@ -45,7 +46,8 @@ public class VideoGameController {
     @PostMapping
     public ResponseEntity<VideoGameResponse> addGame(@RequestBody CreateVideoGameRequest request) {
         VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(request.getVideoGameName(), request.getDescription(),request.getConsoles());
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoGameResponse);
+        return ResponseEntity.created(URI.create("/games/" + videoGameResponse.getName())).body(videoGameResponse);
+
     }
 
     //TODO Create updateRequestClass and replace the pathVariable with the RequestBody

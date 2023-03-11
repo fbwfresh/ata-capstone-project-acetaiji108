@@ -46,4 +46,7 @@ public class CreateVideoGameRequest {
            listOfConsoles.add(console.getName());
         }
     }
+    public void setConsoles(List<String> listOfConsoles){
+        this.listOfConsoles = listOfConsoles;
+    }
 }
