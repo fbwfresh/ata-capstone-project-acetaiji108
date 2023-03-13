@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.controller.model.CreateVideoGameRequest;
+import com.kenzie.appserver.controller.model.UpdateRequest;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
 import com.kenzie.appserver.repositories.VideoGameRepository;
 import com.kenzie.appserver.repositories.model.VideoGameRecord;
@@ -27,11 +28,12 @@ public class VideoGameController {
 
     @GetMapping("/{name}")
     public ResponseEntity<VideoGameResponse> getGameByName(@PathVariable String name) {
-        VideoGameResponse videoGameResponse = videoGameService.findByName(name);
-        if (videoGameResponse == null) {
+        VideoGameRecord videoGameRecord = videoGameService.findByName(name);
+        if (videoGameRecord == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(videoGameResponse);
+
+        return ResponseEntity.ok(toVideoGameResponse(videoGameRecord));
     }
 
     @GetMapping("/all")
@@ -50,19 +52,18 @@ public class VideoGameController {
 
     }
 
-    //TODO Create updateRequestClass and replace the pathVariable with the RequestBody
     @PutMapping("/{name}/consoles")
-    public ResponseEntity<VideoGameResponse> updateConsoles(@PathVariable String name, @RequestParam Consoles[] consoles) {
-        VideoGameResponse videoGameResponse = videoGameService.updateVideoGameConsoles(name, consoles);
+    public ResponseEntity<VideoGameResponse> updateConsoles(@PathVariable String name, @RequestBody UpdateRequest videoGameUpdateRequest) {
+        VideoGameResponse videoGameResponse = videoGameService.updateVideoGameConsoles(videoGameUpdateRequest);
         if (videoGameResponse == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(videoGameResponse);
     }
-    //TODO Create updateRequestClass and replace the pathVariable with the RequestBody
+
     @PutMapping("/{name}/description")
-    public ResponseEntity<VideoGameResponse> updateDescription(@PathVariable String name, @RequestParam String description) {
-        VideoGameResponse videoGameResponse = videoGameService.updateVideoGameDescription(name, description);
+    public ResponseEntity<VideoGameResponse> updateDescription(@RequestBody UpdateRequest videoGameUpdateRequest) {
+        VideoGameResponse videoGameResponse = videoGameService.updateVideoGameDescription(videoGameUpdateRequest);
         if (videoGameResponse == null) {
             return ResponseEntity.notFound().build();
         }
@@ -85,6 +86,19 @@ public class VideoGameController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(videoGameList);
+    }
+    private VideoGameResponse toVideoGameResponse(VideoGameRecord record){
+        if (record == null){
+            return null;
+        }
+        VideoGameResponse videoGameResponse = new VideoGameResponse();
+        videoGameResponse.setConsoles(record.getConsoles());
+        videoGameResponse.setName(record.getName());
+        videoGameResponse.setDescription(record.getDescription());
+        videoGameResponse.setDownwardVote(record.getDownwardVote());
+        videoGameResponse.setTotalVote(record.getVotingPercentage());
+        videoGameResponse.setUpwardVote(record.getUpwardVote());
+        return videoGameResponse;
     }
 
 }

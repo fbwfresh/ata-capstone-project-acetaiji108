@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Consoles;
 
 import javax.validation.constraints.NotEmpty;
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class CreateVideoGameRequest {
-
+public class UpdateRequest {
     @NotEmpty
     @JsonProperty("name")
     private String videoGameName;
@@ -27,7 +24,8 @@ public class CreateVideoGameRequest {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int votingPercentage;
-    public CreateVideoGameRequest(){}
+
+    public UpdateRequest(){}
 
     public String getVideoGameName() {
         return videoGameName;
@@ -48,10 +46,9 @@ public class CreateVideoGameRequest {
     public List<String> getConsoles(){
         return listOfConsoles;
     }
-
     public void setConsoles(Consoles... consoles){
         for(Consoles console : consoles){
-           listOfConsoles.add(console.getName());
+            listOfConsoles.add(console.getName());
         }
     }
     public void setConsoles(List<String> listOfConsoles){

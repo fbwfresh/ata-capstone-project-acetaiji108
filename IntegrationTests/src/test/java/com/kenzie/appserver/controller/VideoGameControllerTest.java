@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.controller.model.CreateVideoGameRequest;
+import com.kenzie.appserver.controller.model.UpdateRequest;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
 import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.VideoGameService;
@@ -56,15 +57,12 @@ public class VideoGameControllerTest {
             videoGameService.deleteVideoGame(name);
             mvc.perform(delete("/games/{name}", name));
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Exception thrown during cleanup");
         }
     }
 
     @Test
     public void getGameByName_Exists() throws Exception {
-//        String name = "NBA 2K23";
-//        String description = "Basketball game";
-//        VideoGame videoGame = new VideoGame(name,description,Consoles.PS5,Consoles.PC,Consoles.PS4);
 
         VideoGameResponse gameResponse = videoGameService.addNewVideoGame(videoGame.getName(), videoGame.getDescription(),videoGame.getConsoles());
         mvc.perform(get("/games/{name}", gameResponse.getName())
@@ -147,43 +145,41 @@ public class VideoGameControllerTest {
 //                .andExpect(status().is2xxSuccessful());
     }
 //
-//    @Test
-//    public void updateDoctor_PutSuccessful() throws Exception {
-//        // GIVEN
-//        String doctorId = UUID.randomUUID().toString();
-//        String name = mockNeat.strings().valStr();
-//        String dob = mockNeat.strings().valStr();
-//        boolean isActive = true;
-//
-//        Doctor doctor = new Doctor(name, dob, doctorId, isActive);
-//        DoctorRecord persistedDoctor = videoGameService.addNewDoctor(doctor);
-//        Doctor testDoctor = videoGameService.findById(doctorId);
-//        String newName = mockNeat.strings().valStr();
-//
-//
-//        DoctorUpdateRequest doctorUpdateRequest = new DoctorUpdateRequest();
-//        doctorUpdateRequest.setDoctorId(doctorId);
-//        doctorUpdateRequest.setName(newName);
-//        doctorUpdateRequest.setDob(dob);
-//        doctorUpdateRequest.setActive(isActive);
-//
-//
-//        mapper.registerModule(new JavaTimeModule());
-//
-//        // WHEN
-//        mvc.perform(put("/doctor")
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(doctorUpdateRequest)))
-//                // THEN
-//                .andExpect(jsonPath("doctorId")
-//                        .exists())
-//                .andExpect(jsonPath("name")
-//                        .value(is(newName)))
-//                .andExpect(jsonPath("dob")
-//                        .value(is(dob)))
-//                .andExpect(jsonPath("isActive")
-//                        .value(is(true)))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void updateConsoles_PutSuccessful() throws Exception {
+        // GIVEN
+        CreateVideoGameRequest createVideoGameRequest = new CreateVideoGameRequest();
+        createVideoGameRequest.setVideoGameName(videoGame.getName());
+        createVideoGameRequest.setDescription(videoGame.getDescription());
+        createVideoGameRequest.setConsoles(videoGame.getConsoles());
+
+        VideoGameResponse persistedGame = videoGameService.addNewVideoGame(createVideoGameRequest);
+        VideoGameRecord gameRecord = videoGameService.findByName(persistedGame.getName());
+       // String newName = mockNeat.strings().valStr();
+
+
+        UpdateRequest gameUpdateRequest = new UpdateRequest();
+        gameUpdateRequest.setVideoGameName(gameRecord.getName());
+        gameUpdateRequest.setDescription(gameRecord.getDescription());
+        gameUpdateRequest.setConsoles(Consoles.IOS,Consoles.AND);
+
+
+
+        mapper.registerModule(new JavaTimeModule());
+        videoGameService.updateVideoGameConsoles(gameUpdateRequest);
+
+        // WHEN
+        mvc.perform(put("/{name}/consoles",name)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(gameUpdateRequest)))
+                // THEN
+                .andExpect(jsonPath("name")
+                        .exists())
+                .andExpect(jsonPath("Description")
+                        .value(is(description)))
+                .andExpect(jsonPath("Consoles")
+                        .value(hasItems(Consoles.IOS,Consoles.AND)))
+                .andExpect(status().isOk());
+    }
 }

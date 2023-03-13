@@ -17,6 +17,11 @@ public class VideoGame {
             this.consoles.add(console.getName());
         }
     }
+    public VideoGame(String name, String description, List<String> consoles){
+        this.name = name;
+        this.description = description;
+        this.consoles = consoles;
+    }
 
     public int getUpwardVote() {
         return upwardVote;
