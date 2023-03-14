@@ -2,11 +2,14 @@ package com.kenzie.appserver.service.model;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 public class VideoGame {
     private String name;
     private String description;
-    private List<String> consoles  = new ArrayList<>();
+    private Set<String> consoles  = new HashSet<>();
     private int upwardVote = 0;
     private int downwardVote = 0;
     private int votingPercentage = 0;
@@ -17,7 +20,7 @@ public class VideoGame {
             this.consoles.add(console.getName());
         }
     }
-    public VideoGame(String name, String description, List<String> consoles){
+    public VideoGame(String name, String description, Set<String> consoles){
         this.name = name;
         this.description = description;
         this.consoles = consoles;
@@ -51,11 +54,11 @@ public class VideoGame {
         this.description = description;
     }
 
-    public List<String> getConsoles() {
+    public Set<String> getConsoles() {
         return consoles;
     }
 
-    public void setConsoles(List<String> consoles) {
+    public void setConsoles(Set<String> consoles) {
         this.consoles = consoles;
     }
 //    public static void main(String[] args) {

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Consoles;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UpdateRequest {
     @NotEmpty
@@ -13,10 +13,10 @@ public class UpdateRequest {
     private String videoGameName;
     @NotEmpty
     @JsonProperty("Description")
-    private String Description;
+    private String description;
     @NotEmpty
     @JsonProperty("Consoles")
-    private List<String> listOfConsoles = new ArrayList<>();
+    private Set<String> consoles = new HashSet<>();
     //TODO map the JSON property and set up getters and setters
     @JsonProperty("UpwardVote")
     private int upwardVote;
@@ -36,23 +36,19 @@ public class UpdateRequest {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String Description) {
-        this.Description = Description;
+        this.description = Description;
     }
 
-    public List<String> getConsoles(){
-        return listOfConsoles;
+    public Set<String> getConsoles(){
+        return consoles;
     }
-    public void setConsoles(Consoles... consoles){
-        for(Consoles console : consoles){
-            listOfConsoles.add(console.getName());
-        }
-    }
-    public void setConsoles(List<String> listOfConsoles){
-        this.listOfConsoles = listOfConsoles;
+
+    public void setConsoles(Set<String> listOfConsoles){
+        this.consoles = listOfConsoles;
     }
 
     public int getUpwardVote() {

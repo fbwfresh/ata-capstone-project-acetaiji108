@@ -6,13 +6,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.kenzie.appserver.service.model.Consoles;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @DynamoDBTable(tableName = "VideoGame")
 public class VideoGameRecord {
     private String name;
     private String description;
-    private List<String> consoles;
+    private Set<String> consoles;
     private int upwardVote;
     private int downwardVote;
     private int votingPercentage;
@@ -26,7 +28,7 @@ public class VideoGameRecord {
         return description;
     }
     @DynamoDBAttribute(attributeName = "Consoles")
-    public List<String> getConsoles() {
+    public Set<String> getConsoles() {
         return consoles;
     }
     @DynamoDBAttribute(attributeName = "DownwardVote")
@@ -62,13 +64,13 @@ public class VideoGameRecord {
         this.description = description;
     }
 
-    public void setConsoles(List<String> consoles) {
+    public void setConsoles(Set<String> consoles) {
         this.consoles = consoles;
 
     }
 
     public void setConsoles(Consoles[] consoles) {
-        this.consoles = new ArrayList<>();
+        this.consoles = new HashSet<>();
         for (Consoles console : consoles) {
             this.consoles.add(console.getName());
         }

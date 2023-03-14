@@ -45,7 +45,7 @@ public class VideoGameService {
         //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
     }
 
-    public VideoGameResponse addNewVideoGame(String name, String description, List<String> consoles) {
+    public VideoGameResponse addNewVideoGame(String name, String description, Set<String> consoles) {
         // Example sending data to the local repository
 
        // VideoGameRecord videoGame = new VideoGameRecord();
@@ -73,7 +73,7 @@ public class VideoGameService {
         // Example sending data to the local repository
 
         // VideoGameRecord videoGame = new VideoGameRecord();
-
+        System.out.println("adding new game");
         VideoGameRecord videoGameRecord = new VideoGameRecord();
         videoGameRecord.setName(game.getVideoGameName());
         videoGameRecord.setDescription(game.getDescription());
@@ -81,7 +81,9 @@ public class VideoGameService {
         videoGameRecord.setDownwardVote(game.getDownwardVote());
         videoGameRecord.setUpwardVote(game.getUpwardVote());
         videoGameRecord.setVotingPercentage(game.getVotingPercentage());
+        System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
+        System.out.println("after save");
         //TODO the code below is how to save the videogame utilizing lambda functionality
         //Example sending data to the lambda
         // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
@@ -116,17 +118,17 @@ public class VideoGameService {
         videoGameRepository.save(gameExists.get());
         return toVideoGameResponse(gameExists.get());
     }
-    public VideoGameResponse updateVideoGameConsoles(String name,List<String> consoles) {
-        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
-        if (!gameExists.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-        }
-        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),consoles);
-        gameExists.get().setConsoles(game.getConsoles());
-        videoGameRepository.save(gameExists.get());
-        return toVideoGameResponse(gameExists.get());
-    }
-    public VideoGameResponse updateVideoGameConsoles(UpdateRequest videoGameUpdateRequest) {
+//    public VideoGameResponse updateVideoGameConsoles(String name,List<String> consoles) {
+//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
+//        if (!gameExists.isPresent()){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
+//        }
+//        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),consoles);
+//        gameExists.get().setConsoles(game.getConsoles());
+//        videoGameRepository.save(gameExists.get());
+//        return toVideoGameResponse(gameExists.get());
+//    }
+    public VideoGameResponse updateVideoGame(UpdateRequest videoGameUpdateRequest) {
         Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
         if (gameRecord.isPresent()) {
             VideoGameRecord videoGameRecord = gameRecord.get();

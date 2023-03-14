@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @IntegrationTest
 public class VideoGameControllerTest {
+
     @Autowired
     private MockMvc mvc;
 
@@ -63,8 +66,9 @@ public class VideoGameControllerTest {
 
     @Test
     public void getGameByName_Exists() throws Exception {
-
+        //GIVEN
         VideoGameResponse gameResponse = videoGameService.addNewVideoGame(videoGame.getName(), videoGame.getDescription(),videoGame.getConsoles());
+        //WHEN
         mvc.perform(get("/games/{name}", gameResponse.getName())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name")
@@ -83,9 +87,9 @@ public class VideoGameControllerTest {
         createVideoGameRequest.setVideoGameName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
-        videoGameService.addNewVideoGame(videoGame.getName(), videoGame.getDescription(), videoGame.getConsoles());
+        videoGameService.addNewVideoGame(createVideoGameRequest);
 
-        MvcResult result = mvc.perform(post("/games/")
+        MvcResult result = mvc.perform(post("/games")
                         .content(mapper.writeValueAsString(createVideoGameRequest))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -100,6 +104,8 @@ public class VideoGameControllerTest {
         assertThat(response.getDescription()).isEqualTo(createVideoGameRequest.getDescription());
         assertThat(response.getConsoles()).isNotEmpty().as("Consoles are populated");
         assertThat(response.getConsoles()).isEqualTo(createVideoGameRequest.getConsoles());
+//
+//
 //        VideoGameResponse response = mvc.perform(post("/games/")
 //                        .content(mapper.writeValueAsString(createVideoGameRequest))
 //                        .accept(MediaType.APPLICATION_JSON)
@@ -144,7 +150,6 @@ public class VideoGameControllerTest {
 //                        .exists())
 //                .andExpect(status().is2xxSuccessful());
     }
-//
     @Test
     public void updateConsoles_PutSuccessful() throws Exception {
         // GIVEN
@@ -156,30 +161,39 @@ public class VideoGameControllerTest {
         VideoGameResponse persistedGame = videoGameService.addNewVideoGame(createVideoGameRequest);
         VideoGameRecord gameRecord = videoGameService.findByName(persistedGame.getName());
        // String newName = mockNeat.strings().valStr();
+       Set<String> consolesList = new HashSet<>();
+       consolesList.add(Consoles.IOS.getName());
+       consolesList.add(Consoles.AND.getName());
+
 
 
         UpdateRequest gameUpdateRequest = new UpdateRequest();
         gameUpdateRequest.setVideoGameName(gameRecord.getName());
         gameUpdateRequest.setDescription(gameRecord.getDescription());
-        gameUpdateRequest.setConsoles(Consoles.IOS,Consoles.AND);
+        gameUpdateRequest.setConsoles(consolesList);
+
+//            return mvc.perform(put("/api/v1/reviewMyTeacher/teacher/{teacherName}", updateRequest.getTeacherName())
+//                    .accept(MediaType.APPLICATION_JSON)
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .content(mapper.writeValueAsString(updateRequest)));
 
 
 
         mapper.registerModule(new JavaTimeModule());
-        videoGameService.updateVideoGameConsoles(gameUpdateRequest);
+        videoGameService.updateVideoGame(gameUpdateRequest);
 
         // WHEN
-        mvc.perform(put("/{name}/consoles",name)
+        mvc.perform(put("/games/{name}",gameUpdateRequest.getVideoGameName())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(gameUpdateRequest)))
-                // THEN
+                .andExpect(status().isOk())
+                        // THEN
                 .andExpect(jsonPath("name")
                         .exists())
                 .andExpect(jsonPath("Description")
                         .value(is(description)))
                 .andExpect(jsonPath("Consoles")
-                        .value(hasItems(Consoles.IOS,Consoles.AND)))
-                .andExpect(status().isOk());
+                        .value(hasItems(Consoles.IOS.getName(),Consoles.AND.getName())));
     }
 }
