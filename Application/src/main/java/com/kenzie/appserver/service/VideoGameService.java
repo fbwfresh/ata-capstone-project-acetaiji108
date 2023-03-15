@@ -73,7 +73,7 @@ public class VideoGameService {
         // Example sending data to the local repository
 
         // VideoGameRecord videoGame = new VideoGameRecord();
-        System.out.println("adding new game");
+       // System.out.println("adding new game");
         VideoGameRecord videoGameRecord = new VideoGameRecord();
         videoGameRecord.setName(game.getVideoGameName());
         videoGameRecord.setDescription(game.getDescription());
@@ -81,9 +81,9 @@ public class VideoGameService {
         videoGameRecord.setDownwardVote(game.getDownwardVote());
         videoGameRecord.setUpwardVote(game.getUpwardVote());
         videoGameRecord.setVotingPercentage(game.getVotingPercentage());
-        System.out.println("before save");
+       // System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
-        System.out.println("after save");
+      //  System.out.println("after save");
         //TODO the code below is how to save the videogame utilizing lambda functionality
         //Example sending data to the lambda
         // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
@@ -181,15 +181,6 @@ public class VideoGameService {
         return "Game Not Found. Try Checking The Spelling, And Try Again";
     }
 
-//    public List<VideoGameResponse> top5RatingLeaderboard(){
-//        List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
-//        List<VideoGameResponse> top5 =  videoGameResponsesList.stream()
-//                .sorted(Comparator.comparing(x -> x.getUpwardVote()))
-//                .limit(5)
-//                .collect(Collectors.toList());
-//        return top5;
-//    }
-
     public List<VideoGameResponse> top5RatingLeaderboard() {
         List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
         List<VideoGameResponse> top5 =  videoGameResponsesList.stream()
@@ -205,10 +196,6 @@ public class VideoGameService {
        return top5.get(random.nextInt(5));
     }
 
-
-
-
-
     private VideoGameResponse toVideoGameResponse(VideoGameRecord record){
         if (record == null){
             return null;
@@ -222,7 +209,5 @@ public class VideoGameService {
         videoGameResponse.setUpwardVote(record.getUpwardVote());
         return videoGameResponse;
     }
-
-
 
 }

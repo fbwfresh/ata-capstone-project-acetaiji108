@@ -31,7 +31,12 @@ public class CreateVideoGameRequest {
     }
 
     public void setVideoGameName(String videoGameName) {
-        this.videoGameName = videoGameName;
+        //This is how I am able to encode the uri
+//        if(videoGameName.contains(" ")){
+//         this.videoGameName =  videoGameName.replaceAll(" ","-");
+      //  }else {
+            this.videoGameName = videoGameName;
+       // }
     }
 
     public String getDescription() {

@@ -15,10 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +31,12 @@ public class VideoGameController {
 
     @GetMapping("/{name}")
     public ResponseEntity<VideoGameResponse> getGameByName(@PathVariable String name) {
-        VideoGameRecord videoGameRecord = videoGameService.findByName(name);
-        if (videoGameRecord == null) {
-            return ResponseEntity.notFound().build();
-        }
 
-        return ResponseEntity.ok(toVideoGameResponse(videoGameRecord));
+            VideoGameRecord videoGameRecord = videoGameService.findByName(name);
+            if (videoGameRecord == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(toVideoGameResponse(videoGameRecord));
     }
 
     @GetMapping("/all")
@@ -52,40 +50,15 @@ public class VideoGameController {
 
     @PostMapping
     public ResponseEntity<VideoGameResponse> addGame(@RequestBody CreateVideoGameRequest request) {
-        System.out.println("starting controller");
-        VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(request);
-        System.out.println("executed service method");
-//TODO edit this to include a converter class that I should make to replace a space character with a % or & or _ or whatever then another method
-        //TODO to decode the % or & or _ into a space. Also should edit this return to create a new URI with that special character
-        //TODO also need to update the get method to be able to retrieve it using that special character
-           return ResponseEntity.ok(videoGameResponse);
-
-
- //       return ResponseEntity.created(URI.create("/games/" + videoGameResponse.getName())).body(videoGameResponse);
-
+        try {
+            VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(request);
+          String  encodedUri = URLEncoder.encode(videoGameResponse.getName(),"UTF-8");
+            return ResponseEntity.created(URI.create("/games/" + encodedUri)).body(videoGameResponse);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
-//    @PutMapping("/teacher/{teacherName}")
-//    public ResponseEntity<ReviewResponse> updateReview(@PathVariable String teacherName, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
-//        try {
-//            Review review = new Review();
-//            review.setTeacherName(reviewUpdateRequest.getTeacherName());
-//            review.setDatePosted(reviewUpdateRequest.getDatePosted());
-//            review.setCourseTitle(reviewUpdateRequest.getCourseTitle());
-//            review.setComment(reviewUpdateRequest.getComment());
-//            review.setUsername(reviewUpdateRequest.getUsername());
-//            review.setPresentation(reviewUpdateRequest.getPresentation());
-//            review.setOutgoing(reviewUpdateRequest.getOutgoing());
-//            review.setSubjectKnowledge(reviewUpdateRequest.getSubjectKnowledge());
-//            review.setListening(reviewUpdateRequest.getListening());
-//            review.setCommunication(reviewUpdateRequest.getCommunication());
-//            review.setAvailability(reviewUpdateRequest.getAvailability());
-//            Review updatedReview = reviewService.updateReview(review);
-//            ReviewResponse reviewResponse = convertToResponse(updatedReview);
-//            return ResponseEntity.accepted().body(reviewResponse);
-//        } catch (ReviewNotFoundException e){
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+
 
     @PutMapping("/{name}")
     public ResponseEntity<VideoGameResponse> updateVideoGame(@RequestBody UpdateRequest videoGameUpdateRequest) {
@@ -96,14 +69,6 @@ public class VideoGameController {
         return ResponseEntity.ok(videoGameResponse);
     }
 
-//    @PutMapping("/{name}")
-//    public ResponseEntity<VideoGameResponse> updateDescription(@RequestBody UpdateRequest videoGameUpdateRequest) {
-//        VideoGameResponse videoGameResponse = videoGameService.updateVideoGameDescription(videoGameUpdateRequest);
-//        if (videoGameResponse == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(videoGameResponse);
-//    }
 
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteGame(@PathVariable String name) {
@@ -135,5 +100,18 @@ public class VideoGameController {
         videoGameResponse.setUpwardVote(record.getUpwardVote());
         return videoGameResponse;
     }
+
+//    private String encodeUri(String name){
+//        if(name.contains(" ")){
+//            name.replaceAll(" ","-");
+//        }
+//        return name;
+//    }
+//    private String decodeUri(String name){
+//        if(name.contains("-")){
+//            name.replaceAll("-"," ");
+//        }
+//        return name;
+//    }
 
 }

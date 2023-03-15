@@ -12,16 +12,19 @@ import com.kenzie.appserver.service.VideoGameService;
 import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
 import net.andreinc.mockneat.MockNeat;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,23 +43,25 @@ public class VideoGameControllerTest {
     private MockMvc mvc;
 
     @Autowired
-    VideoGameService videoGameService;
+    private VideoGameService videoGameService;
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private String name = "NBA 2K23";
     private String description = "Basketball game";
     private VideoGame videoGame = new VideoGame(name,description,Consoles.PS5,Consoles.PC,Consoles.PS4);
+    private VideoGameController controller = new VideoGameController(videoGameService);
+
 
     @BeforeAll
     static void setup(){
         mapper.registerModule(new Jdk8Module());
-
     }
 
     @AfterEach
     void cleanup() {
         //cleanup the tables so that we have clean data for each test
         try {
+            //controller.deleteGame(name);
             videoGameService.deleteVideoGame(name);
             mvc.perform(delete("/games/{name}", name));
         }catch (Exception e){
@@ -67,17 +72,37 @@ public class VideoGameControllerTest {
     @Test
     public void getGameByName_Exists() throws Exception {
         //GIVEN
-        VideoGameResponse gameResponse = videoGameService.addNewVideoGame(videoGame.getName(), videoGame.getDescription(),videoGame.getConsoles());
-        //WHEN
-        mvc.perform(get("/games/{name}", gameResponse.getName())
+        CreateVideoGameRequest createVideoGameRequest = new CreateVideoGameRequest();
+        createVideoGameRequest.setVideoGameName(videoGame.getName());
+        createVideoGameRequest.setDescription(videoGame.getDescription());
+        createVideoGameRequest.setConsoles(videoGame.getConsoles());
+        videoGameService.addNewVideoGame(createVideoGameRequest);
+
+        mvc.perform(get("/games/{name}",createVideoGameRequest.getVideoGameName())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name")
-                        .value(is(name)))
+                        .value(is(createVideoGameRequest.getVideoGameName())))
                 .andExpect(jsonPath("Description")
                         .value(is(description)))
                 .andExpect(jsonPath("Consoles")
                         .value(hasItems(Consoles.PS5.getName(),Consoles.PC.getName(),Consoles.PS4.getName())))
                 .andExpect(status().isOk());
+//        VideoGameController controller = new VideoGameController(videoGameService);
+//        ResponseEntity<VideoGameResponse> postResponse = controller.addGame(createVideoGameRequest);
+//        ResponseEntity<VideoGameResponse> getResponse = controller.getGameByName(createVideoGameRequest.getVideoGameName());
+//        Assert.assertEquals(postResponse.getBody().getName(),getResponse.getBody().getName());
+//        Assert.assertEquals(postResponse.getBody().getDescription(),getResponse.getBody().getDescription());
+//        Assert.assertEquals(postResponse.getBody().getConsoles(),getResponse.getBody().getConsoles());
+//        Assert.assertEquals(getResponse.getStatusCodeValue(),200);
+//         mvc.perform(post("/games")
+//                        .content(mapper.writeValueAsString(createVideoGameRequest))
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().is2xxSuccessful())
+//                .andReturn();
+        //WHEN
+//
+
     }
 
     @Test
@@ -104,7 +129,7 @@ public class VideoGameControllerTest {
         assertThat(response.getDescription()).isEqualTo(createVideoGameRequest.getDescription());
         assertThat(response.getConsoles()).isNotEmpty().as("Consoles are populated");
         assertThat(response.getConsoles()).isEqualTo(createVideoGameRequest.getConsoles());
-//
+
 //
 //        VideoGameResponse response = mvc.perform(post("/games/")
 //                        .content(mapper.writeValueAsString(createVideoGameRequest))
