@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VideoGameResponse {
     @JsonProperty("name")
     private String name;
     @JsonProperty("Consoles")
-    private List<String> consoles;
+    private Set<String> consoles;
     @JsonProperty("Description")
     private String description;
     @JsonProperty("UpwardVote")
@@ -21,9 +22,9 @@ public class VideoGameResponse {
     private int totalVote;
 
 
-   public List<String> getConsoles(){return consoles;}
+   public Set<String> getConsoles(){return consoles;}
 
-    public void setConsoles(List<String> consoles){this.consoles = consoles;}
+    public void setConsoles(Set<String> consoles){this.consoles = consoles;}
     public String getDescription() {
         return description;
     }

@@ -75,7 +75,7 @@ public class VideoGameServiceTest {
 
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.of(record));
         // WHEN
-        VideoGameResponse videoGameResponse = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord videoGameResponse = new VideoGameService(videoGameRepository).findByName(gameName);
 
         // THEN
         assertNotNull(videoGameResponse, "The video game is returned");
@@ -144,7 +144,7 @@ public class VideoGameServiceTest {
         String videoGameName = "invalid";
         // WHEN
         when(videoGameRepository.findById(videoGameName)).thenReturn(Optional.empty());
-        VideoGameResponse videoGame = new VideoGameService(videoGameRepository).findByName(videoGameName);
+        VideoGameRecord videoGame = new VideoGameService(videoGameRepository).findByName(videoGameName);
         // THEN
         Assertions.assertNull(videoGame, "The video game is null when not found");
     }
@@ -156,7 +156,7 @@ public class VideoGameServiceTest {
 
         // WHEN
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameResponse game = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord game = new VideoGameService(videoGameRepository).findByName(gameName);
 
         // THEN
         Assertions.assertNull(game, "The game is null when not found");
@@ -169,7 +169,7 @@ public class VideoGameServiceTest {
 
         // WHEN
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameResponse game = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord game = new VideoGameService(videoGameRepository).findByName(gameName);
 
         // THEN
         Assertions.assertNull(game, "The game is null when not found");

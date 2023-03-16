@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Consoles;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-public class CreateVideoGameRequest {
-
+public class UpdateRequest {
     @NotEmpty
     @JsonProperty("name")
     private String videoGameName;
@@ -24,27 +24,23 @@ public class CreateVideoGameRequest {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int votingPercentage;
-    public CreateVideoGameRequest(){}
+
+    public UpdateRequest(){}
 
     public String getVideoGameName() {
         return videoGameName;
     }
 
     public void setVideoGameName(String videoGameName) {
-        //This is how I am able to encode the uri
-//        if(videoGameName.contains(" ")){
-//         this.videoGameName =  videoGameName.replaceAll(" ","-");
-      //  }else {
-            this.videoGameName = videoGameName;
-       // }
+        this.videoGameName = videoGameName;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String Description) {
+        this.description = Description;
     }
 
     public Set<String> getConsoles(){
