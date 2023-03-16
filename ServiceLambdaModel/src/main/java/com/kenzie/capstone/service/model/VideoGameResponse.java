@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Game {
+public class VideoGameResponse {
     @JsonProperty("name")
     private String name;
     @JsonProperty("Consoles")
