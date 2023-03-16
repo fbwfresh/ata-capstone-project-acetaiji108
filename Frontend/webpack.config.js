@@ -9,6 +9,7 @@ module.exports = {
   },
   entry: {
     examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+    commentPage: path.resolve(__dirname, 'src', 'pages', 'commentPage.js')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -39,6 +40,11 @@ module.exports = {
       filename: 'index.html',
       inject: false
     }),
+    new HtmlWebpackPlugin({
+             template: './src/comments.html',
+             filename: 'comments.html',
+             inject: false
+          }),
     new CopyPlugin({
       patterns: [
         {
