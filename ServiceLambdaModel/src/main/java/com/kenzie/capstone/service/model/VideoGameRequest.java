@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @DynamoDBTable(tableName = "VideoGame")
-public class VideoGameResponse {
+public class VideoGameRequest {
     private String name;
     private String description;
     private Set<String> consoles;
