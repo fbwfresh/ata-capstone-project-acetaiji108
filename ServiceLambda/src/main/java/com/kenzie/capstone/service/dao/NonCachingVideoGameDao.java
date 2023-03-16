@@ -11,7 +11,6 @@ import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
 import com.kenzie.capstone.service.model.VideoGameRecord;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,11 +31,7 @@ public class NonCachingVideoGameDao implements VideoGameDao {
                             new ExpectedAttributeValue().withExists(false)
                     )));
         } catch (ConditionalCheckFailedException e) {
-            try {
-                throw new Exception("Game has already been added");
-            } catch (Exception ex) {
-                throw new RuntimeException("Game has already been added");
-            }
+            throw new RuntimeException("Game has already been added");
         }
         return record;
     }
