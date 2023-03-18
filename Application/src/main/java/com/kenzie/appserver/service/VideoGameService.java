@@ -7,16 +7,13 @@ import com.kenzie.appserver.repositories.VideoGameRepository;
 import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
-import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.client.VideoGameServiceClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.UUID.randomUUID;
 
 
 @Service
@@ -24,12 +21,12 @@ public class VideoGameService {
     //TODO add the lambda functionality to the service methods whenever we get that part figured out and also add a leaderboard
     // functionality
     private VideoGameRepository videoGameRepository;
-    //private LambdaServiceClient lambdaServiceClient;
+    private VideoGameServiceClient videoGameServiceClient;
 
-    public VideoGameService(VideoGameRepository videoGameRepository) {
+    public VideoGameService(VideoGameRepository videoGameRepository, VideoGameServiceClient videoGameServiceClient) {
         this.videoGameRepository = videoGameRepository;
 
-     //   this.lambdaServiceClient = lambdaServiceClient;
+        this.videoGameServiceClient = videoGameServiceClient;
 
     }
 

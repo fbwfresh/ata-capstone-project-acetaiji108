@@ -109,13 +109,13 @@ Resources:
           }
         ]
       }
-  GetExampleDataFunction:
+  AddVideoGameFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.GetExampleData
+      Handler: com.kenzie.capstone.service.lambda.AddVideoGame
       Runtime: java11
-      Description: Get Example Data for given id
+      Description: Adds a videogame to the database
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -138,8 +138,8 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /example/{id}
-            Method: get
+            Path: /games/
+            Method: post
   SetExampleDataFunction:
     Type: AWS::Serverless::Function
     Properties:
