@@ -20,22 +20,22 @@ public class CachingVideoGameDao implements VideoGameDao {
     private Gson gson = builder.create();
 
     // Converting out of the cache
-    private List<VideoGameRecord> fromJson(String json) {
-        return gson.fromJson(json, new TypeToken<Set<VideoGameRecord>>() { }.getType());
+    private VideoGameRecord fromJson(String json) {
+        return gson.fromJson(json, new TypeToken<VideoGameRecord>() {
+        }.getType());
     }
 
     private void addToCache(VideoGameRecord record) {
-        // for (ReferralRecord record : records) {
-        String cacheKey = String.format(VIDEO_GAME_KEY,record.getName());
-        /* your implementation for cache key */
+        String cacheKey = String.format(VIDEO_GAME_KEY, record.getName());
+        /* implementation for cache key */
         cacheClient.setValue(cacheKey,
                 VIDEOGAME_READ_TTL,
                 gson.toJson(record)
         );
-        // }
     }
+
     @Inject
-    public CachingVideoGameDao(CacheClient cache, NonCachingVideoGameDao videoGameDao){
+    public CachingVideoGameDao(CacheClient cache, NonCachingVideoGameDao videoGameDao) {
         this.nonCachingVideoGameDao = videoGameDao;
         this.cacheClient = cache;
     }
@@ -49,7 +49,7 @@ public class CachingVideoGameDao implements VideoGameDao {
     @Override
     public boolean deleteVideoGame(VideoGameRecord record) {
         cacheClient.invalidate(record.getName());
-        if(cacheClient.getValue(record.getName()).isPresent()) {
+        if (cacheClient.getValue(record.getName()).isPresent()) {
             return false;
         }
         return true;
@@ -57,15 +57,19 @@ public class CachingVideoGameDao implements VideoGameDao {
 
     @Override
     public VideoGameRecord findByName(String name) {
-        cacheClient.getValue(name);
-        return null;
+        VideoGameRecord record = fromJson(cacheClient.getValue(name).get());
+        if (record == null) {
+            record = nonCachingVideoGameDao.findByName(name);
+            cacheClient.setValue(name, VIDEOGAME_READ_TTL, gson.toJson(record));
+        }
+        return record;
     }
 
     @Override
     public List<VideoGameRecord> getAllGames() {
-        return null;
+        return nonCachingVideoGameDao.getAllGames();
     }
-
+}
 
 //    private List<ReferralRecord> listOfRecords;
 //    // Create the Gson object with instructions for ZonedDateTime
@@ -144,4 +148,4 @@ public class CachingVideoGameDao implements VideoGameDao {
 //        // return null;
 //    }
 
-}
+
