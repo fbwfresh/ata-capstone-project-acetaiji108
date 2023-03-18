@@ -10,7 +10,7 @@ public class VideoGameServiceClient {
   //  private static final String SET_EXAMPLE_ENDPOINT = "example";
     private ObjectMapper mapper;
     public VideoGameServiceClient(){this.mapper = new ObjectMapper();}
-    public VideoGameResponse addReferral(VideoGameRequest videoGameRequest) {
+    public VideoGameResponse addVideoGame(VideoGameRequest videoGameRequest) {
         EndpointUtility endpointUtility = new EndpointUtility();
         String request;
         try {

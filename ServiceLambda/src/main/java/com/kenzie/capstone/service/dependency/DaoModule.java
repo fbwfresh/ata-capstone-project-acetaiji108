@@ -31,21 +31,19 @@ public class DaoModule {
 
     @Singleton
     @Provides
-    @Named("NonCachingVideoGameDao")
+    @Named("VideoGameDao")
     @Inject
-    public NonCachingVideoGameDao provideNonCachingDao(@Named("DynamoDBMapper") DynamoDBMapper mapper)
-    {
-        return new NonCachingVideoGameDao(mapper);
+    public VideoGameDao provideVideoGameDao(
+            @Named("CacheClient") CacheClient cacheClient,
+            @Named("NonCachingVideoGameDao") NonCachingVideoGameDao nonCachingVideoGameDao) {
+        return new CachingVideoGameDao(cacheClient, nonCachingVideoGameDao);
     }
-
     @Singleton
     @Provides
-    @Named("CachingVideoGameDao")
+    @Named("NonCachingVideoGameDao")
     @Inject
-    public CachingVideoGameDao provideCachingDao(@Named("CacheClient")CacheClient cacheClient,
-                                                 @Named("NonCachingVideoGameDao") NonCachingVideoGameDao nonCachingVideoGameDao)
-    {
-        return new CachingVideoGameDao(cacheClient,nonCachingVideoGameDao);
+    public NonCachingVideoGameDao provideNonCachingVideoGameDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
+        return new NonCachingVideoGameDao(mapper);
     }
 
 }

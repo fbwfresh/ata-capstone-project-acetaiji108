@@ -8,6 +8,7 @@ import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
 import com.kenzie.capstone.service.client.VideoGameServiceClient;
+import com.kenzie.capstone.service.model.VideoGameRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,6 +30,9 @@ public class VideoGameService {
         this.videoGameServiceClient = videoGameServiceClient;
 
     }
+//    public VideoGameService(VideoGameRepository videoGameRepository) {
+//        this.videoGameRepository = videoGameRepository;
+//    }
 
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
@@ -42,30 +46,30 @@ public class VideoGameService {
         //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
     }
 
-    public VideoGameResponse addNewVideoGame(String name, String description, Set<String> consoles) {
-        // Example sending data to the local repository
-
-       // VideoGameRecord videoGame = new VideoGameRecord();
-
-        VideoGameRecord videoGameRecord = new VideoGameRecord();
-        videoGameRecord.setName(name);
-        videoGameRecord.setDescription(description);
-        videoGameRecord.setConsoles(consoles);
-        videoGameRecord.setDownwardVote(0);
-        videoGameRecord.setUpwardVote(0);
-        videoGameRecord.setVotingPercentage(0);
-        videoGameRepository.save(videoGameRecord);
-        //TODO the code below is how to save the videogame utilizing lambda functionality
-        //Example sending data to the lambda
-        // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
-        //videoGameRecord.setId(dataFromLambda.getId());
-        // videoGameRecord.setName(dataFromLambda.getData());
-
-       // videoGameRepository.save(exampleRecord);
-
-        //Example example = new Example(dataFromLambda.getId(), name);
-        return toVideoGameResponse(videoGameRecord);
-    }
+//    public VideoGameResponse addNewVideoGame(String name, String description, Set<String> consoles) {
+//        // Example sending data to the local repository
+//
+//       // VideoGameRecord videoGame = new VideoGameRecord();
+//
+//        VideoGameRecord videoGameRecord = new VideoGameRecord();
+//        videoGameRecord.setName(name);
+//        videoGameRecord.setDescription(description);
+//        videoGameRecord.setConsoles(consoles);
+//        videoGameRecord.setDownwardVote(0);
+//        videoGameRecord.setUpwardVote(0);
+//        videoGameRecord.setVotingPercentage(0);
+//        videoGameRepository.save(videoGameRecord);
+//        //TODO the code below is how to save the videogame utilizing lambda functionality
+//        //Example sending data to the lambda
+//        // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
+//        //videoGameRecord.setId(dataFromLambda.getId());
+//        // videoGameRecord.setName(dataFromLambda.getData());
+//
+//       // videoGameRepository.save(exampleRecord);
+//
+//        //Example example = new Example(dataFromLambda.getId(), name);
+//        return toVideoGameResponse(videoGameRecord);
+//    }
     public VideoGameResponse addNewVideoGame(CreateVideoGameRequest game) {
         // Example sending data to the local repository
 
@@ -80,16 +84,16 @@ public class VideoGameService {
         videoGameRecord.setVotingPercentage(game.getVotingPercentage());
        // System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
-      //  System.out.println("after save");
-        //TODO the code below is how to save the videogame utilizing lambda functionality
-        //Example sending data to the lambda
-        // VideoGameRecord dataFromLambda = lambdaServiceClient.setVideoGameData(name,description,consoles);
-        //videoGameRecord.setId(dataFromLambda.getId());
-        // videoGameRecord.setName(dataFromLambda.getData());
 
-        // videoGameRepository.save(exampleRecord);
+        VideoGameRequest videoGameRequest = new VideoGameRequest();
+        videoGameRequest.setConsoles(game.getConsoles());
+        videoGameRequest.setDescription(game.getDescription());
+        videoGameRequest.setName(game.getVideoGameName());
+        videoGameRequest.setDownwardVote(game.getDownwardVote());
+        videoGameRequest.setUpwardVote(game.getUpwardVote());
+        videoGameRequest.setVotingPercentage(game.getVotingPercentage());
+      com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.addVideoGame(videoGameRequest);
 
-        //Example example = new Example(dataFromLambda.getId(), name);
         return toVideoGameResponse(videoGameRecord);
     }
 
