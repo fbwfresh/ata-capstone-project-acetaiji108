@@ -33,4 +33,17 @@ public class VideoGameService {
         return VideoGameConverter.fromRecordToResponse(record);
     }
 
+    public boolean deleteVideoGame(String videoGameName){
+        VideoGameRecord record = videoGameDao.findByName(videoGameName);
+        if(record == null){
+            throw new InvalidGameException("Request must contain a valid video game name");
+        }
+            boolean deleted = videoGameDao.deleteVideoGame(record);
+
+            if(!deleted){
+                return false;
+            }
+        return deleted;
+    }
+
 }

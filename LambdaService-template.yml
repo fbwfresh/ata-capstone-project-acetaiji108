@@ -112,10 +112,10 @@ Resources:
   AddVideoGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
       Handler: com.kenzie.capstone.service.lambda.AddVideoGame
       Runtime: java11
-      Description: Adds a videogame to the database
+      Description: Add a videogame
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -131,36 +131,36 @@ Resources:
         SecurityGroupIds: [ { "Fn::GetAtt": [ "SecurityGroup",  "GroupId" ] } ]
         SubnetIds:
           - !Ref PublicSubnet
-        Environment:
-          Variables:
-            JEDIS_URL: !GetAtt ReplicationGroup.PrimaryEndPoint.Address
+      Environment:
+        Variables:
+          JEDIS_URL: !GetAtt ReplicationGroup.PrimaryEndPoint.Address
       Events:
         UpdateResource:
           Type: Api
           Properties:
             Path: /games/
             Method: post
-##  SetExampleDataFunction:
-##    Type: AWS::Serverless::Function
-##    Properties:
-##      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-##      Handler: com.kenzie.capstone.service.lambda.SetExampleData
-##      Runtime: java11
-##      Description: Set Example Data
-##      MemorySize: 512
-##      Timeout: 240
-##      # Function's execution role
-##      Policies:
-##        - AWSLambdaBasicExecutionRole
-##        - AWSLambda_ReadOnlyAccess
-##        - AWSXrayWriteOnlyAccess
-##        - AWSLambdaVPCAccessExecutionRole
-#        - AmazonS3FullAccess
-#        - AmazonDynamoDBFullAccess
-#      Tracing: Active
-#      Events:
-#        UpdateResource:
-#          Type: Api
-#          Properties:
-#            Path: /example/
-#            Method: post
+  DeleteGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.DeleteVideoGame
+      Runtime: java11
+      Description: Deletes Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/{name}
+            Method: post

@@ -177,6 +177,8 @@ public class VideoGameService {
     public String deleteVideoGame(String name) {
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
+            //todo add delete in the client
+           // videoGameServiceClient.delete()
             return "Deleted Game";
         }
         return "Game Not Found. Try Checking The Spelling, And Try Again";

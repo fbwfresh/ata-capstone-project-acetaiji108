@@ -1,4 +1,4 @@
-package com.kenzie.capstone.service;
+package com.kenzie.capstone.service.model;
 
 public enum Consoles {
     X360("Xbox 360"),

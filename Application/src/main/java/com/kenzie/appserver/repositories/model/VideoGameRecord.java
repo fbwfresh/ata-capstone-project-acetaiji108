@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@DynamoDBTable(tableName = "VideoGame")
+@DynamoDBTable(tableName = "VideoGames")
 public class VideoGameRecord {
     private String name;
     private String description;
