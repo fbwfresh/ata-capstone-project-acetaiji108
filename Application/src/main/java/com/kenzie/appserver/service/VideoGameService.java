@@ -178,8 +178,10 @@ public class VideoGameService {
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
             //todo add delete in the client
-           // videoGameServiceClient.delete()
-            return "Deleted Game";
+           boolean deleted = videoGameServiceClient.deleteVideoGame(name);
+           if (deleted) {
+               return "Deleted Game";
+           }
         }
         return "Game Not Found. Try Checking The Spelling, And Try Again";
     }
