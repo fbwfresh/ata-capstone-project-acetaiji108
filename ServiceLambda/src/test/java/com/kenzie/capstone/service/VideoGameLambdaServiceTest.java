@@ -1,16 +1,24 @@
 package com.kenzie.capstone.service;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.common.base.Verify;
+import com.google.gson.Gson;
 import com.kenzie.capstone.service.converter.VideoGameConverter;
 import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
 import com.kenzie.capstone.service.dao.VideoGameDao;
 import com.kenzie.capstone.service.dependency.DaoModule;
+import com.kenzie.capstone.service.exceptions.InvalidGameException;
+import com.kenzie.capstone.service.lambda.GetVideoGame;
 import com.kenzie.capstone.service.model.*;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
+
+import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,19 +27,43 @@ import static org.mockito.Mockito.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class VideoGameLambdaServiceTest {
     //class ReferralServiceTest {
-        /**
-         * ------------------------------------------------------------------------
-         * expenseService.getExpenseById
-         * ------------------------------------------------------------------------
-         **/
-        private VideoGameDao videoGameDao;
-        private VideoGameService videoGameService;
-        @BeforeAll
-        void setup() {
-            DaoModule module = new DaoModule();
-            this.videoGameDao = new NonCachingVideoGameDao(module.provideDynamoDBMapper());
-            this.videoGameService = new VideoGameService(videoGameDao);
-        }
+    /**
+     * ------------------------------------------------------------------------
+     * expenseService.getExpenseById
+     * ------------------------------------------------------------------------
+     **/
+    private VideoGameDao videoGameDao;
+    private VideoGameService videoGameService;
+
+    @BeforeAll
+    void setup() {
+        DaoModule module = new DaoModule();
+        this.videoGameDao = new NonCachingVideoGameDao(module.provideDynamoDBMapper());
+        this.videoGameService = new VideoGameService(videoGameDao);
+    }
+
+    @Test
+    void testHandleVideoGame() throws InvalidGameException {
+        // GIVEN
+        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+        input.setPathParameters(Map.of("videoGameId", "1"));
+
+        VideoGameRecord record = new VideoGameRecord();
+        record.getName().equals("Test Game");
+
+        // WHEN
+        APIGatewayProxyResponseEvent result = new GetVideoGame().handleRequest(input, null);
+
+        // THEN
+        assertEquals(200, result.getStatusCode());
+        assertNotNull(result.getBody());
+
+        VideoGameResponse response = new Gson().fromJson(result.getBody(), VideoGameResponse.class);
+        assertNotNull(response);
+        assertEquals("Test Game", response.getName());
+    }
+
+}
 //        @Test
 //        public void getCustomerReferralSummary_noReferralsTest() {
 //            String customerId = "CUST-001";
@@ -125,7 +157,7 @@ public class VideoGameLambdaServiceTest {
 //            assertEquals(customerId, response.getCustomerId(), "The response customerId should match");
 //            assertEquals(referrerId, response.getReferrerId(), "The response referrerId should match");
 //            assertNotNull(response.getReferralDate(), "The response referral date exists");
-        }
+
 //        @Test
 //        void addReferralTest_no_customer_id() {
 //            // GIVEN
