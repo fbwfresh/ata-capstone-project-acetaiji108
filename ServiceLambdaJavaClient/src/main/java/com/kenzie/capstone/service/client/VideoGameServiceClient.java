@@ -10,7 +10,9 @@ import java.util.List;
 public class VideoGameServiceClient {
     private static final String ADD_VIDEOGAME_ENDPOINT = "games/";
     private static final String DELETE_VIDEOGAME_ENDPOINT = "games/{name}";
+    private static final String GET_VIDEOGAME_ENDPOINT = "games/{name}";
     private ObjectMapper mapper;
+
     public VideoGameServiceClient(){this.mapper = new ObjectMapper();}
     public VideoGameResponse addVideoGame(VideoGameRequest videoGameRequest) {
         EndpointUtility endpointUtility = new EndpointUtility();
@@ -53,5 +55,15 @@ public class VideoGameServiceClient {
 
         return outcome;
     }
-
+    public VideoGameResponse getVideoGame(String name) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_VIDEOGAME_ENDPOINT.replace("{name}", name));
+        VideoGameResponse videoGameResponse;
+        try {
+            videoGameResponse = mapper.readValue(response, VideoGameResponse.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return videoGameResponse;
+    }
 }

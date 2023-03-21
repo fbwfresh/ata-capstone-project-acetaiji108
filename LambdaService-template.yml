@@ -164,3 +164,27 @@ Resources:
           Properties:
             Path: /games/{name}
             Method: post
+  GetGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.GetVideoGame
+      Runtime: java11
+      Description: Deletes Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/{name}
+            Method: get

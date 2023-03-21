@@ -39,12 +39,14 @@ public class VideoGameService {
         VideoGameRecord dataFromDynamo = videoGameRepository
                 .findById(name).orElse(null);
 
-              //  .map(game -> new VideoGame(game.getName(), game.getDescription(),))
-              
+        //  .map(game -> new VideoGame(game.getName(), game.getDescription(),))
+
+
+        com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
+
         return dataFromDynamo;
-        //TODO Example getting data from the lambda
-        //ExampleData dataFromLambda = lambdaServiceClient.getExampleData(name);
     }
+
 
 //    public VideoGameResponse addNewVideoGame(String name, String description, Set<String> consoles) {
 //        // Example sending data to the local repository
