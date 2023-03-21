@@ -1,9 +1,11 @@
 package com.kenzie.appserver.service;
+import com.kenzie.appserver.controller.model.CreateVideoGameRequest;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
 import com.kenzie.appserver.repositories.VideoGameRepository;
 import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
+import com.kenzie.capstone.service.client.VideoGameServiceClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,14 +22,16 @@ import static org.mockito.Mockito.*;
 
 public class VideoGameServiceTest {
     private VideoGameRepository videoGameRepository;
-    private VideoGame videoGame;
-    //private ReferralServiceClient referralServiceClient;
+    private VideoGameService videoGameService;
+    private VideoGameServiceClient videoGameServiceClient;
 
     @BeforeEach
     void setup() {
         videoGameRepository = mock(VideoGameRepository.class);
-        //referralServiceClient = mock(ReferralServiceClient.class);
+        videoGameServiceClient = mock(VideoGameServiceClient.class);
         //videoGame = new VideoGame(videoGameRepository,
+        videoGameService = new VideoGameService(videoGameRepository,videoGameServiceClient);
+
     }
 
     @Test
@@ -45,7 +49,7 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findAll()).thenReturn(recordList);
 
         // WHEN
-        List<VideoGameResponse> videoGames = new VideoGameService(videoGameRepository).listAllVideoGames();
+        List<VideoGameResponse> videoGames = videoGameService.listAllVideoGames();
 
         // THEN
         assertNotNull(videoGames, "The video game list is returned");
@@ -75,7 +79,7 @@ public class VideoGameServiceTest {
 
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.of(record));
         // WHEN
-        VideoGameRecord videoGameResponse = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord videoGameResponse = videoGameService.findByName(gameName);
 
         // THEN
         assertNotNull(videoGameResponse, "The video game is returned");
@@ -90,8 +94,15 @@ public class VideoGameServiceTest {
         String gameDescription = "testDescription";
         ///Consoles[] gameConsoles = new Consoles[]{Consoles.PC, Consoles.PS2};
         VideoGame videoGame1 = new VideoGame(gameName,gameDescription,Consoles.PS2, Consoles.PC);
+        CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
+        videoGameRequest.setVideoGameName(gameName);
+        videoGameRequest.setDescription(gameDescription);
+        videoGameRequest.setConsoles(videoGame1.getConsoles());
+        videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
+        videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
+        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
         // WHEN
-        VideoGameResponse videoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(gameName, gameDescription,videoGame1.getConsoles());
+        VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(videoGameRequest);
 
         // THEN
         assertNotNull(videoGameResponse, "The video game is returned");
@@ -119,7 +130,7 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findAll()).thenReturn(recordList);
 
         // WHEN
-        List<VideoGameResponse> videoGameResponses = new VideoGameService(videoGameRepository).listAllVideoGames();
+        List<VideoGameResponse> videoGameResponses = videoGameService.listAllVideoGames();
 
         // THEN
         assertNotNull(videoGameResponses, "The video game list is returned");
@@ -144,7 +155,7 @@ public class VideoGameServiceTest {
         String videoGameName = "invalid";
         // WHEN
         when(videoGameRepository.findById(videoGameName)).thenReturn(Optional.empty());
-        VideoGameRecord videoGame = new VideoGameService(videoGameRepository).findByName(videoGameName);
+        VideoGameRecord videoGame = videoGameService.findByName(videoGameName);
         // THEN
         Assertions.assertNull(videoGame, "The video game is null when not found");
     }
@@ -156,7 +167,7 @@ public class VideoGameServiceTest {
 
         // WHEN
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameRecord game = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord game = videoGameService.findByName(gameName);
 
         // THEN
         Assertions.assertNull(game, "The game is null when not found");
@@ -169,7 +180,7 @@ public class VideoGameServiceTest {
 
         // WHEN
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameRecord game = new VideoGameService(videoGameRepository).findByName(gameName);
+        VideoGameRecord game = videoGameService.findByName(gameName);
 
         // THEN
         Assertions.assertNull(game, "The game is null when not found");
@@ -183,6 +194,13 @@ public class VideoGameServiceTest {
        // Consoles[] consoles = {Consoles.PS5, Consoles.WII};
 
         VideoGame videoGame1 = new VideoGame(videoGameName,description,Consoles.PS5,Consoles.WII);
+        CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
+        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
+        videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
+        videoGameRequest.setDescription(videoGame1.getDescription());
+        videoGameRequest.setConsoles(videoGame1.getConsoles());
+        videoGameRequest.setVideoGameName(videoGame1.getName());
 
         VideoGameResponse expectedVideoGameResponse = new VideoGameResponse();
         expectedVideoGameResponse.setName(videoGameName);
@@ -205,7 +223,7 @@ public class VideoGameServiceTest {
         ArgumentCaptor<VideoGameRecord> videoGameRecordCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
 
         // WHEN
-        VideoGameResponse returnedVideoGameResponse = new VideoGameService(videoGameRepository).addNewVideoGame(videoGameName, description,videoGame1.getConsoles());
+        VideoGameResponse returnedVideoGameResponse = videoGameService.addNewVideoGame(videoGameRequest);
 
         // THEN
         assertNotNull(returnedVideoGameResponse);
@@ -256,7 +274,7 @@ public class VideoGameServiceTest {
         }).when(videoGameRepository).save(videoGameRecordCaptor.capture());
 
         // WHEN
-        VideoGameResponse updatedVideoGameResponse = new VideoGameService(videoGameRepository).updateVideoGameDescription(gameName, newDescription);
+        VideoGameResponse updatedVideoGameResponse = videoGameService.updateVideoGameDescription(gameName, newDescription);
 
         // THEN
         VideoGameRecord record = videoGameRecordCaptor.getValue();
@@ -280,7 +298,7 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
 
         // WHEN
-        Assertions.assertThrows(ResponseStatusException.class, () -> new VideoGameService(videoGameRepository).updateVideoGameDescription(gameName, newDescription));
+        Assertions.assertThrows(ResponseStatusException.class, () -> videoGameService.updateVideoGameDescription(gameName, newDescription));
 
         // THEN
         try {
@@ -297,7 +315,7 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
 
         // WHEN
-        String result = new VideoGameService(videoGameRepository).deleteVideoGame(gameName);
+        String result = videoGameService.deleteVideoGame(gameName);
 
         // THEN
         assertEquals("Game Not Found. Try Checking The Spelling, And Try Again", result, "The game could not be found");
@@ -311,9 +329,16 @@ public class VideoGameServiceTest {
         String description = "gameDescription";
        // Consoles[] consoles = {Consoles.WIIU, Consoles.PS5};
         VideoGame videoGame1 = new VideoGame(name,description,Consoles.PS5,Consoles.WIIU);
+        CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
+        videoGameRequest.setVideoGameName(videoGame1.getName());
+        videoGameRequest.setConsoles(videoGame1.getConsoles());
+        videoGameRequest.setDescription(videoGame1.getDescription());
+        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
+        videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
 
         // WHEN
-        VideoGameResponse response = new VideoGameService(videoGameRepository).addNewVideoGame(name, description, videoGame1.getConsoles());
+        VideoGameResponse response = videoGameService.addNewVideoGame(videoGameRequest);
 
         // THEN
         assertEquals(name, response.getName(), "Name should match");
@@ -434,7 +459,7 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findAll()).thenReturn(records);
 
         // WHEN
-        List<VideoGameResponse> top5 = new VideoGameService(videoGameRepository).top5RatingLeaderboard();
+        List<VideoGameResponse> top5 = videoGameService.top5RatingLeaderboard();
 
         // THEN
         // list the top 5 games above with the highest upvotes

@@ -1,7 +1,11 @@
 package com.kenzie.capstone.service.dependency;
 
 
+import com.kenzie.capstone.service.caching.CacheClient;
+import com.kenzie.capstone.service.caching.CachingVideoGameDao;
 import com.kenzie.capstone.service.dao.ExampleDao;
+import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
+import com.kenzie.capstone.service.dao.VideoGameDao;
 import com.kenzie.capstone.service.util.DynamoDbClientProvider;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -27,10 +31,19 @@ public class DaoModule {
 
     @Singleton
     @Provides
-    @Named("ExampleDao")
+    @Named("VideoGameDao")
     @Inject
-    public ExampleDao provideExampleDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
-        return new ExampleDao(mapper);
+    public VideoGameDao provideVideoGameDao(
+            @Named("CacheClient") CacheClient cacheClient,
+            @Named("NonCachingVideoGameDao") NonCachingVideoGameDao nonCachingVideoGameDao) {
+        return new CachingVideoGameDao(cacheClient, nonCachingVideoGameDao);
+    }
+    @Singleton
+    @Provides
+    @Named("NonCachingVideoGameDao")
+    @Inject
+    public NonCachingVideoGameDao provideNonCachingVideoGameDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
+        return new NonCachingVideoGameDao(mapper);
     }
 
 }

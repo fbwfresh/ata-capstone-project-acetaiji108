@@ -1,9 +1,9 @@
-package com.kenzie.appserver.repositories.model;
+package com.kenzie.capstone.service.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.kenzie.appserver.service.model.Consoles;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -69,11 +69,10 @@ public class VideoGameRecord {
 
     }
 
-    public void setConsoles(Consoles[] consoles) {
-        this.consoles = new HashSet<>();
-        for (Consoles console : consoles) {
-            this.consoles.add(console.getName());
-        }
-
-    }
+//    public void setConsoles(Consoles[] consoles) {
+//        this.consoles = new HashSet<>();
+//        for (Consoles console : consoles) {
+//            this.consoles.add(console.getName());
+//        }
+//   }
 }
