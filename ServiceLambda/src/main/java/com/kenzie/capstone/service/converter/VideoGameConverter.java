@@ -20,7 +20,7 @@ public class VideoGameConverter {
         VideoGameResponse response = new VideoGameResponse();
         response.setConsoles(record.getConsoles());
         response.setDescription(record.getDescription());
-        response.setName(response.getName());
+        response.setName(record.getName());
         response.setTotalVote(record.getVotingPercentage());
         response.setUpwardVote(record.getUpwardVote());
         response.setDownwardVote(record.getDownwardVote());

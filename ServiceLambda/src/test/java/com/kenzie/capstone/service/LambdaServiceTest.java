@@ -72,12 +72,12 @@ class LambdaServiceTest {
        record.setDescription(response.getDescription());
        record.setConsoles(response.getConsoles());
         assertNotNull(record, "The record is valid");
-       //assertEquals(gameName, record.getName(), "The record name should match");
+        assertEquals(gameName, record.getName(), "The record name should match");
         assertEquals(description, record.getDescription(), "The record description should match");
         assertNotNull(record.getConsoles(), "The record consoles exist");
         assertNotNull(response, "A response is returned");
 //TODO make a delete method in the videoGameService for the lambda
-       //assertTrue(videoGameService.deleteVideoGame(response.getName()));
+       assertTrue(videoGameService.deleteVideoGame(response.getName()));
     }
 //    @Test
 //    void setDataTest() {

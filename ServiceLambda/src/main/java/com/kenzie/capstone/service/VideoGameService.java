@@ -19,7 +19,7 @@ public class VideoGameService {
     public VideoGameRecord getVideoGame(String name){
        VideoGameRecord record = videoGameDao.findByName(name);
        if(record == null){
-           return null;
+           throw new InvalidGameException("Invalid Game Name Inputted");
        }
        return record;
     }
@@ -35,14 +35,14 @@ public class VideoGameService {
 
     public boolean deleteVideoGame(String videoGameName){
         VideoGameRecord record = videoGameDao.findByName(videoGameName);
-        if(record == null){
-            throw new InvalidGameException("Request must contain a valid video game name");
-        }
+            if(record == null){
+                throw new InvalidGameException("Request must contain a valid video game name");
+         }
             boolean deleted = videoGameDao.deleteVideoGame(record);
 
-            if(!deleted){
-                return false;
-            }
+                if(!deleted){
+                   return false;
+              }
         return deleted;
     }
 
