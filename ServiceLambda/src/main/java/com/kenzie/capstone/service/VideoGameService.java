@@ -16,12 +16,12 @@ public class VideoGameService {
         this.videoGameDao = videoGameDao;
     }
 
-    public VideoGameRecord getVideoGame(String name){
-       VideoGameRecord record = videoGameDao.findByName(name);
-       if(record == null){
-           throw new InvalidGameException("Invalid Game Name Inputted");
-       }
-       return record;
+    public VideoGameResponse getVideoGame(String name){
+        VideoGameRecord record = videoGameDao.findByName(name);
+        if(record == null){
+            throw new InvalidGameException("Request must contain a valid video game name");
+        }
+        return VideoGameConverter.fromRecordToResponse(record);
     }
 
     public VideoGameResponse addVideoGame(VideoGameRequest request){

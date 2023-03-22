@@ -4,6 +4,7 @@ import com.kenzie.capstone.service.dao.ExampleDao;
 import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
 import com.kenzie.capstone.service.dao.VideoGameDao;
 import com.kenzie.capstone.service.dependency.DaoModule;
+import com.kenzie.capstone.service.exceptions.InvalidGameException;
 import com.kenzie.capstone.service.model.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
@@ -80,5 +81,36 @@ class LambdaIntegrationTest {
         request.setDownwardVote(request.getDownwardVote());
         request.setVotingPercentage(request.getVotingPercentage());
         assertTrue(videoGameService.deleteVideoGame(request.getName()));
+    }
+
+    @Test
+    void getVideoGameTest() throws InvalidGameException {
+        // GIVEN
+//        VideoGameRequest request = new VideoGameRequest();
+//        request.setName("Persona 5");
+//        request.setDescription("A classic platformer game developed by Nintendo.");
+//        //request.setConsoles((Set<String>) List.of("Nintendo Entertainment System", "Game Boy Advance"));
+//        VideoGame game = new VideoGame(request.getName(), request.getDescription(), Consoles.NS, Consoles.GBA);
+//
+//
+//        VideoGameRecord record = new VideoGameRecord();
+//        record.setName(game.getName());
+//        record.setDescription(game.getDescription());
+//        record.setConsoles(game.getConsoles());
+
+        //when(videoGameDao.findByName(request.getName())).thenReturn(record);
+
+        // WHEN
+        VideoGameResponse response = videoGameService.getVideoGame("Persona 5");
+
+
+
+        // THEN
+        //verify(videoGameDao, times(1)).findByName(request.getName());
+
+        assertNotNull(response, "The returned response is valid");
+        assertEquals("Persona 5", response.getName(), "The video game name matches");
+//        assertEquals(request.getDescription(), response.getDescription(), "The video game description matches");
+//        assertEquals(record.getConsoles(), response.getConsoles(), "The video game consoles match");
     }
 }
