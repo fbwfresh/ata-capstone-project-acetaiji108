@@ -15,8 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -63,7 +62,7 @@ public class VideoGameServiceTest {
                 assertEquals(videoGame2.getName(), videoGame.getName(), "The video game name matches");
                 assertEquals(videoGame2.getDescription(), videoGame.getDescription(), "The video game description matches");
             } else {
-                Assertions.assertTrue(false, "Video game returned that was not in the records!");
+                assertTrue(false, "Video game returned that was not in the records!");
             }
         }
     }
@@ -315,10 +314,10 @@ public class VideoGameServiceTest {
         when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
 
         // WHEN
-        String result = videoGameService.deleteVideoGame(gameName);
+        boolean result = videoGameService.deleteVideoGame(gameName);
 
         // THEN
-        assertEquals("Game Not Found. Try Checking The Spelling, And Try Again", result, "The game could not be found");
+        assertFalse(result);
         verify(videoGameRepository, never()).delete(any());
     }
 
@@ -327,7 +326,6 @@ public class VideoGameServiceTest {
         // GIVEN
         String name = "gameName";
         String description = "gameDescription";
-       // Consoles[] consoles = {Consoles.WIIU, Consoles.PS5};
         VideoGame videoGame1 = new VideoGame(name,description,Consoles.PS5,Consoles.WIIU);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
         videoGameRequest.setVideoGameName(videoGame1.getName());

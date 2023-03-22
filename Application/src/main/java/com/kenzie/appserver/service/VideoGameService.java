@@ -36,15 +36,20 @@ public class VideoGameService {
 
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
-        VideoGameRecord dataFromDynamo = videoGameRepository
-                .findById(name).orElse(null);
+      //  VideoGameRecord dataFromDynamo = videoGameRepository
+        //        .findById(name).orElse(null);
 
         //  .map(game -> new VideoGame(game.getName(), game.getDescription(),))
 
-
         com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
-
-        return dataFromDynamo;
+        VideoGameRecord record = new VideoGameRecord();
+        record.setName(responseFromLambdaClient.getName());
+        record.setDescription(responseFromLambdaClient.getDescription());
+        record.setConsoles(responseFromLambdaClient.getConsoles());
+        record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
+        record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
+        record.setVotingPercentage(responseFromLambdaClient.getTotalVote());
+        return record;
     }
 
 
@@ -176,16 +181,16 @@ public class VideoGameService {
         return toVideoGameResponse(gameExists.get());
     }
 
-    public String deleteVideoGame(String name) {
+    public boolean deleteVideoGame(String name) {
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
             //todo add delete in the client
-           boolean deleted = videoGameServiceClient.deleteVideoGame(name);
-           if (deleted) {
-               return "Deleted Game";
-           }
         }
-        return "Game Not Found. Try Checking The Spelling, And Try Again";
+        boolean deleted = videoGameServiceClient.deleteVideoGame(name);
+//        if (deleted) {
+//            return "Deleted Game";
+//        }
+        return deleted;
     }
 
     public List<VideoGameResponse> top5RatingLeaderboard() {
