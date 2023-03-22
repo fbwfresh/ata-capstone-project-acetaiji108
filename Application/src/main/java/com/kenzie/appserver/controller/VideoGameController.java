@@ -72,8 +72,8 @@ public class VideoGameController {
 
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteGame(@PathVariable String name) {
-        String response = videoGameService.deleteVideoGame(name);
-        if (response.equals("Game Not Found. Try Checking The Spelling, And Try Again")) {
+        boolean response = videoGameService.deleteVideoGame(name);
+        if (!response) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
