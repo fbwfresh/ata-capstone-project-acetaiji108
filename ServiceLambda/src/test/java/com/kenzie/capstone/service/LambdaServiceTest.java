@@ -79,7 +79,8 @@ class LambdaServiceTest {
 //TODO make a delete method in the videoGameService for the lambda
        assertTrue(videoGameService.deleteVideoGame(response.getName()));
     }
-//    @Test
+
+//        @Test
 //    void setDataTest() {
 //        ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
 //        ArgumentCaptor<String> dataCaptor = ArgumentCaptor.forClass(String.class);
