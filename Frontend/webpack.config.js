@@ -9,6 +9,7 @@ module.exports = {
   },
   entry: {
     examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+    videoGamePage: path.resolve(__dirname, 'src', 'pages', 'videoGamePage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -39,6 +40,11 @@ module.exports = {
       filename: 'index.html',
       inject: false
     }),
+    new HtmlWebpackPlugin({
+          template: './src/VideoGameMainPage.html',
+          filename: 'VideoGameMainPage.html',
+          inject: false
+        }),
     new CopyPlugin({
       patterns: [
         {
