@@ -106,13 +106,24 @@ public class VideoGameService {
 
 
     public List<VideoGameResponse> listAllVideoGames(){
-        List<VideoGameResponse> videoGameResponses = new ArrayList<>();
-        Iterator<VideoGameRecord> videoGameRecordList =  videoGameRepository.findAll().iterator();
-        while(videoGameRecordList.hasNext()){
-
-            videoGameResponses.add(toVideoGameResponse(videoGameRecordList.next()));
-        }
-        return videoGameResponses;
+//        List<VideoGameResponse> videoGameResponses = new ArrayList<>();
+//        Iterator<VideoGameRecord> videoGameRecordList =  videoGameRepository.findAll().iterator();
+//        while(videoGameRecordList.hasNext()){
+//
+//            videoGameResponses.add(toVideoGameResponse(videoGameRecordList.next()));
+//        }
+         List<com.kenzie.capstone.service.model.VideoGameResponse> videoGameResponsesList = videoGameServiceClient.getAllVideoGames();
+         List<VideoGameResponse> videoGameResponseList =  videoGameResponsesList.stream().map(response -> {
+           VideoGameResponse videoGameResponse = new VideoGameResponse();
+           videoGameResponse.setUpwardVote(response.getUpwardVote());
+           videoGameResponse.setName(response.getName());
+           videoGameResponse.setConsoles(response.getConsoles());
+           videoGameResponse.setDescription(response.getDescription());
+           videoGameResponse.setDownwardVote(response.getDownwardVote());
+           videoGameResponse.setTotalVote(response.getTotalVote());
+           return videoGameResponse;
+       }).collect(Collectors.toList());
+          return videoGameResponseList;
     }
 
 
@@ -147,10 +158,34 @@ public class VideoGameService {
             videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
             videoGameRecord.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
             videoGameRepository.save(videoGameRecord);
+
+            VideoGameRequest videoGameRequest = new VideoGameRequest();
+            videoGameRequest.setName(videoGameUpdateRequest.getVideoGameName());
+            videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
+            videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
+            videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
+            videoGameRequest.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
+            videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+            videoGameServiceClient.addVideoGame(videoGameRequest);
             return toVideoGameResponse(videoGameRecord);
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
     }
+//    public VideoGameResponse updateVideoGameUpvote(UpdateRequest videoGameUpdateRequest) {
+//        Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
+//        if (gameRecord.isPresent()) {
+//            VideoGameRecord videoGameRecord = gameRecord.get();
+//            videoGameRecord.setName(videoGameUpdateRequest.getVideoGameName());
+//            videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
+//            videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
+//            videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+//            videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
+//            videoGameRecord.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
+//            videoGameRepository.save(videoGameRecord);
+//            return toVideoGameResponse(videoGameRecord);
+//        }
+//        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
+//    }
 //        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
 //        if (!gameExists.isPresent()){
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");

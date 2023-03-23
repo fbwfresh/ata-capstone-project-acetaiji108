@@ -8,12 +8,22 @@ import com.kenzie.capstone.service.model.VideoGameRequest;
 import com.kenzie.capstone.service.model.VideoGameResponse;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoGameService {
     private VideoGameDao videoGameDao;
     @Inject
     public VideoGameService(VideoGameDao videoGameDao){
         this.videoGameDao = videoGameDao;
+    }
+    public List<VideoGameResponse> getAllVideoGames(){
+        List<VideoGameResponse> videoGameResponsesList = new ArrayList<>();
+       List<VideoGameRecord> videoGameRecords = videoGameDao.getAllGames();
+       for(VideoGameRecord record : videoGameRecords){
+       videoGameResponsesList.add(VideoGameConverter.fromRecordToResponse(record));
+       }
+       return videoGameResponsesList;
     }
 
     public VideoGameResponse getVideoGame(String name){

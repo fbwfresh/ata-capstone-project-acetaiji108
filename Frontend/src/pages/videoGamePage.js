@@ -10,12 +10,22 @@ class VideoGamePage extends BaseClass {
     }
 
     mount() {
-        document.getElementById('create-videoGameForm').addEventListener('submit', this.onCreate);
-        document.getElementById('findButton').addEventListener('click', this.onFindById);
-        //document.getElementById('updateButton').addEventListener('click', this.onUpdate);
-        // document.getElementById('deleteButton').addEventListener('click',this.onDelete);
+        const MonsterHunterUpvote = document.getElementById("MonsterHunterUpvote");
+        MonsterHunterUpvote.addEventListener('click',this.onCreate,false);
+        MonsterHunterUpvote.myName = "MonsterHunterID";
+        MonsterHunterUpvote.myUpvotes = 0;
+        document.getElementById('upvote').addEventListener('click', this.onCreate);
+        document.getElementById('downvote').addEventListener('click', this.onFindById);
+        document.getElementById('upvote').addEventListener('click', this.onCreate);
+        document.getElementById('downvote').addEventListener('click', this.onFindById);
+        document.getElementById('upvote').addEventListener('click', this.onCreate);
+        document.getElementById('downvote').addEventListener('click', this.onFindById);
+        document.getElementById('upvote').addEventListener('click', this.onCreate);
+        document.getElementById('downvote').addEventListener('click', this.onFindById);
+        document.getElementById('upvote').addEventListener('click', this.onCreate);
+        document.getElementById('downvote').addEventListener('click', this.onFindById);
         this.client = new VideoGameClient();
-        this.dataStore.addChangeListener(this.renderDoctorById)
+        this.dataStore.addChangeListener(this.renderVideoGames())
     }
     async renderByVideoGameName(){
         const doctorFoundTable = document.getElementById("doctorFoundByIdResult");
@@ -55,7 +65,11 @@ class VideoGamePage extends BaseClass {
     async onCreate(event){
         //console.log(event);
         event.preventDefault();
-        event.stopImmediatePropagation();
+        // event.stopImmediatePropagation();
+
+        const videoGameElement = dataStore.get(event.currentTarget.myName);
+        // event.currentTarget.myUpvotes = event.currentTarget.myUpvotes + 1;
+
         let name = document.getElementById("add-doctor-name-field").value;
         let dob = document.getElementById("add-doctor-dob-field").value;
 //this is where the doctor gets created on the page by inputting the information we saved into variables
