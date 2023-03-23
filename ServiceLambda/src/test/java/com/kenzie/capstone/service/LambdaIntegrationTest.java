@@ -89,21 +89,6 @@ class LambdaIntegrationTest {
     @Test
     void getVideoGameTest() throws InvalidGameException {
         // GIVEN
-//        VideoGameRequest request = new VideoGameRequest();
-//        request.setName("Persona 5");
-//        request.setDescription("A classic platformer game developed by Nintendo.");
-//        //request.setConsoles((Set<String>) List.of("Nintendo Entertainment System", "Game Boy Advance"));
-//        VideoGame game = new VideoGame(request.getName(), request.getDescription(), Consoles.NS, Consoles.GBA);
-//
-//
-//        VideoGameRecord record = new VideoGameRecord();
-//        record.setName(game.getName());
-//        record.setDescription(game.getDescription());
-//        record.setConsoles(game.getConsoles());
-
-        //when(videoGameDao.findByName(request.getName())).thenReturn(record);
-
-        // GIVEN
         VideoGameResponse response = videoGameService.getVideoGame("Monster Hunter Rise");
 
 
@@ -118,10 +103,6 @@ class LambdaIntegrationTest {
 
         }
 
-
-
-//        assertEquals(request.getDescription(), response.getDescription(), "The video game description matches");
-//        assertEquals(record.getConsoles(), response.getConsoles(), "The video game consoles match");
 
     @Test
     void GetAllVideoGamesTest() {
