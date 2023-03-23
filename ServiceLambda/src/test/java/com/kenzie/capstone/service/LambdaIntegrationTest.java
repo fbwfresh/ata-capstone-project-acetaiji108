@@ -103,20 +103,28 @@ class LambdaIntegrationTest {
 
         //when(videoGameDao.findByName(request.getName())).thenReturn(record);
 
-        // WHEN
-        VideoGameResponse response = videoGameService.getVideoGame("Persona 5");
+        // GIVEN
+        VideoGameResponse response = videoGameService.getVideoGame("Monster Hunter Rise");
 
+
+        // WHEN
+        System.out.println("Name: " + response.getName());
+        System.out.println("Description: " + response.getDescription());
+        System.out.println("Consoles: " + response.getConsoles());
 
         // THEN
-        //verify(videoGameDao, times(1)).findByName(request.getName());
+        assertNotNull(response, "The response is valid");
+        assertEquals("Monster Hunter Rise", response.getName(), "The video game name matches");
+
+        }
+
 
 
 //        assertEquals(request.getDescription(), response.getDescription(), "The video game description matches");
 //        assertEquals(record.getConsoles(), response.getConsoles(), "The video game consoles match");
-    }
 
     @Test
-    void testGetAllVideoGames() {
+    void GetAllVideoGamesTest() {
         // GIVEN
         List<VideoGameResponse> response = videoGameService.getAllVideoGames();
 
