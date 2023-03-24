@@ -18,6 +18,7 @@ public class VideoGameRecord {
     private int upwardVote;
     private int downwardVote;
     private int votingPercentage;
+    private String image;
 
     @DynamoDBHashKey(attributeName = "name")
     public String getName() {
@@ -43,6 +44,9 @@ public class VideoGameRecord {
     public int getVotingPercentage(){
         return votingPercentage;
     }
+    @DynamoDBAttribute(attributeName = "image")
+    public String getImage(){return image;}
+    public void setImage(String image){this.image = image;}
 
     public void setUpwardVote(int upwardVote) {
         this.upwardVote = upwardVote;

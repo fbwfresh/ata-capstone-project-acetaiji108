@@ -30,9 +30,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +50,9 @@ public class VideoGameControllerTest {
     private static final ObjectMapper mapper = new ObjectMapper();
     private String name = "NBA 2K23";
     private String description = "Basketball game";
-    private VideoGame videoGame = new VideoGame(name,description,Consoles.PS5,Consoles.PC,Consoles.PS4);
+    private VideoGame videoGame = new VideoGame(name,description,
+            "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg",
+            Consoles.PS5,Consoles.PC,Consoles.PS4);
     private VideoGameController controller = new VideoGameController(videoGameService);
 
 
@@ -60,6 +64,8 @@ public class VideoGameControllerTest {
     @AfterEach
     void cleanup() {
         //cleanup the tables so that we have clean data for each test
+        //throws an exception because we updated the method to use the client and had it return a boolean if the
+        //client deletes it from its DB and since this game isnt added to the database it isnt deleted
         try {
             //controller.deleteGame(name);
             videoGameService.deleteVideoGame(name);
@@ -69,6 +75,7 @@ public class VideoGameControllerTest {
         }
     }
 
+    //this test fails because i am no longer using the repository for the method if I commented out the client then it will pass
     @Test
     public void getGameByName_Exists() throws Exception {
         //GIVEN
@@ -76,8 +83,11 @@ public class VideoGameControllerTest {
         createVideoGameRequest.setVideoGameName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
+        createVideoGameRequest.setImage(videoGame.getImage());
         videoGameService.addNewVideoGame(createVideoGameRequest);
 
+//       VideoGameResponse response = controller.getGameByName(createVideoGameRequest.getVideoGameName()).getBody();
+//       assertEquals(response.getName(),createVideoGameRequest.getVideoGameName());
         mvc.perform(get("/games/{name}",createVideoGameRequest.getVideoGameName())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name")
@@ -86,22 +96,9 @@ public class VideoGameControllerTest {
                         .value(is(description)))
                 .andExpect(jsonPath("Consoles")
                         .value(hasItems(Consoles.PS5.getName(),Consoles.PC.getName(),Consoles.PS4.getName())))
+                .andExpect(jsonPath("image")
+                        .value(is(videoGame.getImage())))
                 .andExpect(status().isOk());
-//        VideoGameController controller = new VideoGameController(videoGameService);
-//        ResponseEntity<VideoGameResponse> postResponse = controller.addGame(createVideoGameRequest);
-//        ResponseEntity<VideoGameResponse> getResponse = controller.getGameByName(createVideoGameRequest.getVideoGameName());
-//        Assert.assertEquals(postResponse.getBody().getName(),getResponse.getBody().getName());
-//        Assert.assertEquals(postResponse.getBody().getDescription(),getResponse.getBody().getDescription());
-//        Assert.assertEquals(postResponse.getBody().getConsoles(),getResponse.getBody().getConsoles());
-//        Assert.assertEquals(getResponse.getStatusCodeValue(),200);
-//         mvc.perform(post("/games")
-//                        .content(mapper.writeValueAsString(createVideoGameRequest))
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().is2xxSuccessful())
-//                .andReturn();
-        //WHEN
-//
 
     }
 
@@ -112,6 +109,7 @@ public class VideoGameControllerTest {
         createVideoGameRequest.setVideoGameName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
+        createVideoGameRequest.setImage(videoGame.getImage());
         videoGameService.addNewVideoGame(createVideoGameRequest);
 
         MvcResult result = mvc.perform(post("/games")
@@ -129,52 +127,10 @@ public class VideoGameControllerTest {
         assertThat(response.getDescription()).isEqualTo(createVideoGameRequest.getDescription());
         assertThat(response.getConsoles()).isNotEmpty().as("Consoles are populated");
         assertThat(response.getConsoles()).isEqualTo(createVideoGameRequest.getConsoles());
+        assertThat(response.getImage()).isEqualTo(videoGame.getImage());
 
-//
-//        VideoGameResponse response = mvc.perform(post("/games/")
-//                        .content(mapper.writeValueAsString(createVideoGameRequest))
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect(jsonPath("name").isNotEmpty())
-//                .andExpect(jsonPath("name").value(createVideoGameRequest.getVideoGameName()))
-//                .andExpect(jsonPath("description").isNotEmpty())
-//                .andExpect(jsonPath("description").value(createVideoGameRequest.getDescription()))
-//                .andExpect(jsonPath("consoles").isNotEmpty())
-//                .andExpect(jsonPath("consoles").value(createVideoGameRequest.getConsoles()))
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString()
-//                .map(response -> mapper.readValue(response, VideoGameResponse.class))
-//                .orElseThrow();
-
-//        ResultActions actions = mvc.perform(post("/games/")
-//                        .content(mapper.writeValueAsString(createVideoGameRequest))
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().is2xxSuccessful());
-//
-//        String responseBody = actions.andReturn().getResponse().getContentAsString();
-//        VideoGameResponse response = mapper.readValue(responseBody, VideoGameResponse.class);
-//        assertThat(response.getName()).isNotEmpty().as("The Name is populated");
-//        assertThat(response.getName()).isEqualTo(createVideoGameRequest.getVideoGameName()).as("The name is correct");
-//        assertThat(response.getDescription()).isNotEmpty().as("The Description is populated");
-//        assertThat(response.getDescription()).isEqualTo(createVideoGameRequest.getDescription());
-//        assertThat(response.getConsoles()).isNotEmpty().as("Consoles are populated");
-//        assertThat(response.getConsoles()).isEqualTo(createVideoGameRequest.getConsoles());
-
-//        mvc.perform(post("/games/")
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(createVideoGameRequest)))
-//                .andExpect(jsonPath("name")
-//                        .exists())
-//                .andExpect(jsonPath("Description")
-//                        .exists())
-//                .andExpect(jsonPath("Consoles")
-//                        .exists())
-//                .andExpect(status().is2xxSuccessful());
     }
+    //this test fails because i am no longer using the repository for the method if I commented out the client then it will pass
     @Test
     public void updateConsoles_PutSuccessful() throws Exception {
         // GIVEN
@@ -182,6 +138,7 @@ public class VideoGameControllerTest {
         createVideoGameRequest.setVideoGameName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
+        createVideoGameRequest.setImage(videoGame.getImage());
 
         VideoGameResponse persistedGame = videoGameService.addNewVideoGame(createVideoGameRequest);
         VideoGameRecord gameRecord = videoGameService.findByName(persistedGame.getName());
@@ -196,13 +153,7 @@ public class VideoGameControllerTest {
         gameUpdateRequest.setVideoGameName(gameRecord.getName());
         gameUpdateRequest.setDescription(gameRecord.getDescription());
         gameUpdateRequest.setConsoles(consolesList);
-
-//            return mvc.perform(put("/api/v1/reviewMyTeacher/teacher/{teacherName}", updateRequest.getTeacherName())
-//                    .accept(MediaType.APPLICATION_JSON)
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .content(mapper.writeValueAsString(updateRequest)));
-
-
+        gameUpdateRequest.setImage(gameRecord.getImage());
 
         mapper.registerModule(new JavaTimeModule());
         videoGameService.updateVideoGame(gameUpdateRequest);
@@ -218,6 +169,8 @@ public class VideoGameControllerTest {
                         .exists())
                 .andExpect(jsonPath("Description")
                         .value(is(description)))
+                .andExpect(jsonPath("image")
+                        .value(gameRecord.getImage()))
                 .andExpect(jsonPath("Consoles")
                         .value(hasItems(Consoles.IOS.getName(),Consoles.AND.getName())));
     }

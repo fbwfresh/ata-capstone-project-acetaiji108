@@ -36,20 +36,24 @@ public class VideoGameService {
 
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
-      //  VideoGameRecord dataFromDynamo = videoGameRepository
-        //        .findById(name).orElse(null);
+//        VideoGameRecord dataFromDynamo = videoGameRepository
+//                .findById(name).orElse(null);
+//        return dataFromDynamo;
+try {
+    com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
+    VideoGameRecord record = new VideoGameRecord();
+    record.setName(responseFromLambdaClient.getName());
+    record.setDescription(responseFromLambdaClient.getDescription());
+    record.setConsoles(responseFromLambdaClient.getConsoles());
+    record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
+    record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
+    record.setVotingPercentage(responseFromLambdaClient.getTotalVote());
+    record.setImage(responseFromLambdaClient.getImage());
+    return record;
 
-        //  .map(game -> new VideoGame(game.getName(), game.getDescription(),))
-
-        com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
-        VideoGameRecord record = new VideoGameRecord();
-        record.setName(responseFromLambdaClient.getName());
-        record.setDescription(responseFromLambdaClient.getDescription());
-        record.setConsoles(responseFromLambdaClient.getConsoles());
-        record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
-        record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
-        record.setVotingPercentage(responseFromLambdaClient.getTotalVote());
-        return record;
+}catch (NullPointerException e){
+    return null;
+}
     }
 
 
@@ -89,6 +93,7 @@ public class VideoGameService {
         videoGameRecord.setDownwardVote(game.getDownwardVote());
         videoGameRecord.setUpwardVote(game.getUpwardVote());
         videoGameRecord.setVotingPercentage(game.getVotingPercentage());
+        videoGameRecord.setImage(game.getImage());
        // System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
 
@@ -99,6 +104,7 @@ public class VideoGameService {
         videoGameRequest.setDownwardVote(game.getDownwardVote());
         videoGameRequest.setUpwardVote(game.getUpwardVote());
         videoGameRequest.setVotingPercentage(game.getVotingPercentage());
+        videoGameRequest.setImage(game.getImage());
       com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.addVideoGame(videoGameRequest);
 
         return toVideoGameResponse(videoGameRecord);
@@ -112,6 +118,7 @@ public class VideoGameService {
 //
 //            videoGameResponses.add(toVideoGameResponse(videoGameRecordList.next()));
 //        }
+
          List<com.kenzie.capstone.service.model.VideoGameResponse> videoGameResponsesList = videoGameServiceClient.getAllVideoGames();
          List<VideoGameResponse> videoGameResponseList =  videoGameResponsesList.stream().map(response -> {
            VideoGameResponse videoGameResponse = new VideoGameResponse();
@@ -121,6 +128,7 @@ public class VideoGameService {
            videoGameResponse.setDescription(response.getDescription());
            videoGameResponse.setDownwardVote(response.getDownwardVote());
            videoGameResponse.setTotalVote(response.getTotalVote());
+           videoGameResponse.setImage(response.getImage());
            return videoGameResponse;
        }).collect(Collectors.toList());
           return videoGameResponseList;
@@ -132,7 +140,7 @@ public class VideoGameService {
         if (!gameExists.isPresent()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
         }
-        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),consoles);
+        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),gameExists.get().getImage(),consoles);
         gameExists.get().setConsoles(game.getConsoles());
         videoGameRepository.save(gameExists.get());
         return toVideoGameResponse(gameExists.get());
@@ -157,6 +165,7 @@ public class VideoGameService {
             videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
             videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
             videoGameRecord.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
+            videoGameRecord.setImage(videoGameUpdateRequest.getImage());
             videoGameRepository.save(videoGameRecord);
 
             VideoGameRequest videoGameRequest = new VideoGameRequest();
@@ -166,6 +175,7 @@ public class VideoGameService {
             videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
             videoGameRequest.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
             videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+            videoGameRequest.setImage(videoGameUpdateRequest.getImage());
             videoGameServiceClient.addVideoGame(videoGameRequest);
             return toVideoGameResponse(videoGameRecord);
         }
@@ -254,6 +264,7 @@ public class VideoGameService {
         videoGameResponse.setDownwardVote(record.getDownwardVote());
         videoGameResponse.setTotalVote(record.getVotingPercentage());
         videoGameResponse.setUpwardVote(record.getUpwardVote());
+        videoGameResponse.setImage(record.getImage());
         return videoGameResponse;
     }
 

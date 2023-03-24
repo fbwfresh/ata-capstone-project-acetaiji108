@@ -13,17 +13,40 @@ public class VideoGame {
     private int upwardVote = 0;
     private int downwardVote = 0;
     private int votingPercentage = 0;
-    public VideoGame(String name, String description, Consoles... listOfConsoles){
+    private String image;
+    public VideoGame(String name, String description, String image,Consoles... listOfConsoles){
         this.name = name;
         this.description = description;
+        this.image = image;
         for (Consoles console : listOfConsoles){
             this.consoles.add(console.getName());
         }
     }
-    public VideoGame(String name, String description, Set<String> consoles){
+    public VideoGame(String name, String description, String image, Set<String> consoles){
+        this.image = image;
         this.name = name;
         this.description = description;
         this.consoles = consoles;
+    }
+
+    public void setUpwardVote(int upwardVote) {
+        this.upwardVote = upwardVote;
+    }
+
+    public void setDownwardVote(int downwardVote) {
+        this.downwardVote = downwardVote;
+    }
+
+    public void setVotingPercentage(int votingPercentage) {
+        this.votingPercentage = votingPercentage;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getUpwardVote() {

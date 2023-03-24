@@ -17,7 +17,8 @@ public class VideoGameRecord {
     private Set<String> consoles;
     private int upwardVote;
     private int downwardVote;
-    private int votingPercentage;
+    private int totalVote;
+    private String image;
 
     @DynamoDBHashKey(attributeName = "name")
     public String getName() {
@@ -41,8 +42,11 @@ public class VideoGameRecord {
     }
     @DynamoDBAttribute(attributeName = "TotalVote")
     public int getVotingPercentage(){
-        return votingPercentage;
+        return totalVote;
     }
+    @DynamoDBAttribute(attributeName = "image")
+    public String getImage(){return this.image;}
+    public void setImage(String image){this.image = image;}
 
     public void setUpwardVote(int upwardVote) {
         this.upwardVote = upwardVote;
@@ -53,7 +57,7 @@ public class VideoGameRecord {
     }
 
     public void setVotingPercentage(int votingPercentage) {
-        this.votingPercentage = votingPercentage;
+        this.totalVote = votingPercentage;
     }
 
     public void setName(String name) {

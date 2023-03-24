@@ -36,16 +36,16 @@ public class VideoGameServiceTest {
     @Test
     void findAllGamesTwoGames_Test() {
         // GIVEN
-        VideoGameRecord videoGame1 = new VideoGameRecord();
+        com.kenzie.capstone.service.model.VideoGameResponse videoGame1 = new com.kenzie.capstone.service.model.VideoGameResponse();
         videoGame1.setName("name1");
 
-        VideoGameRecord videoGame2 = new VideoGameRecord();
+        com.kenzie.capstone.service.model.VideoGameResponse videoGame2 = new com.kenzie.capstone.service.model.VideoGameResponse();
         videoGame2.setName("name2");
 
-        List<VideoGameRecord> recordList = new ArrayList<>();
+        List<com.kenzie.capstone.service.model.VideoGameResponse> recordList = new ArrayList<>();
         recordList.add(videoGame1);
         recordList.add(videoGame2);
-        when(videoGameRepository.findAll()).thenReturn(recordList);
+        when(videoGameServiceClient.getAllVideoGames()).thenReturn(recordList);
 
         // WHEN
         List<VideoGameResponse> videoGames = videoGameService.listAllVideoGames();
@@ -70,20 +70,21 @@ public class VideoGameServiceTest {
     void findByVideoGameName_Test() {
         // GIVEN
         String gameName = "testGame";
+        VideoGame game = new VideoGame(gameName,"testDescription","testImage",Consoles.PC,Consoles.DS);
 
-        VideoGameRecord record = new VideoGameRecord();
-        record.setName(gameName);
-        record.setDescription("testDescription");
-        record.setConsoles(new Consoles[]{Consoles.PC, Consoles.DS});
-
-        when(videoGameRepository.findById(gameName)).thenReturn(Optional.of(record));
+        com.kenzie.capstone.service.model.VideoGameResponse response = new com.kenzie.capstone.service.model.VideoGameResponse();
+        response.setName(gameName);
+        response.setDescription("testDescription");
+        response.setConsoles(game.getConsoles());
+        response.setImage(game.getImage());
+        when(videoGameServiceClient.getVideoGame(gameName)).thenReturn(response);
         // WHEN
         VideoGameRecord videoGameResponse = videoGameService.findByName(gameName);
 
         // THEN
         assertNotNull(videoGameResponse, "The video game is returned");
-        assertEquals(record.getName(), videoGameResponse.getName(), "The video game name matches");
-        assertEquals(record.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
+        assertEquals(response.getName(), videoGameResponse.getName(), "The video game name matches");
+        assertEquals(response.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
     }
 
     @Test
@@ -91,8 +92,10 @@ public class VideoGameServiceTest {
         // GIVEN
         String gameName = "testGame";
         String gameDescription = "testDescription";
+        String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
+
         ///Consoles[] gameConsoles = new Consoles[]{Consoles.PC, Consoles.PS2};
-        VideoGame videoGame1 = new VideoGame(gameName,gameDescription,Consoles.PS2, Consoles.PC);
+        VideoGame videoGame1 = new VideoGame(gameName,gameDescription,image,Consoles.PS2, Consoles.PC);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
         videoGameRequest.setVideoGameName(gameName);
         videoGameRequest.setDescription(gameDescription);
@@ -100,6 +103,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setImage(videoGame1.getImage());
         // WHEN
         VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(videoGameRequest);
 
@@ -112,21 +116,31 @@ public class VideoGameServiceTest {
 
     @Test
     void listAllVideoGames_Test() {
+        VideoGame videoGame = new VideoGame("test","testing","image",Consoles.PS4,Consoles.NS);
         // GIVEN
-        VideoGameRecord record1 = new VideoGameRecord();
-        record1.setName("testGame1");
-        record1.setDescription("testDescription1");
-        record1.setConsoles(new Consoles[]{Consoles.PC, Consoles.GC});
+        com.kenzie.capstone.service.model.VideoGameResponse response0 = new com.kenzie.capstone.service.model.VideoGameResponse();
+        response0.setName("testGame1");
+        response0.setDescription("testDescription1");
+        response0.setConsoles(videoGame.getConsoles());
+        response0.setImage("image");
+        response0.setTotalVote(0);
+        response0.setDownwardVote(0);
+        response0.setUpwardVote(0);
 
-        VideoGameRecord record2 = new VideoGameRecord();
-        record2.setName("testGame2");
-        record2.setDescription("testDescription2");
-        record2.setConsoles(new Consoles[]{Consoles.PS4, Consoles.XONE});
+        com.kenzie.capstone.service.model.VideoGameResponse response = new com.kenzie.capstone.service.model.VideoGameResponse();
+        response.setName("testGame2");
+        response.setDescription("testDescription2");
+        response.setConsoles(videoGame.getConsoles());
+        response.setImage("image");
+        response.setTotalVote(0);
+        response.setDownwardVote(0);
+        response.setUpwardVote(0);
 
-        List<VideoGameRecord> recordList = new ArrayList<>();
-        recordList.add(record1);
-        recordList.add(record2);
-        when(videoGameRepository.findAll()).thenReturn(recordList);
+
+        List<com.kenzie.capstone.service.model.VideoGameResponse> recordList = new ArrayList<>();
+        recordList.add(response0);
+        recordList.add(response);
+        when(videoGameServiceClient.getAllVideoGames()).thenReturn(recordList);
 
         // WHEN
         List<VideoGameResponse> videoGameResponses = videoGameService.listAllVideoGames();
@@ -136,12 +150,12 @@ public class VideoGameServiceTest {
         assertEquals(2, videoGameResponses.size(), "There are two video games");
 
         for (VideoGameResponse videoGameResponse : videoGameResponses) {
-            if (videoGameResponse.getName().equals(record1.getName())) {
-                assertEquals(record1.getName(), videoGameResponse.getName(), "The video game name matches");
-                assertEquals(record1.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
-            } else if (videoGameResponse.getName().equals(record2.getName())) {
-                assertEquals(record2.getName(), videoGameResponse.getName(), "The video game name matches");
-                assertEquals(record2.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
+            if (videoGameResponse.getName().equals(response0.getName())) {
+                assertEquals(response0.getName(), videoGameResponse.getName(), "The video game name matches");
+                assertEquals(response0.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
+            } else if (videoGameResponse.getName().equals(response.getName())) {
+                assertEquals(response.getName(), videoGameResponse.getName(), "The video game name matches");
+                assertEquals(response.getDescription(), videoGameResponse.getDescription(), "The video game description matches");
             } else {
                 Assertions.fail("Video game returned that was not in the records!");
             }
@@ -153,10 +167,9 @@ public class VideoGameServiceTest {
         // GIVEN
         String videoGameName = "invalid";
         // WHEN
-        when(videoGameRepository.findById(videoGameName)).thenReturn(Optional.empty());
-        VideoGameRecord videoGame = videoGameService.findByName(videoGameName);
+        when(videoGameServiceClient.getVideoGame(videoGameName)).thenReturn(null);
         // THEN
-        Assertions.assertNull(videoGame, "The video game is null when not found");
+        Assertions.assertNull(videoGameService.findByName(videoGameName));
     }
 
     @Test
@@ -165,11 +178,11 @@ public class VideoGameServiceTest {
         String gameName = "gameName";
 
         // WHEN
-        when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameRecord game = videoGameService.findByName(gameName);
+        when(videoGameServiceClient.getVideoGame(gameName)).thenReturn(null);
+
 
         // THEN
-        Assertions.assertNull(game, "The game is null when not found");
+        Assertions.assertNull(videoGameService.findByName(gameName));
     }
 
     @Test
@@ -178,11 +191,10 @@ public class VideoGameServiceTest {
         String gameName = UUID.randomUUID().toString();
 
         // WHEN
-        when(videoGameRepository.findById(gameName)).thenReturn(Optional.empty());
-        VideoGameRecord game = videoGameService.findByName(gameName);
+        when(videoGameServiceClient.getVideoGame(gameName)).thenReturn(null);
 
         // THEN
-        Assertions.assertNull(game, "The game is null when not found");
+        Assertions.assertNull(videoGameService.findByName(gameName));
     }
 
     @Test
@@ -190,9 +202,11 @@ public class VideoGameServiceTest {
         // GIVEN
         String videoGameName = "videoGameName";
         String description = "description";
+        String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
+
        // Consoles[] consoles = {Consoles.PS5, Consoles.WII};
 
-        VideoGame videoGame1 = new VideoGame(videoGameName,description,Consoles.PS5,Consoles.WII);
+        VideoGame videoGame1 = new VideoGame(videoGameName,description,image,Consoles.PS5,Consoles.WII);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
         videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
@@ -200,6 +214,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setDescription(videoGame1.getDescription());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setVideoGameName(videoGame1.getName());
+        videoGameRequest.setImage(videoGame1.getImage());
 
         VideoGameResponse expectedVideoGameResponse = new VideoGameResponse();
         expectedVideoGameResponse.setName(videoGameName);
@@ -208,13 +223,14 @@ public class VideoGameServiceTest {
         expectedVideoGameResponse.setUpwardVote(0);
         expectedVideoGameResponse.setDownwardVote(0);
         expectedVideoGameResponse.setTotalVote(0);
+        expectedVideoGameResponse.setImage(videoGame1.getImage());
 
         VideoGameRecord expectedVideoGameRecord = new VideoGameRecord();
         expectedVideoGameRecord.setName(videoGameName);
         expectedVideoGameRecord.setDescription(description);
         //expectedVideoGameRecord.setConsoles(consoles);
         expectedVideoGameRecord.setConsoles(videoGame1.getConsoles());
-
+        expectedVideoGameRecord.setImage(videoGame1.getImage());
         expectedVideoGameRecord.setUpwardVote(0);
         expectedVideoGameRecord.setDownwardVote(0);
         expectedVideoGameRecord.setVotingPercentage(0);
@@ -239,6 +255,7 @@ public class VideoGameServiceTest {
         assertEquals(record.getUpwardVote(), expectedVideoGameRecord.getUpwardVote(), "The video game upward vote matches");
         assertEquals(record.getDownwardVote(), expectedVideoGameRecord.getDownwardVote(), "The video game downward vote matches");
         assertEquals(record.getVotingPercentage(), expectedVideoGameRecord.getVotingPercentage(), "The video game voting percentage matches");
+        assertEquals(record.getImage(),expectedVideoGameRecord.getImage());
 
         assertEquals(returnedVideoGameResponse.getName(), expectedVideoGameResponse.getName(), "The returned video game name matches");
         assertEquals(returnedVideoGameResponse.getDescription(), expectedVideoGameResponse.getDescription(), "The returned video game description matches");
@@ -246,6 +263,7 @@ public class VideoGameServiceTest {
         assertEquals(returnedVideoGameResponse.getUpwardVote(), expectedVideoGameResponse.getUpwardVote(), "The returned video game upward vote matches");
         assertEquals(returnedVideoGameResponse.getDownwardVote(), expectedVideoGameResponse.getDownwardVote(), "The returned video game downward vote matches");
         assertEquals(returnedVideoGameResponse.getTotalVote(), expectedVideoGameResponse.getTotalVote(), "The returned video game total vote matches");
+        assertEquals(returnedVideoGameResponse.getImage(),expectedVideoGameResponse.getImage());
     }
 
     @Test
@@ -326,7 +344,8 @@ public class VideoGameServiceTest {
         // GIVEN
         String name = "gameName";
         String description = "gameDescription";
-        VideoGame videoGame1 = new VideoGame(name,description,Consoles.PS5,Consoles.WIIU);
+        String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
+        VideoGame videoGame1 = new VideoGame(name,description,image,Consoles.PS5,Consoles.WIIU);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
         videoGameRequest.setVideoGameName(videoGame1.getName());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
@@ -334,12 +353,14 @@ public class VideoGameServiceTest {
         videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
+        videoGameRequest.setImage(videoGame1.getImage());
 
         // WHEN
         VideoGameResponse response = videoGameService.addNewVideoGame(videoGameRequest);
 
         // THEN
         assertEquals(name, response.getName(), "Name should match");
+        assertEquals(image,response.getImage());
         assertEquals(description, response.getDescription(), "Description should match");
         assertEquals(0, response.getUpwardVote(), "Upward vote should be 0");
         assertEquals(0, response.getDownwardVote(), "Downward vote should be 0");
@@ -411,57 +432,58 @@ public class VideoGameServiceTest {
     @Test
     void top5RatingLeaderboard() {
         // GIVEN
-        VideoGameRecord record1 = new VideoGameRecord();
+        com.kenzie.capstone.service.model.VideoGameResponse record1 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record1.setName("Game 1");
         record1.setUpwardVote(50);
         record1.setDownwardVote(20);
-        record1.setVotingPercentage(70);
-        videoGameRepository.save(record1);
+        record1.setTotalVote(70);
 
-        VideoGameRecord record2 = new VideoGameRecord();
+
+        com.kenzie.capstone.service.model.VideoGameResponse record2 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record2.setName("Game 2");
         record2.setUpwardVote(40);
         record2.setDownwardVote(10);
-        record2.setVotingPercentage(80);
-        videoGameRepository.save(record2);
+        record2.setTotalVote(80);
 
-        VideoGameRecord record3 = new VideoGameRecord();
+
+        com.kenzie.capstone.service.model.VideoGameResponse record3 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record3.setName("Game 3");
         record3.setUpwardVote(100);
         record3.setDownwardVote(50);
-        record3.setVotingPercentage(67);
-        videoGameRepository.save(record3);
+        record3.setTotalVote(67);
 
-        VideoGameRecord record4 = new VideoGameRecord();
+
+        com.kenzie.capstone.service.model.VideoGameResponse record4 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record4.setName("Game 4");
         record4.setUpwardVote(80);
         record4.setDownwardVote(30);
-        record4.setVotingPercentage(73);
-        videoGameRepository.save(record4);
+        record4.setTotalVote(73);
 
-        VideoGameRecord record5 = new VideoGameRecord();
+
+        com.kenzie.capstone.service.model.VideoGameResponse record5 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record5.setName("Game 5");
         record5.setUpwardVote(70);
         record5.setDownwardVote(20);
-        record5.setVotingPercentage(78);
-        videoGameRepository.save(record5);
+        record5.setTotalVote(78);
 
-        VideoGameRecord record6 = new VideoGameRecord();
+
+
+        com.kenzie.capstone.service.model.VideoGameResponse record6 = new com.kenzie.capstone.service.model.VideoGameResponse();
         record6.setName("Game 6");
         record6.setUpwardVote(50);
         record6.setDownwardVote(20);
-        record6.setVotingPercentage(75);
-        videoGameRepository.save(record6);
+        record6.setTotalVote(75);
 
-        List<VideoGameRecord> records = List.of(record1, record2, record3, record4, record5, record6);
-        when(videoGameRepository.findAll()).thenReturn(records);
+
+        List<com.kenzie.capstone.service.model.VideoGameResponse> responses = List.of(record1, record2, record3, record4, record5, record6);
+        when(videoGameServiceClient.getAllVideoGames()).thenReturn(responses);
 
         // WHEN
         List<VideoGameResponse> top5 = videoGameService.top5RatingLeaderboard();
 
         // THEN
         // list the top 5 games above with the highest upvotes
-        verify(videoGameRepository, times(1)).findAll();
+        verify(videoGameServiceClient, times(1)).getAllVideoGames();
         assertEquals(5, top5.size(), "There should be 5 games in the list");
         assertEquals("Game 3", top5.get(0).getName(), "Game 3 should be the first game in the list");
     }

@@ -24,8 +24,18 @@ public class UpdateRequest {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int votingPercentage;
+    @JsonProperty("image")
+    private String image;
 
     public UpdateRequest(){}
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getVideoGameName() {
         return videoGameName;

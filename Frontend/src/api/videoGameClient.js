@@ -25,6 +25,14 @@ export default class VideoGameClient extends BaseClass {
             this.handleError("getVideoGame", error, errorCallback)
         }
     }
+    async getAllVideoGames(errorCallback) {
+        try {
+            const response = await this.client.get(`/games/all`);
+            return response.data;
+        } catch (error) {
+            this.handleError("getAllVideoGames", error, errorCallback)
+        }
+    }
 
     async createVideoGame(name, errorCallback) {
         try {

@@ -24,19 +24,18 @@ public class CreateVideoGameRequest {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int votingPercentage;
+    @JsonProperty("image")
+    private String image;
     public CreateVideoGameRequest(){}
+    public void setImage(String image){this.image = image;}
+    public String getImage(){return this.image;}
 
     public String getVideoGameName() {
         return videoGameName;
     }
 
     public void setVideoGameName(String videoGameName) {
-        //This is how I am able to encode the uri
-//        if(videoGameName.contains(" ")){
-//         this.videoGameName =  videoGameName.replaceAll(" ","-");
-      //  }else {
             this.videoGameName = videoGameName;
-       // }
     }
 
     public String getDescription() {

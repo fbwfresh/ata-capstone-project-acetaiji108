@@ -98,6 +98,7 @@ public class VideoGameController {
         videoGameResponse.setDownwardVote(record.getDownwardVote());
         videoGameResponse.setTotalVote(record.getVotingPercentage());
         videoGameResponse.setUpwardVote(record.getUpwardVote());
+        videoGameResponse.setImage(record.getImage());
         return videoGameResponse;
     }
 
