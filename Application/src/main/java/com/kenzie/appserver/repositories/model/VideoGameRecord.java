@@ -44,7 +44,7 @@ public class VideoGameRecord {
     public int getVotingPercentage(){
         return totalVote;
     }
-    @DynamoDBAttribute(attributeName = "image")
+    @DynamoDBAttribute(attributeName = "Image")
     public String getImage(){return this.image;}
     public void setImage(String image){this.image = image;}
 

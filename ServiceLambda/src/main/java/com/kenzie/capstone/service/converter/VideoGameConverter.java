@@ -12,7 +12,8 @@ public class VideoGameConverter {
         record.setDescription(request.getDescription());
         record.setUpwardVote(request.getUpwardVote());
         record.setDownwardVote(request.getDownwardVote());
-        record.setVotingPercentage(request.getVotingPercentage());
+        record.setTotalVote(request.getTotalVote());
+        record.setImage(request.getImage());
         return record;
     }
 
@@ -21,9 +22,10 @@ public class VideoGameConverter {
         response.setConsoles(record.getConsoles());
         response.setDescription(record.getDescription());
         response.setName(record.getName());
-        response.setTotalVote(record.getVotingPercentage());
+        response.setTotalVote(record.getTotalVote());
         response.setUpwardVote(record.getUpwardVote());
         response.setDownwardVote(record.getDownwardVote());
+        response.setImage(record.getImage());
         return response;
     }
 }
