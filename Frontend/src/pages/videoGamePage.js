@@ -73,8 +73,10 @@ class VideoGamePage extends BaseClass {
                 const buttonDown = document.getElementById(buttonDownId);
                 buttonUp.myName = game.name;
                 buttonUp.myUpvotes = game.UpwardVote;
+                buttonUp.myTotalVotes = game.TotalVote;
                 buttonDown.myName = game.name;
                 buttonDown.myDownVotes = game.DownwardVote;
+                buttonDown.myTotalVotes = game.TotalVote;
                 buttonUp.addEventListener('click',this.onUpvote);
                 buttonDown.addEventListener('click',this.onDownvote);
                 //buttonDown.addEventListener('click',this.differentmethodto)
@@ -114,8 +116,17 @@ class VideoGamePage extends BaseClass {
         console.log("in creation");
         console.log(event.currentTarget.myName);
         console.log(event.currentTarget.myUpvotes);
-       const updatedVote = await this.client.updateVideoGameUpvote(event.currentTarget.myName);
-        console.log(updatedVote);
+        //not executing this method .updateVideoGameUpvote
+       event.currentTarget.myUpvotes = event.currentTarget.myUpvotes + 1;
+       event.currentTarget.myTotalVotes = event.currentTarget.myTotalVotes +1;
+       let upvote = event.myUpvotes;
+       let totalvote = event.myTotalVotes;
+      // const updatedVote = await this.client.updateVideoGameUpvote(event.currentTarget.myName);
+       // console.log(updatedVote);
+        console.log(upvote);
+        console.log(totalvote);
+
+
         // event.stopImmediatePropagation();
         //I would use an update method from client within this method after i add one upvote and take
         // whatevers needed to identify the game and whatever is being updated,
