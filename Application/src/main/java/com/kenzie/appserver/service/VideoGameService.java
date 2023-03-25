@@ -33,7 +33,36 @@ public class VideoGameService {
 //    public VideoGameService(VideoGameRepository videoGameRepository) {
 //        this.videoGameRepository = videoGameRepository;
 //    }
-
+    public VideoGameResponse addUpvote(String name){
+       VideoGameRecord record = findByName(name);
+       record.setUpwardVote(record.getUpwardVote() + 1);
+       record.setTotalVote(record.getTotalVote() + 1);
+       VideoGameRequest createVideoGameRequest = new VideoGameRequest();
+       createVideoGameRequest.setName(record.getName());
+       createVideoGameRequest.setDescription(record.getDescription());
+       createVideoGameRequest.setImage(record.getImage());
+       createVideoGameRequest.setTotalVote(record.getTotalVote());
+       createVideoGameRequest.setConsoles(record.getConsoles());
+       createVideoGameRequest.setDownwardVote(record.getDownwardVote());
+       createVideoGameRequest.setUpwardVote(record.getUpwardVote());
+       videoGameServiceClient.addVideoGame(createVideoGameRequest);
+       return toVideoGameResponse(record);
+    }
+    public VideoGameResponse addDownVote(String name){
+        VideoGameRecord record = findByName(name);
+        record.setDownwardVote(record.getDownwardVote() + 1);
+        record.setTotalVote(record.getTotalVote() + 1);
+        VideoGameRequest createVideoGameRequest = new VideoGameRequest();
+        createVideoGameRequest.setName(record.getName());
+        createVideoGameRequest.setDescription(record.getDescription());
+        createVideoGameRequest.setImage(record.getImage());
+        createVideoGameRequest.setTotalVote(record.getTotalVote());
+        createVideoGameRequest.setConsoles(record.getConsoles());
+        createVideoGameRequest.setDownwardVote(record.getDownwardVote());
+        createVideoGameRequest.setUpwardVote(record.getUpwardVote());
+        videoGameServiceClient.addVideoGame(createVideoGameRequest);
+        return toVideoGameResponse(record);
+    }
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
 //        VideoGameRecord dataFromDynamo = videoGameRepository
@@ -47,7 +76,7 @@ try {
     record.setConsoles(responseFromLambdaClient.getConsoles());
     record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
     record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
-    record.setVotingPercentage(responseFromLambdaClient.getTotalVote());
+    record.setTotalVote(responseFromLambdaClient.getTotalVote());
     record.setImage(responseFromLambdaClient.getImage());
     return record;
 
@@ -92,7 +121,7 @@ try {
         videoGameRecord.setConsoles(game.getConsoles());
         videoGameRecord.setDownwardVote(game.getDownwardVote());
         videoGameRecord.setUpwardVote(game.getUpwardVote());
-        videoGameRecord.setVotingPercentage(game.getVotingPercentage());
+        videoGameRecord.setTotalVote(game.getTotalVote());
         videoGameRecord.setImage(game.getImage());
        // System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
@@ -103,7 +132,7 @@ try {
         videoGameRequest.setName(game.getVideoGameName());
         videoGameRequest.setDownwardVote(game.getDownwardVote());
         videoGameRequest.setUpwardVote(game.getUpwardVote());
-        videoGameRequest.setVotingPercentage(game.getVotingPercentage());
+        videoGameRequest.setTotalVote(game.getTotalVote());
         videoGameRequest.setImage(game.getImage());
       com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.addVideoGame(videoGameRequest);
 
@@ -129,6 +158,7 @@ try {
            videoGameResponse.setDownwardVote(response.getDownwardVote());
            videoGameResponse.setTotalVote(response.getTotalVote());
            videoGameResponse.setImage(response.getImage());
+             System.out.println(response.getImage());
            return videoGameResponse;
        }).collect(Collectors.toList());
           return videoGameResponseList;
@@ -164,7 +194,7 @@ try {
             videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
             videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
             videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-            videoGameRecord.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
+            videoGameRecord.setTotalVote(videoGameUpdateRequest.getTotalVote());
             videoGameRecord.setImage(videoGameUpdateRequest.getImage());
             videoGameRepository.save(videoGameRecord);
 
@@ -173,7 +203,7 @@ try {
             videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
             videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
             videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-            videoGameRequest.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
+            videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
             videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
             videoGameRequest.setImage(videoGameUpdateRequest.getImage());
             videoGameServiceClient.addVideoGame(videoGameRequest);
@@ -262,7 +292,7 @@ try {
         videoGameResponse.setName(record.getName());
         videoGameResponse.setDescription(record.getDescription());
         videoGameResponse.setDownwardVote(record.getDownwardVote());
-        videoGameResponse.setTotalVote(record.getVotingPercentage());
+        videoGameResponse.setTotalVote(record.getTotalVote());
         videoGameResponse.setUpwardVote(record.getUpwardVote());
         videoGameResponse.setImage(record.getImage());
         return videoGameResponse;

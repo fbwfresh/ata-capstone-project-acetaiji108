@@ -1,7 +1,6 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenzie.appserver.service.model.Consoles;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.*;
@@ -23,7 +22,7 @@ public class CreateVideoGameRequest {
     @JsonProperty("DownwardVote")
     private int downwardVote;
     @JsonProperty("TotalVote")
-    private int votingPercentage;
+    private int totalVote;
     @JsonProperty("image")
     private String image;
     public CreateVideoGameRequest(){}
@@ -70,11 +69,11 @@ public class CreateVideoGameRequest {
         this.downwardVote = downwardVote;
     }
 
-    public int getVotingPercentage() {
-        return votingPercentage;
+    public int getTotalVote() {
+        return totalVote;
     }
 
-    public void setVotingPercentage(int votingPercentage) {
-        this.votingPercentage = votingPercentage;
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
     }
 }

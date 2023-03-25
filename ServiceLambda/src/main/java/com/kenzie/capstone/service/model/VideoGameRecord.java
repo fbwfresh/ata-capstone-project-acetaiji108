@@ -43,6 +43,7 @@ public class VideoGameRecord {
     }
     @DynamoDBAttribute(attributeName = "Image")
     public String getImage(){return image;}
+
     public void setImage(String image){this.image = image;}
 
     public void setUpwardVote(int upwardVote) {

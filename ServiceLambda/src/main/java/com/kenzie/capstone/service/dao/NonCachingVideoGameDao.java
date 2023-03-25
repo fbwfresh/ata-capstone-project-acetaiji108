@@ -71,5 +71,6 @@ public class NonCachingVideoGameDao implements VideoGameDao {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
         return mapper.scan(VideoGameRecord.class, scanExpression);
     }
+
 }
 

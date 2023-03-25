@@ -43,6 +43,16 @@ public class VideoGameService {
         return VideoGameConverter.fromRecordToResponse(record);
     }
 
+//    public VideoGameResponse addUpvote(VideoGameRequest request){
+//     //  VideoGameRecord record = videoGameDao.findByName(name);
+//        if (request == null) {
+//            throw new InvalidGameException("Request must contain a valid information");
+//        }
+//        VideoGameRecord record = VideoGameConverter.fromRequestToRecord(request);
+//        videoGameDao.addVideoGame(record);
+//        return VideoGameConverter.fromRecordToResponse(record);
+//    }
+
     public boolean deleteVideoGame(String videoGameName){
         VideoGameRecord record = videoGameDao.findByName(videoGameName);
             if(record == null){

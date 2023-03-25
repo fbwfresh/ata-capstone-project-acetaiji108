@@ -102,7 +102,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
-        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
         videoGameRequest.setImage(videoGame1.getImage());
         // WHEN
         VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(videoGameRequest);
@@ -208,7 +208,7 @@ public class VideoGameServiceTest {
 
         VideoGame videoGame1 = new VideoGame(videoGameName,description,image,Consoles.PS5,Consoles.WII);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
-        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setDescription(videoGame1.getDescription());
@@ -350,7 +350,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setVideoGameName(videoGame1.getName());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDescription(videoGame1.getDescription());
-        videoGameRequest.setVotingPercentage(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setImage(videoGame1.getImage());

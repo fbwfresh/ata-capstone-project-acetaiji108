@@ -74,8 +74,6 @@ class LambdaIntegrationTest {
         // WHEN
         VideoGameResponse response = videoGameService.getVideoGame(gameName);
 
-
-
         // THEN
         //verify(videoGameDao, times(1)).findByName(request.getName());
 

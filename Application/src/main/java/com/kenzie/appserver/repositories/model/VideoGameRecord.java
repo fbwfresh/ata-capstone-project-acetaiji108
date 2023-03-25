@@ -41,7 +41,7 @@ public class VideoGameRecord {
         return upwardVote;
     }
     @DynamoDBAttribute(attributeName = "TotalVote")
-    public int getVotingPercentage(){
+    public int getTotalVote(){
         return totalVote;
     }
     @DynamoDBAttribute(attributeName = "Image")
@@ -56,8 +56,8 @@ public class VideoGameRecord {
         this.downwardVote = downwardVote;
     }
 
-    public void setVotingPercentage(int votingPercentage) {
-        this.totalVote = votingPercentage;
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
     }
 
     public void setName(String name) {
