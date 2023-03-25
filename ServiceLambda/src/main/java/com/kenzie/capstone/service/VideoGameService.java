@@ -43,6 +43,43 @@ public class VideoGameService {
         return VideoGameConverter.fromRecordToResponse(record);
     }
 
+    public VideoGameResponse updateVideoGame(VideoGameRequest request) {
+        if (request == null || request.getName() == null) {
+            throw new InvalidGameException("Request must contain a valid game ID and information to update");
+        }
+
+        VideoGameRecord existingRecord = videoGameDao.findByName(request.getName());
+        if (existingRecord == null) {
+            throw new InvalidGameException("Game with name " + request.getName() + " not found");
+        }
+
+        // Update fields in the existing record based on the fields in the request
+        if (request.getName() != null) {
+            existingRecord.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            existingRecord.setDescription(request.getDescription());
+        }
+        if (request.getConsoles() != null) {
+            existingRecord.setConsoles(request.getConsoles());
+        }
+        if (request.getImage() != null) {
+            existingRecord.setImage(request.getImage());
+        }
+
+        existingRecord.setUpwardVote(request.getUpwardVote());
+        existingRecord.setDownwardVote(request.getDownwardVote());
+        existingRecord.setTotalVote(request.getTotalVote());
+
+
+        // Save the updated record to the database
+        videoGameDao.updateVideoGame(existingRecord);
+
+        return VideoGameConverter.fromRecordToResponse(existingRecord);
+    }
+
+
+
 //    public VideoGameResponse addUpvote(VideoGameRequest request){
 //     //  VideoGameRecord record = videoGameDao.findByName(name);
 //        if (request == null) {

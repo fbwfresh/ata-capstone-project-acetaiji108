@@ -9,14 +9,13 @@ import java.util.Set;
 public class UpdateRequest {
     @NotEmpty
     @JsonProperty("name")
-    private String videoGameName;
+    private String name;
     @NotEmpty
     @JsonProperty("Description")
     private String description;
     @NotEmpty
     @JsonProperty("Consoles")
     private Set<String> consoles = new HashSet<>();
-    //TODO map the JSON property and set up getters and setters
     @JsonProperty("UpwardVote")
     private int upwardVote;
     @JsonProperty("DownwardVote")
@@ -36,12 +35,12 @@ public class UpdateRequest {
         this.image = image;
     }
 
-    public String getVideoGameName() {
-        return videoGameName;
+    public String getName() {
+        return name;
     }
 
-    public void setVideoGameName(String videoGameName) {
-        this.videoGameName = videoGameName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

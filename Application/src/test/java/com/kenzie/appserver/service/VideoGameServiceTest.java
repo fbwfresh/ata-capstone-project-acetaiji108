@@ -102,7 +102,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
-        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getTotalVote());
         videoGameRequest.setImage(videoGame1.getImage());
         // WHEN
         VideoGameResponse videoGameResponse = videoGameService.addNewVideoGame(videoGameRequest);
@@ -208,7 +208,7 @@ public class VideoGameServiceTest {
 
         VideoGame videoGame1 = new VideoGame(videoGameName,description,image,Consoles.PS5,Consoles.WII);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
-        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getTotalVote());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setDescription(videoGame1.getDescription());
@@ -233,7 +233,7 @@ public class VideoGameServiceTest {
         expectedVideoGameRecord.setImage(videoGame1.getImage());
         expectedVideoGameRecord.setUpwardVote(0);
         expectedVideoGameRecord.setDownwardVote(0);
-        expectedVideoGameRecord.setVotingPercentage(0);
+        expectedVideoGameRecord.setTotalVote(0);
 
         ArgumentCaptor<VideoGameRecord> videoGameRecordCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
 
@@ -254,7 +254,7 @@ public class VideoGameServiceTest {
         Assertions.assertEquals(record.getConsoles(), videoGame1.getConsoles(), "The video game consoles match");
         assertEquals(record.getUpwardVote(), expectedVideoGameRecord.getUpwardVote(), "The video game upward vote matches");
         assertEquals(record.getDownwardVote(), expectedVideoGameRecord.getDownwardVote(), "The video game downward vote matches");
-        assertEquals(record.getVotingPercentage(), expectedVideoGameRecord.getVotingPercentage(), "The video game voting percentage matches");
+        assertEquals(record.getTotalVote(), expectedVideoGameRecord.getTotalVote(), "The video game voting percentage matches");
         assertEquals(record.getImage(),expectedVideoGameRecord.getImage());
 
         assertEquals(returnedVideoGameResponse.getName(), expectedVideoGameResponse.getName(), "The returned video game name matches");
@@ -350,7 +350,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setVideoGameName(videoGame1.getName());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDescription(videoGame1.getDescription());
-        videoGameRequest.setTotalVote(videoGame1.getVotingPercentage());
+        videoGameRequest.setTotalVote(videoGame1.getTotalVote());
         videoGameRequest.setUpwardVote(videoGame1.getUpwardVote());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setImage(videoGame1.getImage());

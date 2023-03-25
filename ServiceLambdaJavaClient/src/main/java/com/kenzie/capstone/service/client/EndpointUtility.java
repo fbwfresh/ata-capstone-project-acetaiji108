@@ -216,6 +216,7 @@ public class EndpointUtility {
         }
     }
 
+
     public String getEndpoint(String endpoint) {
         String api = getApiEndpint();
         String url = api + endpoint;
@@ -240,4 +241,53 @@ public class EndpointUtility {
             return e.getMessage();
         }
     }
+    public String putEndpoint(String endpoint, String data) {
+        String api = getApiEndpint();
+        String url = api + endpoint;
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create(url);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(data))
+                .build();
+        try {
+            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = httpResponse.statusCode();
+            if (statusCode == 200) {
+                return httpResponse.body();
+            } else {
+                throw new ApiGatewayException("PUT request failed: " + statusCode + " status code received");
+            }
+        } catch (IOException | InterruptedException e) {
+            return e.getMessage();
+        }
+    }
+
 }
+//    public String putEndpoint(String endpoint, String data) {
+//        String api = getApiEndpint();
+//        String url = api + endpoint;
+//
+//        HttpClient client = HttpClient.newHttpClient();
+//        URI uri = URI.create(url);
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(uri)
+//                .header("Accept", "application/json")
+//                .PUT(HttpRequest.BodyPublishers.ofString(data))
+//                .build();
+//        try {
+//            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+//
+//            int statusCode = httpResponse.statusCode();
+//            if (statusCode == 200) {
+//                return httpResponse.body();
+//            } else {
+//                throw new ApiGatewayException("GET request failed: " + statusCode + " status code received");
+//            }
+//        } catch (IOException | InterruptedException e) {
+//            return e.getMessage();
+//        }
+//    }

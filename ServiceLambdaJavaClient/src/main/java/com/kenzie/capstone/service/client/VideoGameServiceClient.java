@@ -14,6 +14,8 @@ public class VideoGameServiceClient {
     private static final String DELETE_VIDEOGAME_ENDPOINT = "games/{name}";
     private static final String GET_VIDEOGAME_ENDPOINT = "games/{name}";
     private static final String GET_ALL_VIDEOGAME_ENDPOINT = "games/all";
+    private static final String UPDATE_VIDEOGAME_ENDPOINT = "games/{name}";
+
     private ObjectMapper mapper;
 
     public VideoGameServiceClient(){this.mapper = new ObjectMapper();}
@@ -80,4 +82,27 @@ public class VideoGameServiceClient {
         }
         return videoGameResponse;
     }
+    public VideoGameResponse updateVideoGame(String name, VideoGameRequest videoGameRequest) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+
+        String request;
+        try {
+            request = mapper.writeValueAsString(videoGameRequest);
+        } catch (JsonProcessingException e) {
+            throw new ApiGatewayException("Unable to serialize request: " + e);
+        }
+
+        String endpoint = UPDATE_VIDEOGAME_ENDPOINT.replace("{name}", name);
+        String response = endpointUtility.putEndpoint(endpoint, request);
+
+        VideoGameResponse videoGameResponse;
+        try {
+            videoGameResponse = mapper.readValue(response, VideoGameResponse.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+
+        return videoGameResponse;
+    }
+
 }

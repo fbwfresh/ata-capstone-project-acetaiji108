@@ -185,11 +185,22 @@ try {
 //        videoGameRepository.save(gameExists.get());
 //        return toVideoGameResponse(gameExists.get());
 //    }
-    public VideoGameResponse updateVideoGame(UpdateRequest videoGameUpdateRequest) {
-        Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
-        if (gameRecord.isPresent()) {
-            VideoGameRecord videoGameRecord = gameRecord.get();
-            videoGameRecord.setName(videoGameUpdateRequest.getVideoGameName());
+    public VideoGameResponse updateVideoGame(String name,UpdateRequest videoGameUpdateRequest) {
+      com.kenzie.capstone.service.model.VideoGameResponse response = videoGameServiceClient.getVideoGame(name);
+        if (response != null) {
+            VideoGameRequest videoGameRequest = new VideoGameRequest();
+            videoGameRequest.setName(videoGameUpdateRequest.getName());
+            videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
+            videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
+            videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
+            videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
+            videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+            videoGameRequest.setImage(videoGameUpdateRequest.getImage());
+            //videoGameServiceClient.addVideoGame(videoGameRequest);
+            videoGameServiceClient.updateVideoGame(name,videoGameRequest);
+
+            VideoGameRecord videoGameRecord = new VideoGameRecord();
+            videoGameRecord.setName(videoGameUpdateRequest.getName());
             videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
             videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
             videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
@@ -198,19 +209,33 @@ try {
             videoGameRecord.setImage(videoGameUpdateRequest.getImage());
             videoGameRepository.save(videoGameRecord);
 
-            VideoGameRequest videoGameRequest = new VideoGameRequest();
-            videoGameRequest.setName(videoGameUpdateRequest.getVideoGameName());
-            videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
-            videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
-            videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-            videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
-            videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
-            videoGameRequest.setImage(videoGameUpdateRequest.getImage());
-            videoGameServiceClient.addVideoGame(videoGameRequest);
-            return toVideoGameResponse(videoGameRecord);
-        }
+            VideoGameResponse controllerResponse = new VideoGameResponse();
+            controllerResponse.setImage(videoGameRecord.getImage());
+            controllerResponse.setConsoles(videoGameRecord.getConsoles());
+            controllerResponse.setName(videoGameRecord.getName());
+            controllerResponse.setTotalVote(videoGameRecord.getTotalVote());
+            controllerResponse.setUpwardVote(videoGameRecord.getUpwardVote());
+            controllerResponse.setDownwardVote(videoGameRecord.getDownwardVote());
+            controllerResponse.setDescription(videoGameRecord.getDescription());
+            return controllerResponse;
+        }else
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
     }
+//    Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(name);
+//        if (gameRecord.isPresent()) {
+//            VideoGameRecord videoGameRecord = gameRecord.get();
+//            videoGameRecord.setName(videoGameUpdateRequest.getVideoGameName());
+//            videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
+//            videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
+//            videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+//            videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
+//            videoGameRecord.setTotalVote(videoGameUpdateRequest.getTotalVote());
+//            videoGameRecord.setImage(videoGameUpdateRequest.getImage());
+//            videoGameRepository.save(videoGameRecord);
+//
+//            return toVideoGameResponse(videoGameRecord);
+//        }
+
 //    public VideoGameResponse updateVideoGameUpvote(UpdateRequest videoGameUpdateRequest) {
 //        Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
 //        if (gameRecord.isPresent()) {
@@ -247,7 +272,7 @@ try {
         return toVideoGameResponse(gameExists.get());
     }
     public VideoGameResponse updateVideoGameDescription(UpdateRequest videoGameUpdateRequest) {
-        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
+        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(videoGameUpdateRequest.getName());
         if (!gameExists.isPresent()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
         }

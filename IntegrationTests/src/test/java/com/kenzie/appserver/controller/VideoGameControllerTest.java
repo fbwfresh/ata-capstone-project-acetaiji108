@@ -150,16 +150,16 @@ public class VideoGameControllerTest {
 
 
         UpdateRequest gameUpdateRequest = new UpdateRequest();
-        gameUpdateRequest.setVideoGameName(gameRecord.getName());
+        gameUpdateRequest.setName(gameRecord.getName());
         gameUpdateRequest.setDescription(gameRecord.getDescription());
         gameUpdateRequest.setConsoles(consolesList);
         gameUpdateRequest.setImage(gameRecord.getImage());
 
         mapper.registerModule(new JavaTimeModule());
-        videoGameService.updateVideoGame(gameUpdateRequest);
+        videoGameService.updateVideoGame(gameUpdateRequest.getName(),gameUpdateRequest);
 
         // WHEN
-        mvc.perform(put("/games/{name}",gameUpdateRequest.getVideoGameName())
+        mvc.perform(put("/games/{name}",gameUpdateRequest.getName())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(gameUpdateRequest)))

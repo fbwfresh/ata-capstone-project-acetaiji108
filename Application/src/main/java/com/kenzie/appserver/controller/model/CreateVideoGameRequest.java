@@ -25,7 +25,7 @@ public class CreateVideoGameRequest {
     private int totalVote;
     @JsonProperty("image")
     private String image;
-    public CreateVideoGameRequest(){}
+
     public void setImage(String image){this.image = image;}
     public String getImage(){return this.image;}
 

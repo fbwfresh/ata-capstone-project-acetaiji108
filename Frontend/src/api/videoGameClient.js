@@ -35,19 +35,22 @@ export default class VideoGameClient extends BaseClass {
         }
     }
 
-    async createVideoGame(name,description,image,consoles, errorCallback) {
+    async updateVideoGame(name,description,image,consoles,upwardVote,downwardVote,totalVote, errorCallback) {
         try {
-            const response = await this.client.post(`games`, {
+            const response = await this.client.put(`games/${name}`, {
                 //I put it in lowercase for description and consoles but on dynamo they are upper case
                 "name": name,
-                "description": description,
+                "Description": description,
                 "image": image,
-                "consoles": consoles
+                "Consoles": consoles,
+                "UpwardVote" : upwardVote,
+                "DownwardVote" : downwardVote,
+                "TotalVote" : totalVote
             });
             console.log(response.data);
             return response.data;
         } catch (error) {
-            this.handleError("createVideoGame", error, errorCallback);
+            this.handleError("updatedVideoGame", error, errorCallback);
         }
     }
 

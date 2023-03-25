@@ -74,9 +74,19 @@ class VideoGamePage extends BaseClass {
                 buttonUp.myName = game.name;
                 buttonUp.myUpvotes = game.UpwardVote;
                 buttonUp.myTotalVotes = game.TotalVote;
+                buttonUp.myImage = game.image;
+                buttonUp.myDescription =game.Description;
+                buttonUp.myConsoles = game.Consoles;
+                buttonUp.myDownVotes = game.DownwardVote;
+
                 buttonDown.myName = game.name;
                 buttonDown.myDownVotes = game.DownwardVote;
                 buttonDown.myTotalVotes = game.TotalVote;
+                buttonDown.myDescription = game.Description;
+                buttonDown.myImage = game.image;
+                buttonDown.myConsoles = game.Consoles;
+                buttonDown.myUpvotes = game.UpwardVote;
+
                 buttonUp.addEventListener('click',this.onUpvote);
                 buttonDown.addEventListener('click',this.onDownvote);
                 //buttonDown.addEventListener('click',this.differentmethodto)
@@ -121,6 +131,8 @@ class VideoGamePage extends BaseClass {
        event.currentTarget.myTotalVotes = event.currentTarget.myTotalVotes +1;
        let upvote = event.myUpvotes;
        let totalvote = event.myTotalVotes;
+       //todo maybe edit the add videogame/constructor to be able to accept the votes along with all the other parameters
+        //todo as a secondary constructor.
       // const updatedVote = await this.client.updateVideoGameUpvote(event.currentTarget.myName);
        // console.log(updatedVote);
         console.log(upvote);

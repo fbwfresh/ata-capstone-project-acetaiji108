@@ -69,6 +69,13 @@ public class CachingVideoGameDao implements VideoGameDao {
     public List<VideoGameRecord> getAllGames() {
         return nonCachingVideoGameDao.getAllGames();
     }
+
+    @Override
+    public VideoGameRecord updateVideoGame(VideoGameRecord record) {
+        cacheClient.invalidate(record.getName());
+        addToCache(record);
+        return record;
+    }
 }
 
 //    private List<ReferralRecord> listOfRecords;
