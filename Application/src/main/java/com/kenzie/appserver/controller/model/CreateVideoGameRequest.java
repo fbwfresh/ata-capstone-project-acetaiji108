@@ -9,7 +9,7 @@ public class CreateVideoGameRequest {
 
     @NotEmpty
     @JsonProperty("name")
-    private String videoGameName;
+    private String name;
     @NotEmpty
     @JsonProperty("Description")
     private String description;
@@ -25,16 +25,25 @@ public class CreateVideoGameRequest {
     private int totalVote;
     @JsonProperty("image")
     private String image;
-
+    public CreateVideoGameRequest(){}
+    public CreateVideoGameRequest(String name, String description, String image,Set<String> consoles, int upwardVote, int downwardVote,int totalVote){
+        this.name = name;
+        this.description = description;
+        this.image =image;
+        this.consoles = consoles;
+        this.upwardVote = upwardVote;
+        this.downwardVote = downwardVote;
+        this.totalVote = totalVote;
+    }
     public void setImage(String image){this.image = image;}
     public String getImage(){return this.image;}
 
-    public String getVideoGameName() {
-        return videoGameName;
+    public String getName() {
+        return name;
     }
 
-    public void setVideoGameName(String videoGameName) {
-            this.videoGameName = videoGameName;
+    public void setName(String name) {
+            this.name = name;
     }
 
     public String getDescription() {

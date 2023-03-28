@@ -11,26 +11,17 @@ import com.kenzie.appserver.repositories.model.VideoGameRecord;
 import com.kenzie.appserver.service.VideoGameService;
 import com.kenzie.appserver.service.model.Consoles;
 import com.kenzie.appserver.service.model.VideoGame;
-import net.andreinc.mockneat.MockNeat;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -80,7 +71,7 @@ public class VideoGameControllerTest {
     public void getGameByName_Exists() throws Exception {
         //GIVEN
         CreateVideoGameRequest createVideoGameRequest = new CreateVideoGameRequest();
-        createVideoGameRequest.setVideoGameName(videoGame.getName());
+        createVideoGameRequest.setName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
         createVideoGameRequest.setImage(videoGame.getImage());
@@ -88,10 +79,10 @@ public class VideoGameControllerTest {
 
 //       VideoGameResponse response = controller.getGameByName(createVideoGameRequest.getVideoGameName()).getBody();
 //       assertEquals(response.getName(),createVideoGameRequest.getVideoGameName());
-        mvc.perform(get("/games/{name}",createVideoGameRequest.getVideoGameName())
+        mvc.perform(get("/games/{name}",createVideoGameRequest.getName())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name")
-                        .value(is(createVideoGameRequest.getVideoGameName())))
+                        .value(is(createVideoGameRequest.getName())))
                 .andExpect(jsonPath("Description")
                         .value(is(description)))
                 .andExpect(jsonPath("Consoles")
@@ -106,7 +97,7 @@ public class VideoGameControllerTest {
     public void createVideoGame_CreateSuccessful() throws Exception {
 
         CreateVideoGameRequest createVideoGameRequest = new CreateVideoGameRequest();
-        createVideoGameRequest.setVideoGameName(videoGame.getName());
+        createVideoGameRequest.setName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
         createVideoGameRequest.setImage(videoGame.getImage());
@@ -122,7 +113,7 @@ public class VideoGameControllerTest {
         VideoGameResponse response = mapper.readValue(result.getResponse().getContentAsString(), VideoGameResponse.class);
 
         assertThat(response.getName()).isNotEmpty().as("The Name is populated");
-        assertThat(response.getName()).isEqualTo(createVideoGameRequest.getVideoGameName()).as("The name is correct");
+        assertThat(response.getName()).isEqualTo(createVideoGameRequest.getName()).as("The name is correct");
         assertThat(response.getDescription()).isNotEmpty().as("The Description is populated");
         assertThat(response.getDescription()).isEqualTo(createVideoGameRequest.getDescription());
         assertThat(response.getConsoles()).isNotEmpty().as("Consoles are populated");
@@ -135,7 +126,7 @@ public class VideoGameControllerTest {
     public void updateConsoles_PutSuccessful() throws Exception {
         // GIVEN
         CreateVideoGameRequest createVideoGameRequest = new CreateVideoGameRequest();
-        createVideoGameRequest.setVideoGameName(videoGame.getName());
+        createVideoGameRequest.setName(videoGame.getName());
         createVideoGameRequest.setDescription(videoGame.getDescription());
         createVideoGameRequest.setConsoles(videoGame.getConsoles());
         createVideoGameRequest.setImage(videoGame.getImage());

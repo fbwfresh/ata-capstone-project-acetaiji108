@@ -116,7 +116,7 @@ try {
         // VideoGameRecord videoGame = new VideoGameRecord();
        // System.out.println("adding new game");
         VideoGameRecord videoGameRecord = new VideoGameRecord();
-        videoGameRecord.setName(game.getVideoGameName());
+        videoGameRecord.setName(game.getName());
         videoGameRecord.setDescription(game.getDescription());
         videoGameRecord.setConsoles(game.getConsoles());
         videoGameRecord.setDownwardVote(game.getDownwardVote());
@@ -129,7 +129,7 @@ try {
         VideoGameRequest videoGameRequest = new VideoGameRequest();
         videoGameRequest.setConsoles(game.getConsoles());
         videoGameRequest.setDescription(game.getDescription());
-        videoGameRequest.setName(game.getVideoGameName());
+        videoGameRequest.setName(game.getName());
         videoGameRequest.setDownwardVote(game.getDownwardVote());
         videoGameRequest.setUpwardVote(game.getUpwardVote());
         videoGameRequest.setTotalVote(game.getTotalVote());
@@ -165,16 +165,16 @@ try {
     }
 
 
-    public VideoGameResponse updateVideoGameConsoles(String name,Consoles... consoles) {
-        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
-        if (!gameExists.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-        }
-        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),gameExists.get().getImage(),consoles);
-        gameExists.get().setConsoles(game.getConsoles());
-        videoGameRepository.save(gameExists.get());
-        return toVideoGameResponse(gameExists.get());
-    }
+//    public VideoGameResponse updateVideoGameConsoles(String name,Consoles... consoles) {
+//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
+//        if (!gameExists.isPresent()){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
+//        }
+//        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),gameExists.get().getImage(),consoles);
+//        gameExists.get().setConsoles(game.getConsoles());
+//        videoGameRepository.save(gameExists.get());
+//        return toVideoGameResponse(gameExists.get());
+//    }
 //    public VideoGameResponse updateVideoGameConsoles(String name,List<String> consoles) {
 //        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
 //        if (!gameExists.isPresent()){
@@ -196,8 +196,8 @@ try {
             videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
             videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
             videoGameRequest.setImage(videoGameUpdateRequest.getImage());
-            //videoGameServiceClient.addVideoGame(videoGameRequest);
             videoGameServiceClient.updateVideoGame(name,videoGameRequest);
+            //videoGameServiceClient.addVideoGame(videoGameRequest);
 
             VideoGameRecord videoGameRecord = new VideoGameRecord();
             videoGameRecord.setName(videoGameUpdateRequest.getName());
@@ -271,25 +271,12 @@ try {
         videoGameRepository.save(gameExists.get());
         return toVideoGameResponse(gameExists.get());
     }
-    public VideoGameResponse updateVideoGameDescription(UpdateRequest videoGameUpdateRequest) {
-        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(videoGameUpdateRequest.getName());
-        if (!gameExists.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-        }
-        gameExists.get().setDescription(videoGameUpdateRequest.getDescription());
-        videoGameRepository.save(gameExists.get());
-        return toVideoGameResponse(gameExists.get());
-    }
 
     public boolean deleteVideoGame(String name) {
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
-            //todo add delete in the client
         }
         boolean deleted = videoGameServiceClient.deleteVideoGame(name);
-//        if (deleted) {
-//            return "Deleted Game";
-//        }
         return deleted;
     }
 
@@ -322,5 +309,15 @@ try {
         videoGameResponse.setImage(record.getImage());
         return videoGameResponse;
     }
+
+//    public VideoGameResponse updateVideoGameDescription(UpdateRequest videoGameUpdateRequest) {
+//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(videoGameUpdateRequest.getName());
+//        if (!gameExists.isPresent()){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
+//        }
+//        gameExists.get().setDescription(videoGameUpdateRequest.getDescription());
+//        videoGameRepository.save(gameExists.get());
+//        return toVideoGameResponse(gameExists.get());
+//    }
 
 }

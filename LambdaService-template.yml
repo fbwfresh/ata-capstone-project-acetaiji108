@@ -163,7 +163,7 @@ Resources:
           Type: Api
           Properties:
             Path: /games/{name}
-            Method: post
+            Method: delete
   GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -235,4 +235,4 @@ Resources:
           Type: Api
           Properties:
             Path: /games/{name}
-            Method: put
+            Method: post

@@ -97,7 +97,7 @@ public class VideoGameServiceTest {
         ///Consoles[] gameConsoles = new Consoles[]{Consoles.PC, Consoles.PS2};
         VideoGame videoGame1 = new VideoGame(gameName,gameDescription,image,Consoles.PS2, Consoles.PC);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
-        videoGameRequest.setVideoGameName(gameName);
+        videoGameRequest.setName(gameName);
         videoGameRequest.setDescription(gameDescription);
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
@@ -213,7 +213,7 @@ public class VideoGameServiceTest {
         videoGameRequest.setDownwardVote(videoGame1.getDownwardVote());
         videoGameRequest.setDescription(videoGame1.getDescription());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
-        videoGameRequest.setVideoGameName(videoGame1.getName());
+        videoGameRequest.setName(videoGame1.getName());
         videoGameRequest.setImage(videoGame1.getImage());
 
         VideoGameResponse expectedVideoGameResponse = new VideoGameResponse();
@@ -347,7 +347,7 @@ public class VideoGameServiceTest {
         String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
         VideoGame videoGame1 = new VideoGame(name,description,image,Consoles.PS5,Consoles.WIIU);
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
-        videoGameRequest.setVideoGameName(videoGame1.getName());
+        videoGameRequest.setName(videoGame1.getName());
         videoGameRequest.setConsoles(videoGame1.getConsoles());
         videoGameRequest.setDescription(videoGame1.getDescription());
         videoGameRequest.setTotalVote(videoGame1.getTotalVote());

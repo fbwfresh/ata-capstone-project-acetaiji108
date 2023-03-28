@@ -6,12 +6,10 @@ import com.amazonaws.services.apigateway.model.GetRestApisRequest;
 import com.amazonaws.services.apigateway.model.GetRestApisResult;
 import com.amazonaws.services.apigateway.model.RestApi;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -219,7 +217,9 @@ public class EndpointUtility {
 
     public String getEndpoint(String endpoint) {
         String api = getApiEndpint();
+
         String url = api + endpoint;
+
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
@@ -243,7 +243,13 @@ public class EndpointUtility {
     }
     public String putEndpoint(String endpoint, String data) {
         String api = getApiEndpint();
-        String url = api + endpoint;
+        String  encodedUri ="";
+        try {
+             encodedUri = URLEncoder.encode(endpoint,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String url = api + encodedUri;
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);

@@ -6,6 +6,8 @@ import com.kenzie.capstone.service.exceptions.InvalidGameException;
 import com.kenzie.capstone.service.model.VideoGameRecord;
 import com.kenzie.capstone.service.model.VideoGameRequest;
 import com.kenzie.capstone.service.model.VideoGameResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 
 public class VideoGameService {
     private VideoGameDao videoGameDao;
+    static final Logger log = LogManager.getLogger();
     @Inject
     public VideoGameService(VideoGameDao videoGameDao){
         this.videoGameDao = videoGameDao;
@@ -27,7 +30,9 @@ public class VideoGameService {
     }
 
     public VideoGameResponse getVideoGame(String name){
+        log.info("before dao " + name);
         VideoGameRecord record = videoGameDao.findByName(name);
+        log.info(record);
         if(record == null){
             throw new InvalidGameException("Request must contain a valid video game name");
         }
@@ -66,16 +71,13 @@ public class VideoGameService {
         if (request.getImage() != null) {
             existingRecord.setImage(request.getImage());
         }
-
         existingRecord.setUpwardVote(request.getUpwardVote());
         existingRecord.setDownwardVote(request.getDownwardVote());
         existingRecord.setTotalVote(request.getTotalVote());
-
-
         // Save the updated record to the database
-        videoGameDao.updateVideoGame(existingRecord);
+       VideoGameRecord record = videoGameDao.updateVideoGame(existingRecord);
 
-        return VideoGameConverter.fromRecordToResponse(existingRecord);
+        return VideoGameConverter.fromRecordToResponse(record);
     }
 
 

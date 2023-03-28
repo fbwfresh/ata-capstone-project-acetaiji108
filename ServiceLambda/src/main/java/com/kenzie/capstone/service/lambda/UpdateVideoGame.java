@@ -29,7 +29,7 @@ public class UpdateVideoGame implements RequestHandler<APIGatewayProxyRequestEve
 
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
         VideoGameService videoGameService = serviceComponent.provideVideoGameService();
-
+//changed this method to a post instead of a put
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
         try {

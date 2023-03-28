@@ -4,7 +4,7 @@ import axios from 'axios'
 export default class VideoGameClient extends BaseClass {
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'createVideoGame', 'getVideoGame', 'deleteVideoGame','getAllVideoGames','updateVideoGameUpvote'];
+        const methodsToBind = ['clientLoaded', 'getVideoGame', 'deleteVideoGame','getAllVideoGames','createVideoGame','updateVideoGame'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -35,9 +35,9 @@ export default class VideoGameClient extends BaseClass {
         }
     }
 
-    async updateVideoGame(name,description,image,consoles,upwardVote,downwardVote,totalVote, errorCallback) {
+    async createVideoGame(name,description,image,consoles,upwardVote,downwardVote,totalVote, errorCallback) {
         try {
-            const response = await this.client.put(`games/${name}`, {
+            const response = await this.client.post(`/games`, {
                 //I put it in lowercase for description and consoles but on dynamo they are upper case
                 "name": name,
                 "Description": description,
@@ -53,6 +53,23 @@ export default class VideoGameClient extends BaseClass {
             this.handleError("updatedVideoGame", error, errorCallback);
         }
     }
+    async updateVideoGame(name, description, image, consoles, upwardVote, downwardVote, totalVote, errorCallback) {
+        try {
+            const response = await this.client.post(`/games/${name}`, {
+                "Description": description,
+                "image": image,
+                "Consoles": consoles,
+                "UpwardVote": upwardVote,
+                "DownwardVote": downwardVote,
+                "TotalVote": totalVote
+            });
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            this.handleError("updateVideoGame", error, errorCallback);
+        }
+    }
+
 
     async deleteVideoGame(name,errorCallback){
         try{
@@ -64,22 +81,22 @@ export default class VideoGameClient extends BaseClass {
         }
     }
 
-    async updateVideoGameUpvote(name,errorCallback){
-        try{
-            const response = await this.client.put(`games/${name}/upvote`);
-            return response.data;
-        }catch (error){
-            this.handleError("updateVideoGameUpvote",error, errorCallback)
-        }
-    }
-    async updateVideoGameDownvote(name,errorCallback){
-        try{
-            const response = await this.client.put(`games/${name}/downvote`);
-            return response.data;
-        }catch (error){
-            this.handleError("updateVideoGameDownvote",error, errorCallback)
-        }
-    }
+    // async updateVideoGameUpvote(name,errorCallback){
+    //     try{
+    //         const response = await this.client.put(`games/${name}/upvote`);
+    //         return response.data;
+    //     }catch (error){
+    //         this.handleError("updateVideoGameUpvote",error, errorCallback)
+    //     }
+    // }
+    // async updateVideoGameDownvote(name,errorCallback){
+    //     try{
+    //         const response = await this.client.put(`games/${name}/downvote`);
+    //         return response.data;
+    //     }catch (error){
+    //         this.handleError("updateVideoGameDownvote",error, errorCallback)
+    //     }
+    // }
 
     handleError(method, error, errorCallback) {
         console.error(method + " failed - " + error);

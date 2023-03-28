@@ -3,8 +3,12 @@ package com.kenzie.capstone.service.converter;
 import com.kenzie.capstone.service.model.VideoGameRecord;
 import com.kenzie.capstone.service.model.VideoGameRequest;
 import com.kenzie.capstone.service.model.VideoGameResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class VideoGameConverter {
+    static final Logger log = LogManager.getLogger();
+
     public static VideoGameRecord fromRequestToRecord(VideoGameRequest request){
         VideoGameRecord record = new VideoGameRecord();
         record.setName(request.getName());
@@ -18,6 +22,7 @@ public class VideoGameConverter {
     }
 
     public static VideoGameResponse fromRecordToResponse(VideoGameRecord record){
+        log.info("before Converting " + record);
         VideoGameResponse response = new VideoGameResponse();
         response.setConsoles(record.getConsoles());
         response.setDescription(record.getDescription());
@@ -26,6 +31,7 @@ public class VideoGameConverter {
         response.setUpwardVote(record.getUpwardVote());
         response.setDownwardVote(record.getDownwardVote());
         response.setImage(record.getImage());
+        log.info("after conversion " + response);
         return response;
     }
 }

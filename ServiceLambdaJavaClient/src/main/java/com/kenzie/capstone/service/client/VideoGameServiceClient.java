@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.capstone.service.model.VideoGameRequest;
 import com.kenzie.capstone.service.model.VideoGameResponse;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +64,13 @@ public class VideoGameServiceClient {
     }
     public VideoGameResponse getVideoGame(String name) {
         EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_VIDEOGAME_ENDPOINT.replace("{name}", name));
+                String  encodedUri ="";
+        try {
+            encodedUri = URLEncoder.encode(name,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String response = endpointUtility.getEndpoint(GET_VIDEOGAME_ENDPOINT.replace("{name}", encodedUri));
         VideoGameResponse videoGameResponse;
         try {
             videoGameResponse = mapper.readValue(response, VideoGameResponse.class);
@@ -93,8 +101,8 @@ public class VideoGameServiceClient {
         }
 
         String endpoint = UPDATE_VIDEOGAME_ENDPOINT.replace("{name}", name);
-        String response = endpointUtility.putEndpoint(endpoint, request);
-
+        String response = endpointUtility.postEndpoint(endpoint, request);
+//changed to a postEndpoint
         VideoGameResponse videoGameResponse;
         try {
             videoGameResponse = mapper.readValue(response, VideoGameResponse.class);

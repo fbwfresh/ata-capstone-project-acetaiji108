@@ -71,6 +71,7 @@ class VideoGamePage extends BaseClass {
                 let buttonDownId = await  this.replaceSpace(game.name+"downvote");
                 const buttonUp = document.getElementById(buttonUpId);
                 const buttonDown = document.getElementById(buttonDownId);
+
                 buttonUp.myName = game.name;
                 buttonUp.myUpvotes = game.UpwardVote;
                 buttonUp.myTotalVotes = game.TotalVote;
@@ -121,20 +122,31 @@ class VideoGamePage extends BaseClass {
     }
 
     async onUpvote(event){
-        //console.log(event);
         event.preventDefault();
         console.log("in creation");
         console.log(event.currentTarget.myName);
         console.log(event.currentTarget.myUpvotes);
+        console.log(event.currentTarget.myDownVotes);
+        console.log(event.currentTarget.myDescription);
+        console.log(event.currentTarget.myTotalVotes);
+        console.log(event.currentTarget.myImage);
+        console.log(event.currentTarget.myConsoles);
         //not executing this method .updateVideoGameUpvote
+        this.dataStore.set(event.currentTarget.myName,event.currentTarget);
        event.currentTarget.myUpvotes = event.currentTarget.myUpvotes + 1;
        event.currentTarget.myTotalVotes = event.currentTarget.myTotalVotes +1;
-       let upvote = event.myUpvotes;
-       let totalvote = event.myTotalVotes;
-       //todo maybe edit the add videogame/constructor to be able to accept the votes along with all the other parameters
-        //todo as a secondary constructor.
-      // const updatedVote = await this.client.updateVideoGameUpvote(event.currentTarget.myName);
-       // console.log(updatedVote);
+       let name = event.currentTarget.myName;
+       let description = event.currentTarget.myDescription;
+       let consoles = event.currentTarget.myConsoles;
+       let downvote = event.currentTarget.myDownVotes;
+       let image = event.currentTarget.myImage;
+       let upvote = event.currentTarget.myUpvotes;
+       let totalvote = event.currentTarget.myTotalVotes;
+
+       const updatedGame = await this.client.updateVideoGame(name,description,image,consoles,upvote,downvote,totalvote,this.errorHandler)
+       // console.log(this.errorHandler);
+        this.dataStore.set(name,updatedGame);
+        console.log(updatedGame);
         console.log(upvote);
         console.log(totalvote);
 
