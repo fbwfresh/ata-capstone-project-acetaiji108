@@ -235,4 +235,4 @@ Resources:
           Type: Api
           Properties:
             Path: /games/{name}
-            Method: post
+            Method: put

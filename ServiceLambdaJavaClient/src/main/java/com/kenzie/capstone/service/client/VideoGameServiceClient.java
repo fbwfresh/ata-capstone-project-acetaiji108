@@ -100,8 +100,9 @@ public class VideoGameServiceClient {
             throw new ApiGatewayException("Unable to serialize request: " + e);
         }
 
+
         String endpoint = UPDATE_VIDEOGAME_ENDPOINT.replace("{name}", name);
-        String response = endpointUtility.postEndpoint(endpoint, request);
+        String response = endpointUtility.putEndpoint(endpoint, request);
 //changed to a postEndpoint
         VideoGameResponse videoGameResponse;
         try {

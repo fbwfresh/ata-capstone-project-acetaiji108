@@ -79,6 +79,7 @@ public class VideoGameController {
 
     @PutMapping("/{name}")
     public ResponseEntity<VideoGameResponse> updateVideoGame(@PathVariable String name, @RequestBody UpdateRequest videoGameUpdateRequest) {
+
         VideoGameResponse videoGameResponse = videoGameService.updateVideoGame(name,videoGameUpdateRequest);
         if (videoGameResponse == null) {
             return ResponseEntity.notFound().build();

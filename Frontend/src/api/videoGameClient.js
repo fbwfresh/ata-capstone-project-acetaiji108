@@ -55,7 +55,7 @@ export default class VideoGameClient extends BaseClass {
     }
     async updateVideoGame(name, description, image, consoles, upwardVote, downwardVote, totalVote, errorCallback) {
         try {
-            const response = await this.client.post(`/games/${name}`, {
+            const response = await this.client.put(`/games/${name}`, {
                 "Description": description,
                 "image": image,
                 "Consoles": consoles,

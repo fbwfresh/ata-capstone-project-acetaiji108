@@ -191,7 +191,16 @@ public class EndpointUtility {
 
     public String postEndpoint(String endpoint, String data) {
         String api = getApiEndpint();
-        String url = api + endpoint;
+        String encodedEndpoint = "";
+
+        try {
+            encodedEndpoint = URLEncoder.encode(endpoint,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String url = api + encodedEndpoint;
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
@@ -204,7 +213,8 @@ public class EndpointUtility {
             HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = httpResponse.statusCode();
-            if (statusCode == 200) {
+            System.out.println(statusCode);
+            if (statusCode == 200 || statusCode == 201 || statusCode == 202 || statusCode == 203 || statusCode == 204 || statusCode == 205) {
                 return httpResponse.body();
             } else {
                 throw new ApiGatewayException("GET request failed: " + statusCode + " status code received");
@@ -262,7 +272,7 @@ public class EndpointUtility {
             HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = httpResponse.statusCode();
-            if (statusCode == 200) {
+            if (statusCode == 200 || statusCode == 201 || statusCode == 202 || statusCode == 203 || statusCode == 204 || statusCode == 205) {
                 return httpResponse.body();
             } else {
                 throw new ApiGatewayException("PUT request failed: " + statusCode + " status code received");

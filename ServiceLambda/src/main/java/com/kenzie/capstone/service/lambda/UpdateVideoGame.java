@@ -31,6 +31,7 @@ public class UpdateVideoGame implements RequestHandler<APIGatewayProxyRequestEve
         VideoGameService videoGameService = serviceComponent.provideVideoGameService();
 //changed this method to a post instead of a put
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+        log.info("Status Code = " + response.getStatusCode());
 
         try {
             VideoGameRequest videoGameRequest = jsonStringToVideoGameConverter.convert(input.getBody());
