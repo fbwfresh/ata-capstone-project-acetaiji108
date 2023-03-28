@@ -10,20 +10,49 @@ public class VideoGame {
     private String name;
     private String description;
     private Set<String> consoles  = new HashSet<>();
-    private int upwardVote = 0;
-    private int downwardVote = 0;
-    private int votingPercentage = 0;
-    public VideoGame(String name, String description, Consoles... listOfConsoles){
+    private int upwardVote;
+    private int downwardVote;
+    private int totalVote;
+    private String image;
+    public VideoGame(String name, String description, String image,Consoles... listOfConsoles){
         this.name = name;
         this.description = description;
+        this.image = image;
         for (Consoles console : listOfConsoles){
             this.consoles.add(console.getName());
         }
+        this.upwardVote = 0;
+        this.downwardVote = 0;
+        this.totalVote = 0;
     }
-    public VideoGame(String name, String description, Set<String> consoles){
+    public VideoGame(String name, String description, String image, Set<String> consoles, int upwardVote, int downwardVote, int totalVote){
+        this.image = image;
         this.name = name;
         this.description = description;
         this.consoles = consoles;
+        this.upwardVote = upwardVote;
+        this.downwardVote = downwardVote;
+        this.totalVote = totalVote;
+    }
+
+    public void setUpwardVote(int upwardVote) {
+        this.upwardVote = upwardVote;
+    }
+
+    public void setDownwardVote(int downwardVote) {
+        this.downwardVote = downwardVote;
+    }
+
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getUpwardVote() {
@@ -34,8 +63,8 @@ public class VideoGame {
         return downwardVote;
     }
 
-    public int getVotingPercentage() {
-        return votingPercentage;
+    public int getTotalVote() {
+        return totalVote;
     }
 
     public String getName() {

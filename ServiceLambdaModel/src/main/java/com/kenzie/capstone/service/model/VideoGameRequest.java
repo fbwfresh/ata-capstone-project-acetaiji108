@@ -8,7 +8,16 @@ public class VideoGameRequest {
     private Set<String> consoles;
     private int upwardVote;
     private int downwardVote;
-    private int votingPercentage;
+    private int totalVote;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public int getUpwardVote() {
         return upwardVote;
@@ -26,12 +35,12 @@ public class VideoGameRequest {
         this.downwardVote = downwardVote;
     }
 
-    public int getVotingPercentage() {
-        return votingPercentage;
+    public int getTotalVote() {
+        return totalVote;
     }
 
-    public void setVotingPercentage(int votingPercentage) {
-        this.votingPercentage = votingPercentage;
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
     }
     //    public VideoGameRequest(String name, String description, Set<String> consoles){
 //        this.name = name;

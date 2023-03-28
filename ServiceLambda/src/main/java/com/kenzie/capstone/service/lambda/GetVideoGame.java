@@ -16,6 +16,8 @@ import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +42,12 @@ public class GetVideoGame implements RequestHandler<APIGatewayProxyRequestEvent,
                 .withHeaders(headers);
 
         String videoGameId = input.getPathParameters().get("name");
-
+        try {
+           videoGameId = URLDecoder.decode(videoGameId,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        log.info(videoGameId);
         if (videoGameId == null || videoGameId.length() == 0) {
             return response
                     .withStatusCode(400)
