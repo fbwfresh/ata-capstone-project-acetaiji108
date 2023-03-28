@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -25,6 +26,7 @@ class LambdaIntegrationTest {
         this.videoGameDao = new NonCachingVideoGameDao(module.provideDynamoDBMapper());
         this.videoGameService = new VideoGameService(videoGameDao);
     }
+
     @Test
     void addVideoGameTest() {
         // GIVEN
@@ -60,6 +62,7 @@ class LambdaIntegrationTest {
         assertNotNull(record.getConsoles(), "The record consoles exist");
         assertNotNull(response, "A response is returned");
     }
+
     @Test
     void deleteGameTest() {
         String gameName = "Contra";
@@ -69,17 +72,38 @@ class LambdaIntegrationTest {
     @Test
     void getVideoGameTest() throws InvalidGameException {
         // GIVEN
-    String gameName = "Persona 5";
+        VideoGameResponse response = videoGameService.getVideoGame("Monster Hunter Rise");
+
 
         // WHEN
-        VideoGameResponse response = videoGameService.getVideoGame(gameName);
+        System.out.println("Name: " + response.getName());
+        System.out.println("Description: " + response.getDescription());
+        System.out.println("Consoles: " + response.getConsoles());
 
         // THEN
-        //verify(videoGameDao, times(1)).findByName(request.getName());
+        assertNotNull(response, "The response is valid");
+        assertEquals("Monster Hunter Rise", response.getName(), "The video game name matches");
 
-        assertNotNull(response, "The returned response is valid");
-        assertEquals("Persona 5", response.getName(), "The video game name matches");
-//        assertEquals(request.getDescription(), response.getDescription(), "The video game description matches");
-//        assertEquals(record.getConsoles(), response.getConsoles(), "The video game consoles match");
+        }
+
+
+
+    @Test
+    void GetAllVideoGamesTest() {
+        // GIVEN
+        List<VideoGameResponse> response = videoGameService.getAllVideoGames();
+
+        // WHEN
+        for (VideoGameResponse game : response) {
+            System.out.println("Name: " + game.getName());
+            System.out.println("Description: " + game.getDescription());
+            System.out.println("Consoles: " + game.getConsoles());
+            System.out.println("------------------------");
+        }
+
+        // THEN
+        assertNotNull(response, "The response is valid");
+        assertEquals(51, response.size(), "There are 51 games in the database");
     }
 }
+

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.capstone.service.model.VideoGameRequest;
 import com.kenzie.capstone.service.model.VideoGameResponse;
 
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class VideoGameServiceClient {
     private static final String DELETE_VIDEOGAME_ENDPOINT = "games/{name}";
     private static final String GET_VIDEOGAME_ENDPOINT = "games/{name}";
     private static final String GET_ALL_VIDEOGAME_ENDPOINT = "games/all";
+
     private static final String UPDATE_VIDEOGAME_ENDPOINT = "games/{name}";
 
     private ObjectMapper mapper;
@@ -90,6 +92,7 @@ public class VideoGameServiceClient {
         }
         return videoGameResponse;
     }
+
     public VideoGameResponse updateVideoGame(String name, VideoGameRequest videoGameRequest) {
         EndpointUtility endpointUtility = new EndpointUtility();
 

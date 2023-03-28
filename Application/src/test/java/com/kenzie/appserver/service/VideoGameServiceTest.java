@@ -344,8 +344,10 @@ public class VideoGameServiceTest {
         // GIVEN
         String name = "gameName";
         String description = "gameDescription";
+
         String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
         VideoGame videoGame1 = new VideoGame(name,description,image,Consoles.PS5,Consoles.WIIU);
+
         CreateVideoGameRequest videoGameRequest = new CreateVideoGameRequest();
         videoGameRequest.setName(videoGame1.getName());
         videoGameRequest.setConsoles(videoGame1.getConsoles());

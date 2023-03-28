@@ -4,7 +4,9 @@ import axios from 'axios'
 export default class VideoGameClient extends BaseClass {
     constructor(props = {}){
         super();
+
         const methodsToBind = ['clientLoaded', 'getVideoGame', 'deleteVideoGame','getAllVideoGames','createVideoGame','updateVideoGame'];
+
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -25,6 +27,7 @@ export default class VideoGameClient extends BaseClass {
             this.handleError("getVideoGame", error, errorCallback)
         }
     }
+
     async getAllVideoGames(errorCallback) {
         try {
             const response = await this.client.get(`/games/all`);
@@ -46,10 +49,12 @@ export default class VideoGameClient extends BaseClass {
                 "UpwardVote" : upwardVote,
                 "DownwardVote" : downwardVote,
                 "TotalVote" : totalVote
+
             });
             console.log(response.data);
             return response.data;
         } catch (error) {
+
             this.handleError("updatedVideoGame", error, errorCallback);
         }
     }
@@ -81,6 +86,7 @@ export default class VideoGameClient extends BaseClass {
         }
     }
 
+
     // async updateVideoGameUpvote(name,errorCallback){
     //     try{
     //         const response = await this.client.put(`games/${name}/upvote`);
@@ -97,6 +103,7 @@ export default class VideoGameClient extends BaseClass {
     //         this.handleError("updateVideoGameDownvote",error, errorCallback)
     //     }
     // }
+
 
     handleError(method, error, errorCallback) {
         console.error(method + " failed - " + error);

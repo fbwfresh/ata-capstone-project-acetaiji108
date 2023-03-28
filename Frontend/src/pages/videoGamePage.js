@@ -5,11 +5,14 @@ import VideoGameClient from "../api/videoGameClient";
 class VideoGamePage extends BaseClass {
     constructor() {
         super();
+
         this.bindClassMethods(['onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
+
         this.dataStore = new DataStore();
     }
 
     mount() {
+
         // const MonsterHunterUpvote = document.getElementById("MonsterHunterUpvote");
         // MonsterHunterUpvote.addEventListener('click',this.onCreate,false);
         // MonsterHunterUpvote.myName = "MonsterHunterID";
@@ -31,6 +34,7 @@ class VideoGamePage extends BaseClass {
         this.dataStore.addChangeListener(this.renderVideoGames)
         // this.renderVideoGames();
         this.getAllGames();
+
     }
     async renderByVideoGameName(){
         const doctorFoundTable = document.getElementById("doctorFoundByIdResult");
@@ -44,6 +48,7 @@ class VideoGamePage extends BaseClass {
                                                               `
     }
     async renderVideoGames(){
+
 
         console.log("before datastore");
         const allGames = this.dataStore.get("allVideoGames");
@@ -106,7 +111,7 @@ class VideoGamePage extends BaseClass {
         
 
 
-     
+ 
     async onFindByName(event){
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -120,6 +125,7 @@ class VideoGamePage extends BaseClass {
             this.errorHandler("Error creating! Try again... ");
         }
     }
+
 
     async onUpvote(event){
         event.preventDefault();
@@ -189,3 +195,4 @@ const main = async () => {
     videoGamePage.mount();
 };
 window.addEventListener('DOMContentLoaded', main);
+

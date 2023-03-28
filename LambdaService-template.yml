@@ -236,3 +236,4 @@ Resources:
           Properties:
             Path: /games/{name}
             Method: put
+

@@ -65,6 +65,7 @@ public class VideoGameService {
     }
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
+
 //        VideoGameRecord dataFromDynamo = videoGameRepository
 //                .findById(name).orElse(null);
 //        return dataFromDynamo;
@@ -157,8 +158,10 @@ try {
            videoGameResponse.setDescription(response.getDescription());
            videoGameResponse.setDownwardVote(response.getDownwardVote());
            videoGameResponse.setTotalVote(response.getTotalVote());
+
            videoGameResponse.setImage(response.getImage());
              System.out.println(response.getImage());
+
            return videoGameResponse;
        }).collect(Collectors.toList());
           return videoGameResponseList;
@@ -208,6 +211,7 @@ try {
             videoGameRecord.setTotalVote(videoGameUpdateRequest.getTotalVote());
             videoGameRecord.setImage(videoGameUpdateRequest.getImage());
             videoGameRepository.save(videoGameRecord);
+
 
             VideoGameResponse controllerResponse = new VideoGameResponse();
             controllerResponse.setImage(videoGameRecord.getImage());
@@ -275,8 +279,10 @@ try {
     public boolean deleteVideoGame(String name) {
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
+
         }
         boolean deleted = videoGameServiceClient.deleteVideoGame(name);
+
         return deleted;
     }
 
