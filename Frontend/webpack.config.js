@@ -8,7 +8,7 @@ module.exports = {
     usedExports: true
   },
   entry: {
-    examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+    videoGamePage: path.resolve(__dirname, 'src', 'pages', 'videoGamePage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -18,7 +18,7 @@ module.exports = {
     https: false,
     port: 8080,
     open: true,
-    openPage: 'http://localhost:8080',
+    openPage: 'http://localhost:8080/VideoGameMainPage.html',
     // diableHostChecks, otherwise we get an error about headers and the page won't render
     disableHostCheck: true,
     contentBase: 'packaging_additional_published_artifacts',
@@ -27,7 +27,7 @@ module.exports = {
     proxy: [
       {
         context: [
-          '/example',
+          '/games',
         ],
         target: 'http://localhost:5001'
       }
@@ -35,8 +35,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html',
+      template: './src/VideoGameMainPage.html',
+      filename: 'VideoGameMainPage.html',
       inject: false
     }),
     new CopyPlugin({

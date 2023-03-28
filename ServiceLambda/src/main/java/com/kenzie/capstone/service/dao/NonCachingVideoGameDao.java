@@ -71,5 +71,21 @@ public class NonCachingVideoGameDao implements VideoGameDao {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
         return mapper.scan(VideoGameRecord.class, scanExpression);
     }
+
+    @Override
+    public VideoGameRecord updateVideoGame(VideoGameRecord record) {
+        try {
+            mapper.save(record, new DynamoDBSaveExpression()
+                    .withExpected(ImmutableMap.of(
+                            "name",
+                            new ExpectedAttributeValue().withValue(new AttributeValue(record.getName())).withExists(true)
+                    )));
+        } catch (ConditionalCheckFailedException e) {
+            throw new RuntimeException("Game does not exist");
+        }
+        return record;
+    }
+
+
 }
 

@@ -52,34 +52,41 @@ class LambdaServiceTest {
                 "The player character comes armed with a gun that can shoot infinitely. " +
                 "Different weapons with new abilities and that shoot different types of projectiles can be acquired" +
                 " as the player progresses through the levels.";
-        VideoGame game = new VideoGame(gameName, description, Consoles.DS, Consoles.GC, Consoles.GBA, Consoles.NS, Consoles.WII, Consoles.WIIU);
+        String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
+        VideoGame game = new VideoGame(gameName, description,image, Consoles.DS, Consoles.GC, Consoles.GBA, Consoles.NS, Consoles.WII, Consoles.WIIU);
         VideoGameRequest request = new VideoGameRequest();
         request.setName(game.getName());
         request.setConsoles(game.getConsoles());
         request.setDescription(game.getDescription());
-        request.setUpwardVote(request.getUpwardVote());
-        request.setDownwardVote(request.getDownwardVote());
-        request.setVotingPercentage(request.getVotingPercentage());
+        request.setUpwardVote(game.getUpwardVote());
+        request.setDownwardVote(game.getDownwardVote());
+        request.setTotalVote(game.getTotalVote());
+        request.setImage(request.getImage());
+
         // WHEN
         VideoGameResponse response = this.videoGameService.addVideoGame(request);
         // THEN
 
        VideoGameRecord record = new VideoGameRecord();
        record.setUpwardVote(response.getUpwardVote());
-       record.setVotingPercentage(response.getTotalVote());
+       record.setTotalVote(response.getTotalVote());
        record.setDownwardVote(response.getDownwardVote());
        record.setName(response.getName());
        record.setDescription(response.getDescription());
        record.setConsoles(response.getConsoles());
+       record.setImage(response.getImage());
         assertNotNull(record, "The record is valid");
         assertEquals(gameName, record.getName(), "The record name should match");
         assertEquals(description, record.getDescription(), "The record description should match");
         assertNotNull(record.getConsoles(), "The record consoles exist");
         assertNotNull(response, "A response is returned");
+        assertNotNull(response.getImage(), "An image is returned");
+
 //TODO make a delete method in the videoGameService for the lambda
        assertTrue(videoGameService.deleteVideoGame(response.getName()));
     }
-//    @Test
+
+//        @Test
 //    void setDataTest() {
 //        ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
 //        ArgumentCaptor<String> dataCaptor = ArgumentCaptor.forClass(String.class);

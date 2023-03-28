@@ -163,14 +163,14 @@ Resources:
           Type: Api
           Properties:
             Path: /games/{name}
-            Method: post
+            Method: delete
   GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
       Handler: com.kenzie.capstone.service.lambda.GetVideoGame
       Runtime: java11
-      Description: Deletes Videogame
+      Description: Retrieves Videogame
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -188,3 +188,52 @@ Resources:
           Properties:
             Path: /games/{name}
             Method: get
+  GetAllGamesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.GetAllVideoGames
+      Runtime: java11
+      Description: Retrieves All Videogames
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/all
+            Method: get
+  UpdateVideoGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.UpdateVideoGame
+      Runtime: java11
+      Description: Updates A Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/{name}
+            Method: put
+

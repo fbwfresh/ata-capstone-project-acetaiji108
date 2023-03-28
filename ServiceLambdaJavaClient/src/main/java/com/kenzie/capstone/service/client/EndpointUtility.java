@@ -6,12 +6,10 @@ import com.amazonaws.services.apigateway.model.GetRestApisRequest;
 import com.amazonaws.services.apigateway.model.GetRestApisResult;
 import com.amazonaws.services.apigateway.model.RestApi;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -193,7 +191,16 @@ public class EndpointUtility {
 
     public String postEndpoint(String endpoint, String data) {
         String api = getApiEndpint();
-        String url = api + endpoint;
+        String encodedEndpoint = "";
+
+        try {
+            encodedEndpoint = URLEncoder.encode(endpoint,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String url = api + encodedEndpoint;
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
@@ -206,7 +213,8 @@ public class EndpointUtility {
             HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = httpResponse.statusCode();
-            if (statusCode == 200) {
+            System.out.println(statusCode);
+            if (statusCode == 200 || statusCode == 201 || statusCode == 202 || statusCode == 203 || statusCode == 204 || statusCode == 205) {
                 return httpResponse.body();
             } else {
                 throw new ApiGatewayException("GET request failed: " + statusCode + " status code received");
@@ -216,9 +224,12 @@ public class EndpointUtility {
         }
     }
 
+
     public String getEndpoint(String endpoint) {
         String api = getApiEndpint();
+
         String url = api + endpoint;
+
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
@@ -240,4 +251,59 @@ public class EndpointUtility {
             return e.getMessage();
         }
     }
+    public String putEndpoint(String endpoint, String data) {
+        String api = getApiEndpint();
+        String  encodedUri ="";
+        try {
+             encodedUri = URLEncoder.encode(endpoint,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String url = api + encodedUri;
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create(url);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(data))
+                .build();
+        try {
+            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = httpResponse.statusCode();
+            if (statusCode == 200 || statusCode == 201 || statusCode == 202 || statusCode == 203 || statusCode == 204 || statusCode == 205) {
+                return httpResponse.body();
+            } else {
+                throw new ApiGatewayException("PUT request failed: " + statusCode + " status code received");
+            }
+        } catch (IOException | InterruptedException e) {
+            return e.getMessage();
+        }
+    }
+
 }
+//    public String putEndpoint(String endpoint, String data) {
+//        String api = getApiEndpint();
+//        String url = api + endpoint;
+//
+//        HttpClient client = HttpClient.newHttpClient();
+//        URI uri = URI.create(url);
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(uri)
+//                .header("Accept", "application/json")
+//                .PUT(HttpRequest.BodyPublishers.ofString(data))
+//                .build();
+//        try {
+//            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+//
+//            int statusCode = httpResponse.statusCode();
+//            if (statusCode == 200) {
+//                return httpResponse.body();
+//            } else {
+//                throw new ApiGatewayException("GET request failed: " + statusCode + " status code received");
+//            }
+//        } catch (IOException | InterruptedException e) {
+//            return e.getMessage();
+//        }
+//    }

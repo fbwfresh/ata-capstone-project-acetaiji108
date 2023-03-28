@@ -1,7 +1,6 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenzie.appserver.service.model.Consoles;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
@@ -10,29 +9,38 @@ import java.util.Set;
 public class UpdateRequest {
     @NotEmpty
     @JsonProperty("name")
-    private String videoGameName;
+    private String name;
     @NotEmpty
     @JsonProperty("Description")
     private String description;
     @NotEmpty
     @JsonProperty("Consoles")
     private Set<String> consoles = new HashSet<>();
-    //TODO map the JSON property and set up getters and setters
     @JsonProperty("UpwardVote")
     private int upwardVote;
     @JsonProperty("DownwardVote")
     private int downwardVote;
     @JsonProperty("TotalVote")
-    private int votingPercentage;
+    private int totalVote;
+    @JsonProperty("image")
+    private String image;
 
     public UpdateRequest(){}
 
-    public String getVideoGameName() {
-        return videoGameName;
+    public String getImage() {
+        return image;
     }
 
-    public void setVideoGameName(String videoGameName) {
-        this.videoGameName = videoGameName;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -67,11 +75,11 @@ public class UpdateRequest {
         this.downwardVote = downwardVote;
     }
 
-    public int getVotingPercentage() {
-        return votingPercentage;
+    public int getTotalVote() {
+        return totalVote;
     }
 
-    public void setVotingPercentage(int votingPercentage) {
-        this.votingPercentage = votingPercentage;
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
     }
 }

@@ -29,20 +29,28 @@ public class DaoModule {
         return new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient());
     }
 
+//    @Singleton
+//    @Provides
+//    @Named("VideoGameDao")
+//    @Inject
+//    public VideoGameDao provideVideoGameDao(
+//            @Named("CacheClient") CacheClient cacheClient,
+//            @Named("NonCachingVideoGameDao") NonCachingVideoGameDao nonCachingVideoGameDao) {
+//        return new CachingVideoGameDao(cacheClient, nonCachingVideoGameDao);
+//    }
+//    @Singleton
+//    @Provides
+//    @Named("NonCachingVideoGameDao")
+//    @Inject
+//    public NonCachingVideoGameDao provideNonCachingVideoGameDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
+//        return new NonCachingVideoGameDao(mapper);
+//    }
+
     @Singleton
     @Provides
     @Named("VideoGameDao")
     @Inject
-    public VideoGameDao provideVideoGameDao(
-            @Named("CacheClient") CacheClient cacheClient,
-            @Named("NonCachingVideoGameDao") NonCachingVideoGameDao nonCachingVideoGameDao) {
-        return new CachingVideoGameDao(cacheClient, nonCachingVideoGameDao);
-    }
-    @Singleton
-    @Provides
-    @Named("NonCachingVideoGameDao")
-    @Inject
-    public NonCachingVideoGameDao provideNonCachingVideoGameDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
+    public VideoGameDao provideVideoGameDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
         return new NonCachingVideoGameDao(mapper);
     }
 

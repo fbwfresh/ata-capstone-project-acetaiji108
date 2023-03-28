@@ -20,9 +20,18 @@ public class VideoGameResponse {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int totalVote;
+    @JsonProperty("image")
+    private String image;
 
+    public String getImage() {
+        return image;
+    }
 
-   public Set<String> getConsoles(){return consoles;}
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Set<String> getConsoles(){return consoles;}
 
     public void setConsoles(Set<String> consoles){this.consoles = consoles;}
     public String getDescription() {
