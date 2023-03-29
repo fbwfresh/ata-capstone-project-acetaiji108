@@ -10,15 +10,39 @@ public class VideoGame {
     private Set<String> consoles  = new HashSet<>();
     private int upwardVote = 0;
     private int downwardVote = 0;
-    private int votingPercentage = 0;
-    public VideoGame(String name, String description, Consoles... listOfConsoles){
+    private int totalVote = 0;
+    private String image;
+
+    public void setUpwardVote(int upwardVote) {
+        this.upwardVote = upwardVote;
+    }
+
+    public void setDownwardVote(int downwardVote) {
+        this.downwardVote = downwardVote;
+    }
+
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public VideoGame(String name, String description, String image, Consoles... listOfConsoles){
         this.name = name;
+        this.image = image;
         this.description = description;
         for (Consoles console : listOfConsoles){
             this.consoles.add(console.getName());
         }
     }
-    public VideoGame(String name, String description, Set<String> consoles){
+    public VideoGame(String name, String description,String image, Set<String> consoles){
+        this.image = image;
         this.name = name;
         this.description = description;
         this.consoles = consoles;
@@ -32,9 +56,10 @@ public class VideoGame {
         return downwardVote;
     }
 
-    public int getVotingPercentage() {
-        return votingPercentage;
+    public int getTotalVote() {
+        return totalVote;
     }
+    
 
     public String getName() {
         return name;

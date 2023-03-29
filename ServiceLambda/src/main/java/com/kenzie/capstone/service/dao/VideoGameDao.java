@@ -9,5 +9,6 @@ public interface VideoGameDao {
     public boolean deleteVideoGame(VideoGameRecord record);
     public VideoGameRecord findByName(String name);
     public List<VideoGameRecord> getAllGames();
+    public VideoGameRecord updateVideoGame(VideoGameRecord record);
 
 }

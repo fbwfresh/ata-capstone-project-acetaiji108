@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <script type="text/javascript" src="videoGamePage.js"></script>
     <meta charset="UTF-8">
     <title>GameRanker</title>
     <style>
-        #GameRankerTitle{
-            color: #EEDEC5;
-            font-size: 36px;
-            line-height: 40px;
-            height: 100px;
-            text-shadow: 1px 1px 2px green, 0 0 1em darkgreen, 0 0 0.2em blue;
-            color: #FBFAF5;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: black;
-            padding: 0 20px;
+        .body {
+            background-image: url(https://wallpapercave.com/dwp1x/wp9758145.jpg);
+
         }
         .rounded {
             border-radius: 20px;
@@ -25,50 +17,344 @@
         }
         .game {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             margin-bottom: 50px;
             border-bottom: 2px solid black;
         }
 
+
+        /*<!--image slider start-->*/
+        section {
+            position: relative;
+        }
+            .container {
+                padding: 2rem;
+            }
+
+        .slider {
+            border-radius: 10px;
+            width: 1100px;
+            height: 500px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .slides {
+            width: 500%;
+            height: 500px;
+            display: flex;
+        }
+
+        .slides input{
+            display: none;
+        }
+
+        .slide {
+            width: 20%;
+            transition: 2s;
+        }
+
+        .slide img {
+            width: 1100px;
+            height: 500px;
+            border-radius: 10px;
+            border: 2px solid white;
+            margin-bottom: 10px;
+        }
+
+        /*<!--Manual slider-->*/
+        .navigation-manual {
+            position: absolute;
+            width: 1100px;
+            bottom: 38px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .manual-btn {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 1s;
+        }
+
+        .manual-btn:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        .manual-btn:hover {
+            background: #40D3DC;
+        }
+
+        #radio1:checked ~ .first {
+            margin-left: 0;
+        }
+
+        #radio2:checked ~ .first {
+            margin-left: -20%;
+        }
+
+        #radio3:checked ~ .first {
+            margin-left: -40%;
+        }
+
+        #radio4:checked ~ .first {
+            margin-left: -60%;
+        }
+
+        #radio5:checked ~ .first {
+            margin-left: -80%;
+        }
+
+        /*<!--Auto slider-->*/
+        .navigation-auto {
+            position: absolute;
+            display: flex;
+            width: 1100px;
+            justify-content: center;
+            margin-top: 480px;
+        }
+
+        .navigation-auto div {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            transition: 1s;
+        }
+
+        .navigation-auto div:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        #radio1:checked ~ .navigation-auto .auto-btn1 {
+            background: #40D3DC;
+        }
+
+        #radio2:checked ~ .navigation-auto .auto-btn2 {
+            background: #40D3DC;
+        }
+
+        #radio3:checked ~ .navigation-auto .auto-btn3 {
+            background: #40D3DC;
+        }
+
+        #radio4:checked ~ .navigation-auto .auto-btn4 {
+            background: #40D3DC;
+        }
+
+        #radio5:checked ~ .navigation-auto .auto-btn5 {
+            background: #40D3DC;
+        }
+        /*<!--image slider CSS end-->*/
+
+        /*Banner-Image*/
+        .banner-image {
+            justify-content: center;
+            text-align: center;
+            background-color: #121946;
+            height: 100px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*<!--navBar-->*/
+        .site-header {
+            background-image: linear-gradient(rgba(0,8,100,0.9),rgba(0,8,51,0.9)), url(banner2.jpg);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar {
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: #131921;
+            border-radius: 1px;
+        }
+
+        .navbar img {
+            margin-right: 20px;
+            margin-top: 9px;
+        }
+
+        .search-bar {
+            margin-right: 50px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 300px;
+
+        }
+
+        .search-bar button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #fff;
+            color: #292929;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: SansSerif, Serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+  
+
     </style>
-</head>
-<body>
+
+<head>
+<div class="banner-image">
+    <img class="banner" src="banner6.png" alt="GameRanker Banner" width="800" height="80" />
+</div>
+<body class="body">
+
 <header class="header">
     <div class="site-header">
-        <h1 id="GameRankerTitle"> GameRanker </h1>
+        <div class="navbar">
+            <img src="logo3(1).png" alt="GameRanker" width="180" height="60"/>
+            <form action="" class="search-bar">
+                <input type="text" placeholder="Search Game Titles">
+                <button>Search</button>
+            </form>
+            <nav>
+                <ul>
+                    <li><a href="'#">Home</a></li>
+                    <li><a href="'#">Top 5</a></li>
+                    <li><a href="'#">Search</a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </header>
+
+<!--Image Slider Start-->
+<section class="container">
+<div class="slider">
+    <div class="slides">
+
+    <!-------Radio Buttons Start------->
+    <input type="radio" name="radio-btn" id="radio1">
+    <input type="radio" name="radio-btn" id="radio2">
+    <input type="radio" name="radio-btn" id="radio3">
+    <input type="radio" name="radio-btn" id="radio4">
+    <input type="radio" name="radio-btn" id="radio5">
+
+    <!----------------Slides----------------->
+    <div class="slide first"><img src="https://wallpapercave.com/wp/wp11641246.jpg" alt="COD Modern Warfare 2 wallpaper" /></div>
+    <div class="slide"><img src="https://wallpapercave.com/wp/wp5463083.jpg" alt="Final Fantasy VII Remake" /></div>
+    <div class="slide"><img src="https://wallpapercave.com/wp/wp2910455.jpg" alt="Mario and peach wallpaper" /></div>
+    <div class="slide"><img src="https://wallpapercave.com/wp/wp11654635.jpg" alt="Minecraft cartoon wallpaper" /></div>
+    <div class="slide"><img src="https://wallpapercave.com/wp/wp11351405.jpg" alt="NBA 2k Devin Booker 4K Wallpaper Edition" /></div>
+
+    <!-------Auto Navigation------->
+    <div class="navigation-auto">
+        <div class="auto-btn1"></div>
+        <div class="auto-btn2"></div>
+        <div class="auto-btn3"></div>
+        <div class="auto-btn4"></div>
+        <div class="auto-btn5"></div>
+    </div>
+
+    -----Manual Navigation-----
+    <div class="navigation-manual">
+        <label for="radio1" class="manual-btn"></label>
+        <label for="radio2" class="manual-btn"></label>
+        <label for="radio3" class="manual-btn"></label>
+        <label for="radio4" class="manual-btn"></label>
+        <label for="radio5" class="manual-btn"></label>
+        </div>
+    </div>
+</div>
+
+    <!--Slider JavaScript-->
+    <script type="text/javascript">
+        let counter = 1;
+        setInterval(function(){
+            document.getElementById('radio' + counter).checked = true;
+            counter++;
+            if(counter > 5) {
+                counter = 1;
+            }
+        }, 5500);
+    </script>
+</section>
+<!--Image Slider End-->
+
 <div class="games">
-    <div class="game">
-        <img class="rounded" id="Monster Hunter Rise Image" src="https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/en_US/dlc/switch-dlc/monster-hunter-rise-dlc/rom-bundle/monster-hunter-rise-deluxe-edition/image" width="150" height="150">
-        <div class="name"><label>Name</label></div>
-        <div><label>Description</label></div>
-        <div><label>Consoles</label></div>
+
+    <div id= "allGames" class="game">
+<!--        <img class="rounded" id="Monster Hunter Rise Image" src="https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/en_US/dlc/switch-dlc/monster-hunter-rise-dlc/rom-bundle/monster-hunter-rise-deluxe-edition/image" width="150" height="150">-->
+<!--        <div><button id="MonsterHunterUpvote" class="upvote">Upvote</button>-->
+<!--            <button class="downvote">Downvote</button></div>-->
+<!--        <div class="name"><label><h3>Name:</h3></label></div>-->
+<!--        <div class="description"><label><h3>Description:</h3></label></div>-->
+<!--        <div class="consoles"><label><h3>Consoles:</h3></label></div>-->
+
     </div>
-    <div class="game">
-        <img class="rounded" id="Dark Souls III image" src="https://image.api.playstation.com/cdn/UP0700/CUSA03388_00/v8JlD8KcQUtTqaLBmpFnj1ESRR5zMkLk.png" width="150" height="150">
-        <div><label>Name</label></div>
-        <div><label>Description</label></div>
-        <div><label>Consoles</label></div>
-    </div>
-    <div class="game">
-        <img class="rounded" id="The Elder Scrolls V: Skyrim" src="https://assets-prd.ignimgs.com/2021/08/19/elder-scrolls-skyrim-button-2017-1629409446732.jpg" width="150" height="150">
-        <div><label>Name</label></div>
-        <div><label>Description</label></div>
-        <div><label>Consoles</label></div>
-    </div>
-    <div class="game">
-        <img class="rounded" id="Persona 5" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/capsule_616x353.jpg?t=1679398700" width="150" height="150">
-        <div><label>Name</label></div>
-        <div><label>Description</label></div>
-        <div><label>Consoles</label></div>
-    </div>
-    <div class="game">
-        <img class="rounded" id="The Witcher III" src="https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmHlktOHar3lVl6rY.png" width="150" height="150">
-        <div><label>Name</label></div>
-        <div><label>Description</label></div>
-        <div><label>Consoles</label></div>
-    </div>
+
+<!--    <div class="game">-->
+<!--        <img class="rounded" id="Dark Souls III image" src="https://image.api.playstation.com/cdn/UP0700/CUSA03388_00/v8JlD8KcQUtTqaLBmpFnj1ESRR5zMkLk.png" width="150" height="150">-->
+<!--        <div><button class="upvote">Upvote</button>-->
+<!--            <button class="downvote">Downvote</button></div>-->
+<!--        <div class="name"><label><h3>Name:</h3></label></div>-->
+<!--        <div class="description"><label><h3>Description:</h3></label></div>-->
+<!--        <div class="consoles"><label><h3>Consoles:</h3></label></div>-->
+<!--    </div>-->
+
+<!--    <div class="game">-->
+<!--        <img class="rounded" id="The Elder Scrolls V: Skyrim" src="https://assets-prd.ignimgs.com/2021/08/19/elder-scrolls-skyrim-button-2017-1629409446732.jpg" width="150" height="150">-->
+<!--        <div><button class="upvote">Upvote</button>-->
+<!--            <button class="downvote">Downvote</button></div>-->
+<!--        <div class="name"><label><h3>Name:</h3></label></div>-->
+<!--        <div class="description"><label><h3>Description:</h3></label></div>-->
+<!--        <div class="consoles"><label><h3>Consoles:</h3></label></div>-->
+<!--    </div>-->
+<!--    <div class="game">-->
+<!--        <img class="rounded" id="Persona 5" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/capsule_616x353.jpg?t=1679398700" width="150" height="150">-->
+<!--       <div><button class="upvote">Upvote</button>-->
+<!--           <button class="downvote">Downvote</button></div>-->
+<!--        <div class="name"><label><h3>Name:</h3></label></div>-->
+<!--        <div class="description"><label><h3>Description:</h3></label></div>-->
+<!--        <div class="consoles"><label><h3>Consoles:</h3></label></div>-->
+<!--    </div>-->
+<!--    <div class="game">-->
+<!--        <img class="rounded" id="The Witcher III" src="https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmHlktOHar3lVl6rY.png" width="150" height="150">-->
+<!--        <div><button class="upvote">Upvote</button>-->
+<!--            <button class="downvote">Downvote</button></div>-->
+<!--        <div class="name"><label><h3>Name:</h3></label></div>-->
+<!--        <div class="description"><label><h3>Description:</h3></label></div>-->
+<!--        <div class="consoles"><label><h3>Consoles:</h3></label></div>-->
+<!--    </div>-->
+
 
 </div>
 </body>
