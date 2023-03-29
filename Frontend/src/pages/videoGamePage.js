@@ -12,24 +12,7 @@ class VideoGamePage extends BaseClass {
     }
 
     mount() {
-
-        // const MonsterHunterUpvote = document.getElementById("MonsterHunterUpvote");
-        // MonsterHunterUpvote.addEventListener('click',this.onCreate,false);
-        // MonsterHunterUpvote.myName = "MonsterHunterID";
-        // MonsterHunterUpvote.myUpvotes = 0;
-         //document.getElementById('MonsterHunterUpvote').addEventListener('click', this.onCreate);
-        // document.getElementById('downvote').addEventListener('click', this.onFindById);
-        // document.getElementById('upvote').addEventListener('click', this.onCreate);
-        // document.getElementById('downvote').addEventListener('click', this.onFindById);
-        // document.getElementById('upvote').addEventListener('click', this.onCreate);
-        // document.getElementById('downvote').addEventListener('click', this.onFindById);
-        // document.getElementById('upvote').addEventListener('click', this.onCreate);
-        // document.getElementById('downvote').addEventListener('click', this.onFindById);
-        // document.getElementById('upvote').addEventListener('click', this.onCreate);
-        // document.getElementById('downvote').addEventListener('click', this.onFindById);
         console.log("start of mount");
-           // document.addEventListener("DOMContentLoaded", this.renderVideoGames);
-
         this.client = new VideoGameClient();
         this.dataStore.addChangeListener(this.renderVideoGames)
         // this.renderVideoGames();
@@ -95,7 +78,6 @@ class VideoGamePage extends BaseClass {
 
                 buttonUp.addEventListener('click',this.onUpvote);
                 buttonDown.addEventListener('click',this.onDownvote);
-                //buttonDown.addEventListener('click',this.differentmethodto)
             }
         }
 }

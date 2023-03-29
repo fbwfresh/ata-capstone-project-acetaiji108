@@ -29,13 +29,16 @@ public class UpdateVideoGame implements RequestHandler<APIGatewayProxyRequestEve
 
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
         VideoGameService videoGameService = serviceComponent.provideVideoGameService();
-//changed this method to a post instead of a put
+        //changed this method to a post instead of a put
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         log.info("Status Code = " + response.getStatusCode());
 
         try {
+            log.info("before we convert");
             VideoGameRequest videoGameRequest = jsonStringToVideoGameConverter.convert(input.getBody());
+            log.info("videoGameRequest " + videoGameRequest);
             VideoGameResponse videoGameResponse = videoGameService.updateVideoGame(videoGameRequest);
+            log.info("videoGameResponse " + videoGameResponse);
             return response
                     .withStatusCode(200)
                     .withBody(gson.toJson(videoGameResponse));

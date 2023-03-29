@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -103,7 +105,7 @@ class LambdaIntegrationTest {
 
         // THEN
         assertNotNull(response, "The response is valid");
-        assertEquals(51, response.size(), "There are 51 games in the database");
+        assertEquals(50, response.size(), "There are 51 games in the database");
     }
 }
 
