@@ -5,9 +5,7 @@ import VideoGameClient from "../api/videoGameClient";
 class VideoGamePage extends BaseClass {
     constructor() {
         super();
-
         this.bindClassMethods(['onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
-
         this.dataStore = new DataStore();
     }
 
@@ -19,7 +17,6 @@ class VideoGamePage extends BaseClass {
         this.getAllGames();
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
 
-
     }
     async renderByVideoGameName(){
         const videoGameResultArea = document.getElementById("searchResult");
@@ -27,7 +24,7 @@ class VideoGamePage extends BaseClass {
         console.log(game);
 
         videoGameResultArea.innerHTML = `    <div class="centerResults2"><h3>Search Engine Results:</h3></div>
-                                                        <div class="centerResults"><img class="rounded" src=${game.image} height="300" width="350"></div>                                                      
+                                                        <div class="centerResults"><img class="rounded" src=${game.image} height="400" width="400"></div>                                                      
                                                           <div><h3> Description: </h3></div>
                                                           <p>${game.Description}</p>
                                                           <div class="centerResults"><h5>Consoles: ${game.Consoles}</h5></div> 
@@ -87,14 +84,12 @@ class VideoGamePage extends BaseClass {
     async replaceSpace(name){
        return name.replace(/ /g,"-");
     }
+
       async getAllGames(event){
           this.dataStore.set("allVideoGames",null);
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
       }
-        
-
-
  
     async onFindByName(event){
         event.preventDefault();
@@ -140,30 +135,7 @@ class VideoGamePage extends BaseClass {
         console.log(updatedGame);
         console.log(upvote);
         console.log(totalvote);
-
-
         // event.stopImmediatePropagation();
-        //I would use an update method from client within this method after i add one upvote and take
-        // whatevers needed to identify the game and whatever is being updated,
-        // probably just create a new method using the name and adding plus one.
-        //event.currentTarget.myU
-
-//         const videoGameElement = dataStore.get(event.currentTarget.myName);
-//         // event.currentTarget.myUpvotes = event.currentTarget.myUpvotes + 1;
-//
-//         let name = document.getElementById("add-doctor-name-field").value;
-//         let dob = document.getElementById("add-doctor-dob-field").value;
-// //this is where the doctor gets created on the page by inputting the information we saved into variables
-//         const createdDoctor = await this.client.createDoctor(name, dob, this.errorHandler);
-//         //Setting updating the value in doctors to be the new created doctor
-//         this.dataStore.set("doctors",createdDoctor);
-//         console.log(createdDoctor);
-//         if (createdDoctor) {
-//             this.showMessage(`Created a Doctor!`)
-//             this.renderDoctors()
-//         } else {
-//             this.errorHandler("Error creating! Try again... ");
-//         }
     }
     async onDownvote(event) {
         //console.log(event);

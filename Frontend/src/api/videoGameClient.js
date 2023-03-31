@@ -5,7 +5,7 @@ export default class VideoGameClient extends BaseClass {
     constructor(props = {}){
         super();
 
-        const methodsToBind = ['clientLoaded', 'getVideoGame', 'deleteVideoGame','getAllVideoGames','createVideoGame','updateVideoGame'];
+        const methodsToBind = ['clientLoaded', 'getVideoGame', 'deleteVideoGame','getAllVideoGames','createVideoGame','updateVideoGame','getTop5'];
 
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
@@ -35,6 +35,16 @@ export default class VideoGameClient extends BaseClass {
             return response.data;
         } catch (error) {
             this.handleError("getAllVideoGames", error, errorCallback)
+        }
+    }
+
+    async getTop5(errorCallback) {
+        try {
+            const response = await this.client.get(`/games/leaderboard`);
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            this.handleError("getTop5", error, errorCallback)
         }
     }
 
