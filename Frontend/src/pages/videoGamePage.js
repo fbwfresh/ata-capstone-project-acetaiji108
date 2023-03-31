@@ -14,41 +14,43 @@ class VideoGamePage extends BaseClass {
     mount() {
         console.log("start of mount");
         this.client = new VideoGameClient();
-        this.dataStore.addChangeListener(this.renderVideoGames)
+        this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
+        document.getElementById('searchButton').addEventListener('click', this.onFindByName);
+
 
     }
     async renderByVideoGameName(){
-        const doctorFoundTable = document.getElementById("doctorFoundByIdResult");
-        const doctor = this.dataStore.get("doctor");
+        const videoGameResultArea = document.getElementById("searchResult");
+        const game = this.dataStore.get("VideoGame");
+        console.log(game);
 
-        doctorFoundTable.innerHTML += `
-                                                         <div><td>${doctor.doctorId}</td> </div>
-                                                          <div><td>${doctor.name}</td></div>
-                                                          <div><td>${doctor.dob}</td></div>
-                                                          <div><td>${doctor.isActive}</td></div>
+        videoGameResultArea.innerHTML = `    <div class="centerResults2"><h3>Search Engine Results:</h3></div>
+                                                        <div class="centerResults"><img class="rounded" src=${game.image} height="300" width="350"></div>                                                      
+                                                          <div><h3> Description: </h3></div>
+                                                          <p>${game.Description}</p>
+                                                          <div class="centerResults"><h5>Consoles: ${game.Consoles}</h5></div> 
+                                                          <div class="game"></div>                                                                                                  
                                                               `
     }
     async renderVideoGames(){
-
-
         console.log("before datastore");
         const allGames = this.dataStore.get("allVideoGames");
         console.log(allGames);
        let GamesHtml =  ""
         if(allGames){
             for (const game of allGames){
-                let upvoteName = await  this.replaceSpace(game.name+"upvote");
-                let downvoteName = await  this.replaceSpace(game.name+"downvote");
+                let upvoteButtonId = await  this.replaceSpace(game.name+"upvote");
+                let downvoteButtonId = await  this.replaceSpace(game.name+"downvote");
 
                 GamesHtml += `<div><img class= "rounded" src=${game.image} width="150" height="150"></div>
-                              <div class="border"><button id= ${upvoteName}>upvote</button>
-                               <button id= "${downvoteName}">downvote</button></div>
+                              <div class="border"><button id= ${upvoteButtonId}>upvote</button>
+                               <button id= "${downvoteButtonId}">downvote</button></div>
+                              
                                 <div class="game"></div>`
 
     }
-
     }else{
             GamesHtml =`Loading Games...`;
         }
@@ -97,12 +99,13 @@ class VideoGamePage extends BaseClass {
     async onFindByName(event){
         event.preventDefault();
         event.stopImmediatePropagation();
-        let doctorId = document.getElementById("add-id-field").value;
-        const foundDoctor = await this.client.getDoctor(doctorId, this.errorHandler);
-        this.dataStore.set("doctor",foundDoctor);
-        console.log(foundDoctor);
-        if(foundDoctor){
-            this.showMessage("Found Doctor!")
+        let gameName = document.getElementById("searchBarId").value;
+        const foundGame = await this.client.getVideoGame(gameName,this.errorHandler);
+        this.dataStore.set("VideoGame",foundGame);
+        console.log(foundGame);
+        if(foundGame){
+            this.showMessage("Found Game!")
+            this.renderByVideoGameName();
         } else{
             this.errorHandler("Error creating! Try again... ");
         }
