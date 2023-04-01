@@ -64,12 +64,12 @@ class LambdaIntegrationTest {
         assertNotNull(record.getConsoles(), "The record consoles exist");
         assertNotNull(response, "A response is returned");
     }
-
-    @Test
-    void deleteGameTest() {
-        String gameName = "Contra";
-        assertTrue(videoGameService.deleteVideoGame(gameName));
-    }
+//put this delete inside the getAllGame test so that it is guaranteed to delete before it gets all games
+//    @Test
+//    void deleteGameTest() {
+//        String gameName = "Contra";
+//        assertTrue(videoGameService.deleteVideoGame(gameName));
+//    }
 
     @Test
     void getVideoGameTest() throws InvalidGameException {
@@ -93,6 +93,8 @@ class LambdaIntegrationTest {
     @Test
     void GetAllVideoGamesTest() {
         // GIVEN
+        String gameName = "Contra";
+        assertTrue(videoGameService.deleteVideoGame(gameName));
         List<VideoGameResponse> response = videoGameService.getAllVideoGames();
 
         // WHEN
@@ -105,7 +107,7 @@ class LambdaIntegrationTest {
 
         // THEN
         assertNotNull(response, "The response is valid");
-        assertEquals(50, response.size(), "There are 51 games in the database");
+        assertEquals(50, response.size(), "There are 50 games in the database");
     }
 }
 
