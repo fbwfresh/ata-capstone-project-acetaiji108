@@ -109,7 +109,7 @@ class VideoGamePage extends BaseClass {
 
     async onUpvote(event){
         event.preventDefault();
-        console.log("in creation");
+        console.log("upvote in creation");
         console.log(event.currentTarget.myName);
         console.log(event.currentTarget.myUpvotes);
         console.log(event.currentTarget.myDownVotes);
@@ -118,7 +118,7 @@ class VideoGamePage extends BaseClass {
         console.log(event.currentTarget.myImage);
         console.log(event.currentTarget.myConsoles);
         //not executing this method .updateVideoGameUpvote
-        this.dataStore.set(event.currentTarget.myName,event.currentTarget);
+        //this.dataStore.set(event.currentTarget.myName,event.currentTarget);
        event.currentTarget.myUpvotes = event.currentTarget.myUpvotes + 1;
        event.currentTarget.myTotalVotes = event.currentTarget.myTotalVotes +1;
        let name = event.currentTarget.myName;
@@ -140,11 +140,21 @@ class VideoGamePage extends BaseClass {
     async onDownvote(event) {
         //console.log(event);
         event.preventDefault();
-        console.log("in creation");
+        console.log("downvote in creation");
         console.log(event.currentTarget.myName);
         console.log(event.currentTarget.myDownVotes);
-       const updatedVote = await this.client.updateVideoGameDownvote(event.currentTarget.myName);
-        console.log(updatedVote);
+        let downvote = event.currentTarget.myDownVotes + 1;
+        let totalVote = event.currentTarget.myTotalVotes +1;
+        let name = event.currentTarget.myName;
+        let description = event.currentTarget.myDescription;
+        let consoles = event.currentTarget.myConsoles;
+        let image = event.currentTarget.myImage;
+        let upvote = event.currentTarget.myUpvotes;
+       const updatedGame = await this.client.updateVideoGame(name,description,image,consoles,upvote,downvote,totalVote,this.errorHandler);
+        console.log(updatedGame);
+        console.log("total vote " + totalVote);
+        console.log("downVote " + downvote);
+        this.dataStore.set(name,updatedGame)
     }
 }
 const main = async () => {

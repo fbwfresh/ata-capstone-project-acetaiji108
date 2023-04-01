@@ -18,7 +18,7 @@ public class VideoGameServiceClient {
     private static final String GET_VIDEOGAME_ENDPOINT = "games/{name}";
     private static final String GET_ALL_VIDEOGAME_ENDPOINT = "games/all";
 
-    private static final String UPDATE_VIDEOGAME_ENDPOINT = "games/{name}";
+    private static final String UPDATE_VIDEOGAME_ENDPOINT = "games/upvote/{name}";
 
     private ObjectMapper mapper;
 
@@ -95,6 +95,13 @@ public class VideoGameServiceClient {
 
     public VideoGameResponse updateVideoGame(String name, VideoGameRequest videoGameRequest) {
         EndpointUtility endpointUtility = new EndpointUtility();
+        String encodedEndpoint = "";
+
+        try {
+            encodedEndpoint = URLEncoder.encode(name,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
         String request;
         try {
@@ -104,8 +111,8 @@ public class VideoGameServiceClient {
         }
 
 
-        String endpoint = UPDATE_VIDEOGAME_ENDPOINT.replace("{name}", name);
-        String response = endpointUtility.putEndpoint(endpoint, request);
+        String endpoint = UPDATE_VIDEOGAME_ENDPOINT.replace("{name}", encodedEndpoint);
+        String response = endpointUtility.postEndpoint(endpoint, request);
 //changed to a postEndpoint
         VideoGameResponse videoGameResponse;
         try {

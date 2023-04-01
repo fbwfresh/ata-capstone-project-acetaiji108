@@ -192,7 +192,7 @@ try {
       com.kenzie.capstone.service.model.VideoGameResponse response = videoGameServiceClient.getVideoGame(name);
         if (response != null) {
             VideoGameRequest videoGameRequest = new VideoGameRequest();
-            videoGameRequest.setName(videoGameUpdateRequest.getName());
+            videoGameRequest.setName(name);
             videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
             videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
             videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
@@ -203,7 +203,7 @@ try {
             //videoGameServiceClient.addVideoGame(videoGameRequest);
 
             VideoGameRecord videoGameRecord = new VideoGameRecord();
-            videoGameRecord.setName(videoGameUpdateRequest.getName());
+            videoGameRecord.setName(name);
             videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
             videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
             videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
@@ -216,7 +216,7 @@ try {
             VideoGameResponse controllerResponse = new VideoGameResponse();
             controllerResponse.setImage(videoGameRecord.getImage());
             controllerResponse.setConsoles(videoGameRecord.getConsoles());
-            controllerResponse.setName(videoGameRecord.getName());
+            controllerResponse.setName(name);
             controllerResponse.setTotalVote(videoGameRecord.getTotalVote());
             controllerResponse.setUpwardVote(videoGameRecord.getUpwardVote());
             controllerResponse.setDownwardVote(videoGameRecord.getDownwardVote());
