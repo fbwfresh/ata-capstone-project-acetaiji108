@@ -35,8 +35,9 @@ public class UpdateVideoGame implements RequestHandler<APIGatewayProxyRequestEve
 
         try {
             log.info("before we convert");
+            log.info("input body " + input.getBody());
             VideoGameRequest videoGameRequest = jsonStringToVideoGameConverter.convert(input.getBody());
-            log.info("videoGameRequest " + videoGameRequest);
+            log.info("videoGameRequest " + videoGameRequest.getName());
             VideoGameResponse videoGameResponse = videoGameService.updateVideoGame(videoGameRequest);
             log.info("videoGameResponse " + videoGameResponse);
             return response

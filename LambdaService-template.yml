@@ -138,7 +138,7 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /games/
+            Path: /games
             Method: post
   DeleteGameFunction:
     Type: AWS::Serverless::Function
@@ -234,6 +234,6 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /games/{name}
-            Method: put
+            Path: /games/upvote/{name}
+            Method: post
 

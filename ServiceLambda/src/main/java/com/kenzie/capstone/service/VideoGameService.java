@@ -49,33 +49,47 @@ public class VideoGameService {
     }
 
     public VideoGameResponse updateVideoGame(VideoGameRequest request) {
-        if (request == null || request.getName() == null) {
-            throw new InvalidGameException("Request must contain a valid game ID and information to update");
-        }
+        log.info("starting the update method");
+//        if (request == null || request.getName() == null) {
+//            throw new InvalidGameException("Request must contain a valid game ID and information to update");
+//        }
+        log.info("after the InvalidGameException");
 
         VideoGameRecord existingRecord = videoGameDao.findByName(request.getName());
+        log.info(existingRecord + " after the findbyName method");
         if (existingRecord == null) {
             throw new InvalidGameException("Game with name " + request.getName() + " not found");
         }
+        log.info("After InvalidGameException");
 
         // Update fields in the existing record based on the fields in the request
         if (request.getName() != null) {
             existingRecord.setName(request.getName());
         }
+        log.info(request.getName());
         if (request.getDescription() != null) {
             existingRecord.setDescription(request.getDescription());
         }
+        log.info(request.getDescription());
         if (request.getConsoles() != null) {
             existingRecord.setConsoles(request.getConsoles());
         }
+        log.info(request.getConsoles());
         if (request.getImage() != null) {
             existingRecord.setImage(request.getImage());
         }
+        log.info(request.getImage());
+        existingRecord.setName(request.getName());
+        existingRecord.setDescription(request.getDescription());
+        existingRecord.setConsoles(request.getConsoles());
+        existingRecord.setImage(request.getImage());
         existingRecord.setUpwardVote(request.getUpwardVote());
         existingRecord.setDownwardVote(request.getDownwardVote());
         existingRecord.setTotalVote(request.getTotalVote());
+        log.info("updated Record " + existingRecord);
         // Save the updated record to the database
        VideoGameRecord record = videoGameDao.updateVideoGame(existingRecord);
+       log.info("called the dao method " + record);
 
         return VideoGameConverter.fromRecordToResponse(record);
     }

@@ -191,16 +191,8 @@ public class EndpointUtility {
 
     public String postEndpoint(String endpoint, String data) {
         String api = getApiEndpint();
-        String encodedEndpoint = "";
 
-        try {
-            encodedEndpoint = URLEncoder.encode(endpoint,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        String url = api + encodedEndpoint;
+        String url = api + endpoint;
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);

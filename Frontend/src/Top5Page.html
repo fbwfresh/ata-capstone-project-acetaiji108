@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-    <script type="text/javascript" src="videoGamePage.js"></script>
+    <script type="text/javascript" src="top5Page.js"></script>
     <meta charset="UTF-8">
     <title>GameRanker</title>
     <style>
@@ -14,11 +14,12 @@
             border-radius: 20px;
             border: 2px solid black;
             margin-bottom: 20px;
+            flex-direction: column;
         }
         .game {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 30px;
+            /*display: flex;*/
+            /*flex-direction: column;*/
+            /*margin-bottom: 30px;*/
             border-bottom: 2px solid black;
         }
 
@@ -27,13 +28,14 @@
         section {
             position: relative;
         }
-            .container {
-                padding: 2rem;
-            }
+        .container {
+            padding: 2rem;
+            background-color: silver;
+        }
 
         .slider {
             border-radius: 10px;
-            width: 1100px;
+            width: 500px;
             height: 500px;
             overflow: hidden;
             margin: 0 auto;
@@ -51,11 +53,11 @@
 
         .slide {
             width: 20%;
-            transition: 2s;
+            transition: 1s;
         }
 
         .slide img {
-            width: 1100px;
+            width: 500px;
             height: 500px;
             border-radius: 10px;
             border: 2px solid white;
@@ -64,7 +66,7 @@
 
         /*<!--Manual slider-->*/
         .navigation-manual {
-            position: absolute;
+            position: center;
             width: 1100px;
             bottom: 38px;
             display: flex;
@@ -109,9 +111,9 @@
 
         /*<!--Auto slider-->*/
         .navigation-auto {
-            position: absolute;
+            position: center;
             display: flex;
-            width: 1100px;
+            width: 500px;
             justify-content: center;
             margin-top: 480px;
         }
@@ -247,13 +249,13 @@
             color: purple;
             padding-bottom: 10px;
         }
-  
+
 
     </style>
 
-<head>
+    </head>
 <div class="banner-image">
-    <img class="banner" src="banner6.png" alt="GameRanker Banner" width="800" height="80" />
+    <img class="banner" src="https://e1.pxfuel.com/desktop-wallpaper/889/44/desktop-wallpaper-w-anime-banner.jpg" alt="GameRanker Banner"  />
 </div>
 <body class="body">
 
@@ -279,42 +281,43 @@
 
 <!--Image Slider Start-->
 <section class="container">
-<div class="slider">
-    <div class="slides">
+    <div class="slider">
+        <div class="slides">
 
-    <!-------Radio Buttons Start------->
-    <input type="radio" name="radio-btn" id="radio1">
-    <input type="radio" name="radio-btn" id="radio2">
-    <input type="radio" name="radio-btn" id="radio3">
-    <input type="radio" name="radio-btn" id="radio4">
-    <input type="radio" name="radio-btn" id="radio5">
+            <!-------Radio Buttons Start------->
+            <input type="radio" name="radio-btn" id="radio1">
+            <input type="radio" name="radio-btn" id="radio2">
+            <input type="radio" name="radio-btn" id="radio3">
+            <input type="radio" name="radio-btn" id="radio4">
+            <input type="radio" name="radio-btn" id="radio5">
 
-    <!----------------Slides----------------->
-    <div class="slide first"><img src="https://wallpapercave.com/wp/wp11641246.jpg" alt="COD Modern Warfare 2 wallpaper" /></div>
-    <div class="slide"><img src="https://wallpapercave.com/wp/wp5463083.jpg" alt="Final Fantasy VII Remake" /></div>
-    <div class="slide"><img src="https://wallpapercave.com/wp/wp2910455.jpg" alt="Mario and peach wallpaper" /></div>
-    <div class="slide"><img src="https://wallpapercave.com/wp/wp11654635.jpg" alt="Minecraft cartoon wallpaper" /></div>
-    <div class="slide"><img src="https://wallpapercave.com/wp/wp11351405.jpg" alt="NBA 2k Devin Booker 4K Wallpaper Edition" /></div>
+            <!----------------Slides----------------->
+<!-- TDOO: Add the top5 in these slots by giving them ids and calling them in js           -->
+            <div class="slide first" id="firstSlide"></div>
+            <div class="slide" id="secondSlide"></div>
+            <div class="slide" id="thirdSlide"></div>
+            <div class="slide" id="fourthSlide"></div>
+            <div class="slide" id="fifthSlide"></div>
 
-    <!-------Auto Navigation------->
-    <div class="navigation-auto">
-        <div class="auto-btn1"></div>
-        <div class="auto-btn2"></div>
-        <div class="auto-btn3"></div>
-        <div class="auto-btn4"></div>
-        <div class="auto-btn5"></div>
-    </div>
+            <!-------Auto Navigation------->
+            <div class="navigation-auto">
+                <div class="auto-btn1"></div>
+                <div class="auto-btn2"></div>
+                <div class="auto-btn3"></div>
+                <div class="auto-btn4"></div>
+                <div class="auto-btn5"></div>
+            </div>
 
-    -----Manual Navigation-----
-    <div class="navigation-manual">
-        <label for="radio1" class="manual-btn"></label>
-        <label for="radio2" class="manual-btn"></label>
-        <label for="radio3" class="manual-btn"></label>
-        <label for="radio4" class="manual-btn"></label>
-        <label for="radio5" class="manual-btn"></label>
+<!--            -&#45;&#45;&#45;&#45;Manual Navigation-&#45;&#45;&#45;&#45;-->
+            <div class="navigation-manual">
+                <label for="radio1" class="manual-btn"></label>
+                <label for="radio2" class="manual-btn"></label>
+                <label for="radio3" class="manual-btn"></label>
+                <label for="radio4" class="manual-btn"></label>
+                <label for="radio5" class="manual-btn"></label>
+            </div>
         </div>
     </div>
-</div>
 
     <!--Slider JavaScript-->
     <script type="text/javascript">
@@ -328,11 +331,10 @@
         }, 5500);
     </script>
 </section>
-<!--Image Slider End-->
+<br>
+<div id="top5Games">
 
-<div class="games">
-    <div id= "allGames">
-    </div>
 </div>
+
 </body>
 </html>
