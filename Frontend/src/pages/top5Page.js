@@ -30,9 +30,16 @@ class Top5Page extends BaseClass {
         let x = 1;
         if (top5) {
             for (const game of top5) {
+                let upVote = game.UpwardVote;
+                let totalVote = game.TotalVote;
+                let downVote = game.DownwardVote;
+                let votingPercentage = upVote / totalVote * 100;
+               votingPercentage = votingPercentage.toFixed(2);
                 slides[i].innerHTML = `<img src=${game.image}>`
                 i++;
-                top5results.innerHTML += `<div><h2>${x}. ${game.name}</h2></div>`
+                top5results.innerHTML += `<div><h2>${x}. ${game.name}</h2></div>
+                                          <div><h3>Upvotes: ${upVote}</h3></div>
+                                           <div class="game"><h3>Rating: ${votingPercentage}%</h3></div> `
                 x++;
                // top5results.innerHTML += `<div ><img class="rounded" src=${game.image} width="500" height="500"></div>`
             }

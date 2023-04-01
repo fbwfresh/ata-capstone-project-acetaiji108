@@ -22,9 +22,15 @@ class VideoGamePage extends BaseClass {
         const videoGameResultArea = document.getElementById("searchResult");
         const game = this.dataStore.get("VideoGame");
         console.log(game);
+        let upvote = game.UpwardVote;
+        let downvote = game.DownwardVote;
+        let totalVote = game.TotalVote;
+        let votingPercentage = upvote/totalVote * 100;
+
 
         videoGameResultArea.innerHTML = `    <div class="centerResults2"><h3>Search Engine Results:</h3></div>
                                                         <div class="centerResults"><img class="rounded" src=${game.image} height="400" width="400"></div>                                                      
+                                                          <div><h3>Rating: ${votingPercentage.toFixed(2)}% </h3></div>
                                                           <div><h3> Description: </h3></div>
                                                           <p>${game.Description}</p>
                                                           <div class="centerResults"><h5>Consoles: ${game.Consoles}</h5></div> 
