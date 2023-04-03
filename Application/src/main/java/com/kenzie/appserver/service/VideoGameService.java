@@ -294,6 +294,20 @@ try {
                 .collect(Collectors.toList());
         return top5;
     }
+    public List<VideoGameResponse> allGamesHighestToLowest() {
+        List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
+        List<VideoGameResponse> highToLow = videoGameResponsesList.stream()
+                .sorted(Comparator.comparing(VideoGameResponse::getUpwardVote).reversed())
+                .collect(Collectors.toList());
+        return highToLow;
+    }
+    public List<VideoGameResponse> allGamesLowestToHighest() {
+        List<VideoGameResponse> videoGameResponsesList = listAllVideoGames();
+        List<VideoGameResponse> lowToHigh = videoGameResponsesList.stream()
+                .sorted(Comparator.comparing(VideoGameResponse::getUpwardVote))
+                .collect(Collectors.toList());
+        return lowToHigh;
+    }
 
     public VideoGameResponse gamingSuggestion(){
         Random random = new Random();
