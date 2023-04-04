@@ -97,9 +97,26 @@ public class VideoGameController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/leaderboard")
+    @GetMapping("/leaderboard/top5")
     public ResponseEntity<List<VideoGameResponse>> getTop5Leaderboard() {
         List<VideoGameResponse> videoGameList = videoGameService.top5RatingLeaderboard();
+        if (videoGameList == null || videoGameList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(videoGameList);
+    }
+
+    @GetMapping("/leaderboard/lowToHigh")
+    public ResponseEntity<List<VideoGameResponse>> getlowestToHighLeaderboard() {
+        List<VideoGameResponse> videoGameList = videoGameService.allGamesLowestToHighest();
+        if (videoGameList == null || videoGameList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(videoGameList);
+    }
+    @GetMapping("/leaderboard/highToLow")
+    public ResponseEntity<List<VideoGameResponse>> getHighestToLowest() {
+        List<VideoGameResponse> videoGameList = videoGameService.allGamesHighestToLowest();
         if (videoGameList == null || videoGameList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
