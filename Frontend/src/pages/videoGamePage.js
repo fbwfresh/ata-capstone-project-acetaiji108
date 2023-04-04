@@ -12,7 +12,7 @@ class VideoGamePage extends BaseClass {
     mount() {
         console.log("start of mount");
         this.client = new VideoGameClient();
-        this.dataStore.addChangeListener(this.renderVideoGames);
+        //this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
@@ -46,7 +46,7 @@ class VideoGamePage extends BaseClass {
 //                const game = allGames[0];
               const gamesContainer = document.createElement('div');
               gamesContainer.classList.add('games-container');
-              let count = 1;
+             // let count = 1;
                 for (const game of allGames) {
 
                   const gameContainer = document.createElement('div');
@@ -80,7 +80,7 @@ class VideoGamePage extends BaseClass {
                   downvoteButton.innerHTML = "&#8595;";
 
                   const gameName = document.createElement('h3');
-                  gameName.textContent = count + '. ' + game.name;
+                  gameName.textContent = " " + game.name;
 
                   const gameDescription = document.createElement('p');
                   gameDescription.textContent = 'Description: ' + game.Description;
@@ -88,7 +88,7 @@ class VideoGamePage extends BaseClass {
                   const gameConsoles = document.createElement('h5');
                   gameConsoles.textContent = 'Consoles: ' + game.Consoles;
 
-                  count++;
+                  // count++;
 
                   buttonContainer.appendChild(upvoteButton);
                   buttonContainer.appendChild(downvoteButton);
@@ -127,6 +127,9 @@ class VideoGamePage extends BaseClass {
 
                     .game-info-container {
                       margin: 10px;
+                    }
+                    h3{
+                    margin: 10px;
                     }
 
 
@@ -175,6 +178,7 @@ class VideoGamePage extends BaseClass {
           this.dataStore.set("allVideoGames",null);
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
+          this.renderVideoGames();
       }
  
     async onFindByName(event){
