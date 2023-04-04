@@ -46,30 +46,72 @@
         /*    right: 0rem;*/
         /*}*/
         .leaderboardHeader{
-            background-color: aliceblue;
-            color: black;
+            background-color: black;
+            /*background-color: aliceblue;*/
+            color: white;
+            /*color: black;*/
             text-transform: uppercase;
             box-shadow: 2px 2px 16px 1px #aaa;
             border-top-left-radius: 1rem;
             border-top-right-radius: 1rem;
             height: 15rem;
             position: relative;
-            font-family: "Comic Sans MS";
+            font-family: "Academy Engraved LET";
         }
 
         h1{position: absolute;
             font-size: 3rem;
             line-height: 4rem;
-            top: 4rem;
-            left: -1rem;
-            margin-left: 3rem;
+            top: 0rem;
+            left: .5rem;
+            margin-left: 0rem;
 
         }
+        #tokyoGhoulImage{
+            height: 17rem;
+            position: absolute;
+            bottom: 0rem;
+            right: 35rem;
+        }
+        #zoroImage{
+            height: 18rem;
+            position: absolute;
+            bottom: 0rem;
+            right: 3rem;
+        }
+        #cowboyBebop{
+            height: 15rem;
+            position: absolute;
+            bottom: 0rem;
+            right: -1rem;
+            width: 30rem;
+        }
+        /*#onePieceImage{*/
+        /*    height: 15rem;*/
+        /*    width: 20rem;*/
+        /*    position: absolute;*/
+        /*    bottom: -0.3rem;*/
+        /*    right: 8rem;*/
+        /*}*/
         #leaderboardImage{
             height: 16rem;
+            width: 12rem;
             position: absolute;
-            bottom: -2rem;
-            right: -0.5rem;
+            bottom: -1.9rem;
+            left: -.3rem;
+        }
+        #gtaImage{
+            position: absolute;
+            height: 14.8rem;
+            left: 8rem;
+            bottom: -1rem;
+        }
+        #animeGirl{
+            height: 16.5rem;
+            width: 25rem;
+            position: absolute;
+            bottom: 0rem;
+            right: 2rem;
         }
         a{
             text-decoration: none;
@@ -123,18 +165,7 @@
             background-image: url(https://wallpapercave.com/dwp1x/wp9758145.jpg);
 
         }
-        .rounded {
-            border-radius: 20px;
-            border: 2px solid black;
-            margin-bottom: 20px;
-            flex-direction: column;
-        }
-        .game {
-            /*display: flex;*/
-            /*flex-direction: column;*/
-            /*margin-bottom: 30px;*/
-            border-bottom: 2px solid black;
-        }
+
 
 
         /*<!--image slider start-->*/
@@ -143,29 +174,10 @@
         }
 
 
-        .slider {
-            border-radius: 10px;
-            width: 500px;
-            height: 500px;
-            overflow: hidden;
-            margin: 0 auto;
-
-        }
-
-        .slides {
-            width: 500%;
-            height: 500px;
-
-        }
-
         .slides input{
             display: none;
         }
 
-        .slide {
-            width: 20%;
-            transition: 1s;
-        }
 
         .slide img {
             width: 500px;
@@ -175,59 +187,6 @@
             margin-bottom: 10px;
         }
 
-        /*<!--Manual slider-->*/
-        .navigation-manual {
-            position: center;
-            width: 1100px;
-            bottom: 38px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .manual-btn {
-            border: 2px solid #40D3DC;
-            padding: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 1s;
-        }
-
-        .manual-btn:not(:last-child) {
-            margin-right: 40px;
-        }
-
-        .manual-btn:hover {
-            background: #40D3DC;
-        }
-
-        #radio1:checked ~ .first {
-            margin-left: 0;
-        }
-
-        #radio2:checked ~ .first {
-            margin-left: -20%;
-        }
-
-        #radio3:checked ~ .first {
-            margin-left: -40%;
-        }
-
-        #radio4:checked ~ .first {
-            margin-left: -60%;
-        }
-
-        #radio5:checked ~ .first {
-            margin-left: -80%;
-        }
-
-        /*<!--Auto slider-->*/
-        .navigation-auto {
-            position: center;
-            display: flex;
-            width: 500px;
-            justify-content: center;
-            margin-top: 480px;
-        }
 
         .navigation-auto div {
             border: 2px solid #40D3DC;
@@ -240,26 +199,7 @@
             margin-right: 40px;
         }
 
-        #radio1:checked ~ .navigation-auto .auto-btn1 {
-            background: #40D3DC;
-        }
 
-        #radio2:checked ~ .navigation-auto .auto-btn2 {
-            background: #40D3DC;
-        }
-
-        #radio3:checked ~ .navigation-auto .auto-btn3 {
-            background: #40D3DC;
-        }
-
-        #radio4:checked ~ .navigation-auto .auto-btn4 {
-            background: #40D3DC;
-        }
-
-        #radio5:checked ~ .navigation-auto .auto-btn5 {
-            background: #40D3DC;
-        }
-        /*<!--image slider CSS end-->*/
 
         /*Banner-Image*/
         .banner-image {
@@ -272,21 +212,6 @@
         .banner {
             width: 100%;
             height: 100%;
-        }
-        .centerResults {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .centerResults2 {
-            background-color: gray;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         /*<!--navBar-->*/
@@ -396,7 +321,11 @@
     <div class="leaderboardHeader">
         <h1>Leader Board</h1>
         <img id="leaderboardImage" src="https://i.imgur.com/Z3NMcwv.png" alt="Goku Ultra Instinct">
-
+        <img id="gtaImage" src="https://i.imgur.com/sWy6aev.png">
+        <img id="tokyoGhoulImage" src="https://i.imgur.com/xWV9dIq.png">
+        <img id="cowboyBebop" src="https://i.imgur.com/ds3IsDD.png">
+<!--        <img id="zoroImage" src="https://i.imgur.com/jqBJlyT.png">-->
+        <img id="zoroImage" src="https://i.imgur.com/zdJiMKb.png">
 
         <button id="L2H" class="sortButtons">lowest</button>
         <button id="H2L" class="sortButtons">highest</button>
@@ -426,63 +355,6 @@
         </tbody>
     </table>
 </div>
-
-
-<!--Image Slider Start-->
-
-<!--    <div class="slider">-->
-<!--        <div class="slides">-->
-
-<!--            &lt;!&ndash;-&#45;&#45;&#45;&#45;Radio Buttons Start-&#45;&#45;&#45;&#45;&ndash;&gt;-->
-<!--            <input type="radio" name="radio-btn" id="radio1">-->
-<!--            <input type="radio" name="radio-btn" id="radio2">-->
-<!--            <input type="radio" name="radio-btn" id="radio3">-->
-<!--            <input type="radio" name="radio-btn" id="radio4">-->
-<!--            <input type="radio" name="radio-btn" id="radio5">-->
-
-<!--            &lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;Slides-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-<!--&lt;!&ndash; TDOO: Add the top5 in these slots by giving them ids and calling them in js           &ndash;&gt;-->
-<!--            <div class="slide first" id="firstSlide"></div>-->
-<!--            <div class="slide" id="secondSlide"></div>-->
-<!--            <div class="slide" id="thirdSlide"></div>-->
-<!--            <div class="slide" id="fourthSlide"></div>-->
-<!--            <div class="slide" id="fifthSlide"></div>-->
-
-<!--            &lt;!&ndash;-&#45;&#45;&#45;&#45;Auto Navigation-&#45;&#45;&#45;&#45;&ndash;&gt;-->
-<!--            <div class="navigation-auto">-->
-<!--                <div class="auto-btn1"></div>-->
-<!--                <div class="auto-btn2"></div>-->
-<!--                <div class="auto-btn3"></div>-->
-<!--                <div class="auto-btn4"></div>-->
-<!--                <div class="auto-btn5"></div>-->
-<!--            </div>-->
-
-<!--&lt;!&ndash;            -&#45;&#45;&#45;&#45;Manual Navigation-&#45;&#45;&#45;&#45;&ndash;&gt;-->
-<!--            <div class="navigation-manual">-->
-<!--                <label for="radio1" class="manual-btn"></label>-->
-<!--                <label for="radio2" class="manual-btn"></label>-->
-<!--                <label for="radio3" class="manual-btn"></label>-->
-<!--                <label for="radio4" class="manual-btn"></label>-->
-<!--                <label for="radio5" class="manual-btn"></label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
-<!--    &lt;!&ndash;Slider JavaScript&ndash;&gt;-->
-<!--    <script type="text/javascript">-->
-<!--        let counter = 1;-->
-<!--        setInterval(function(){-->
-<!--            document.getElementById('radio' + counter).checked = true;-->
-<!--            counter++;-->
-<!--            if(counter > 5) {-->
-<!--                counter = 1;-->
-<!--            }-->
-<!--        }, 5500);-->
-<!--    </script>-->
-<!--</section>-->
-<!--<br>-->
-
 
 </body>
 </html>
