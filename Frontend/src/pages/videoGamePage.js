@@ -5,7 +5,7 @@ import VideoGameClient from "../api/videoGameClient";
 class VideoGamePage extends BaseClass {
     constructor() {
         super();
-        this.bindClassMethods(['onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
+        this.bindClassMethods(['recommendGame', 'onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
         this.dataStore = new DataStore();
     }
 
@@ -15,6 +15,7 @@ class VideoGamePage extends BaseClass {
         this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
+        document.getElementById("recommend-game-btn").addEventListener("click", recommendGame);
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
 
     }
@@ -43,17 +44,97 @@ class VideoGamePage extends BaseClass {
         console.log(allGames);
        let GamesHtml =  ""
         if(allGames){
-            for (const game of allGames){
-                let upvoteButtonId = await  this.replaceSpace(game.name+"upvote");
-                let downvoteButtonId = await  this.replaceSpace(game.name+"downvote");
+//                const game = allGames[0];
+              const gamesContainer = document.createElement('div');
+              gamesContainer.classList.add('games-container');
+              let count = 1;
+                for (const game of allGames) {
 
-                GamesHtml += `<div><img class= "rounded" src=${game.image} width="150" height="150"></div>
-                              <div class="border"><button id= ${upvoteButtonId}>upvote</button>
-                               <button id= "${downvoteButtonId}">downvote</button></div>
-                              
-                                <div class="game"></div>`
+                  const gameContainer = document.createElement('div');
+                  gameContainer.classList.add('game-container');
 
-    }
+//                  const gameCountElement = document.createElement('div'); // Add a separate element for the game count
+//                  gameCountElement.classList.add('game-count');
+//                  gameCountElement.textContent = count;
+
+                  const gameImage = document.createElement('img');
+                  gameImage.classList.add('rounded');
+                  gameImage.src = game.image;
+                  gameImage.width = 150;
+                  gameImage.height = 150;
+
+                  const gameInfoContainer = document.createElement('div');
+                  gameInfoContainer.classList.add('game-info-container');
+
+                  const gameHeaderContainer = document.createElement('div');
+                  gameHeaderContainer.classList.add('game-header-container');
+
+                  const buttonContainer = document.createElement('div');
+                  buttonContainer.classList.add('border');
+
+                  const upvoteButton = document.createElement('button');
+                  upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+                  upvoteButton.innerHTML = "&#8593;";
+
+                  const downvoteButton = document.createElement('button');
+                  downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+                  downvoteButton.innerHTML = "&#8595;";
+
+                  const gameName = document.createElement('h3');
+                  gameName.textContent = count + '. Game Name: ' + game.name;
+
+                  const gameDescription = document.createElement('p');
+                  gameDescription.textContent = 'Description: ' + game.Description;
+
+                  const gameConsoles = document.createElement('h5');
+                  gameConsoles.textContent = 'Consoles: ' + game.Consoles;
+
+                  count++;
+
+                  buttonContainer.appendChild(upvoteButton);
+                  buttonContainer.appendChild(downvoteButton);
+
+//                  gameContainer.appendChild(gameCountElement);
+                  gameContainer.appendChild(gameImage);
+                  gameContainer.appendChild(gameInfoContainer);
+                  gameInfoContainer.appendChild(gameHeaderContainer);
+                  gameHeaderContainer.appendChild(buttonContainer);
+                  gameHeaderContainer.appendChild(gameName);
+                  gameInfoContainer.appendChild(gameDescription);
+                  gameInfoContainer.appendChild(gameConsoles);
+
+                  gamesContainer.appendChild(gameContainer);
+
+                document.body.appendChild(gamesContainer);
+
+                const style = document.createElement('style');
+                  style.textContent = `
+                    .games-container {
+                      display: flex;
+                      flex-wrap: wrap;
+                    }
+
+                    .game-container {
+                      display: flex;
+                      flex-direction: row;
+                      align-items: center;
+                      margin: 10px;
+                    }
+
+                    .game-header-container {
+                        display: flex;
+                      flex-direction: row;
+                    }
+
+                    .game-info-container {
+                      margin: 10px;
+                    }
+
+
+                  `;
+                  document.head.appendChild(style);
+}
+
     }else{
             GamesHtml =`Loading Games...`;
         }
@@ -96,6 +177,10 @@ class VideoGamePage extends BaseClass {
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
       }
+
+    async recommendGame(event) {
+        alert("recommendGame");
+    }
  
     async onFindByName(event){
         event.preventDefault();
