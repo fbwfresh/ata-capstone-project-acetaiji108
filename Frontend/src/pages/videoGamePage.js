@@ -5,7 +5,7 @@ import VideoGameClient from "../api/videoGameClient";
 class VideoGamePage extends BaseClass {
     constructor() {
         super();
-        this.bindClassMethods(['recommendGame', 'onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
+        this.bindClassMethods(['onFindByName', 'renderVideoGames', 'renderByVideoGameName','onUpvote','onDownvote','getAllGames'], this);
         this.dataStore = new DataStore();
     }
 
@@ -15,7 +15,6 @@ class VideoGamePage extends BaseClass {
         this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
-        document.getElementById("recommend-game-btn").addEventListener("click", recommendGame);
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
 
     }
@@ -132,9 +131,9 @@ class VideoGamePage extends BaseClass {
 
 
                   `;
+
                   document.head.appendChild(style);
 }
-
     }else{
             GamesHtml =`Loading Games...`;
         }
@@ -177,10 +176,6 @@ class VideoGamePage extends BaseClass {
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
       }
-
-    async recommendGame(event) {
-        alert("recommendGame");
-    }
  
     async onFindByName(event){
         event.preventDefault();
