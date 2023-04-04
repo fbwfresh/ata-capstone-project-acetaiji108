@@ -1,188 +1,203 @@
 package com.kenzie.capstone.service;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.google.common.base.Verify;
 import com.kenzie.capstone.service.converter.VideoGameConverter;
-import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
 import com.kenzie.capstone.service.dao.VideoGameDao;
-import com.kenzie.capstone.service.dependency.DaoModule;
-import com.kenzie.capstone.service.model.*;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
+import com.kenzie.capstone.service.exceptions.InvalidGameException;
+import com.kenzie.capstone.service.model.VideoGameRecord;
+import com.kenzie.capstone.service.model.VideoGameRequest;
+import com.kenzie.capstone.service.model.VideoGameResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class VideoGameLambdaServiceTest {
-    //class ReferralServiceTest {
-        /**
-         * ------------------------------------------------------------------------
-         * expenseService.getExpenseById
-         * ------------------------------------------------------------------------
-         **/
-        private VideoGameDao videoGameDao;
-        private VideoGameService videoGameService;
-        @BeforeAll
-        void setup() {
-            DaoModule module = new DaoModule();
-            this.videoGameDao = new NonCachingVideoGameDao(module.provideDynamoDBMapper());
-            this.videoGameService = new VideoGameService(videoGameDao);
+
+    private VideoGameDao videoGameDao;
+    private VideoGameService videoGameService;
+
+    @BeforeEach
+    void setup() {
+        videoGameDao = mock(VideoGameDao.class);
+        videoGameService = new VideoGameService(videoGameDao);
+    }
+
+    @Test
+    void addVideoGameTest() {
+        ArgumentCaptor<VideoGameRecord> videoGameCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
+
+        // GIVEN
+        String gameName = "Test Game";
+        String gameDescription = "Test Description";
+        VideoGameRequest request = new VideoGameRequest();
+        request.setName(gameName);
+        request.setDescription(gameDescription);
+
+        // WHEN
+        VideoGameResponse response = this.videoGameService.addVideoGame(request);
+
+        // THEN
+        verify(videoGameDao, times(1)).addVideoGame(videoGameCaptor.capture());
+        VideoGameRecord gameRecord = videoGameCaptor.getValue();
+
+        assertNotNull(gameRecord, "The game record is valid");
+        assertEquals(gameName, gameRecord.getName(), "The record game name should match");
+        assertEquals(gameDescription, gameRecord.getDescription(), "The record game description should match");
+
+        assertNotNull(response, "A response is returned");
+        assertEquals(gameName, response.getName(), "The response game name should match");
+        assertEquals(gameDescription, response.getDescription(), "The response game description should match");
+    }
+
+    @Test
+    void addVideoGameTest_nullRequest() {
+        assertThrows(InvalidGameException.class, () -> {
+            videoGameService.addVideoGame(null);
+        });
+    }
+
+    @Test
+    void deleteVideoGameTest() {
+        // GIVEN
+        VideoGameService videoGameService = new VideoGameService(videoGameDao);
+
+        String videoGameName = "Test Game";
+        VideoGameRecord record = new VideoGameRecord();
+        record.setName(new String(videoGameName));
+        record.setConsoles(new HashSet<>(Collections.singletonList("Test Console")));
+        when(videoGameDao.findByName(eq(videoGameName))).thenReturn(record);
+        ArgumentCaptor<VideoGameRecord> argumentCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
+
+        // WHEN
+        when(videoGameDao.deleteVideoGame(argumentCaptor.capture())).thenReturn(true);
+        boolean result = videoGameService.deleteVideoGame(videoGameName);
+
+        // THEN
+        assertTrue(result);
+        VideoGameRecord capturedRecord = argumentCaptor.getValue();
+        assertEquals(videoGameName, capturedRecord.getName());
+        verify(videoGameDao, times(1)).deleteVideoGame(eq(record));
+        verify(videoGameDao, times(1)).findByName(eq(videoGameName));
+    }
+
+    @Test
+    void updateVideoGameTest() {
+        // GIVEN
+        VideoGameService videoGameService = new VideoGameService(videoGameDao);
+
+        VideoGameRequest request = new VideoGameRequest();
+        request.setName("Test Game");
+        request.setDescription("Updated Test Description");
+        request.setConsoles(new HashSet<>(Arrays.asList("Test Console 1", "Test Console 2")));
+        request.setImage("test-image-url");
+        request.setUpwardVote(100);
+        request.setDownwardVote(50);
+        request.setTotalVote(150);
+
+        VideoGameRecord existingRecord = new VideoGameRecord();
+        existingRecord.setName("Test Game");
+        existingRecord.setDescription("Test Description");
+        existingRecord.setConsoles(new HashSet<>(Collections.singletonList("Test Console")));
+        existingRecord.setImage("test-image");
+        existingRecord.setUpwardVote(50);
+        existingRecord.setDownwardVote(25);
+        existingRecord.setTotalVote(75);
+
+        when(videoGameDao.findByName(eq(request.getName()))).thenReturn(existingRecord);
+        ArgumentCaptor<VideoGameRecord> argumentCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
+
+        // WHEN
+        when(videoGameDao.updateVideoGame(argumentCaptor.capture())).thenReturn(existingRecord);
+        VideoGameResponse result = videoGameService.updateVideoGame(request);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(request.getName(), result.getName());
+        assertEquals(request.getDescription(), result.getDescription());
+        assertEquals(request.getConsoles(), result.getConsoles());
+        assertEquals(request.getImage(), result.getImage());
+        assertEquals(request.getUpwardVote(), result.getUpwardVote());
+        assertEquals(request.getDownwardVote(), result.getDownwardVote());
+        assertEquals(request.getTotalVote(), result.getTotalVote());
+
+        VideoGameRecord capturedRecord = argumentCaptor.getValue();
+        assertNotNull(capturedRecord);
+        assertEquals(request.getName(), capturedRecord.getName());
+        assertEquals(request.getDescription(), capturedRecord.getDescription());
+        assertEquals(request.getConsoles(), capturedRecord.getConsoles());
+        assertEquals(request.getImage(), capturedRecord.getImage());
+        assertEquals(request.getUpwardVote(), capturedRecord.getUpwardVote());
+        assertEquals(request.getDownwardVote(), capturedRecord.getDownwardVote());
+        assertEquals(request.getTotalVote(), capturedRecord.getTotalVote());
+
+        verify(videoGameDao, times(1)).findByName(eq(request.getName()));
+        verify(videoGameDao, times(1)).updateVideoGame(eq(existingRecord));
+    }
+
+    @Test
+    void getVideoGameTest() {
+        // GIVEN
+        VideoGameRecord record = new VideoGameRecord();
+
+        record.setName("Monster Hunter Rise");
+        record.setDescription("Action RPG");
+        record.setConsoles(Collections.singleton("Nintendo Switch"));
+        when(videoGameDao.findByName("Monster Hunter Rise")).thenReturn(record);
+
+        // WHEN
+        VideoGameResponse response = videoGameService.getVideoGame("Monster Hunter Rise");
+
+        // THEN
+        assertNotNull(response, "The response is valid");
+        assertEquals("Monster Hunter Rise", response.getName(), "The video game name matches");
+        assertEquals("Action RPG", response.getDescription(), "The video game description matches");
+        assertEquals(Collections.singleton("Nintendo Switch"), response.getConsoles(), "The video game consoles match");
+
+        // Print out the response for easier debugging
+        System.out.println("Name: " + response.getName());
+        System.out.println("Description: " + response.getDescription());
+        System.out.println("Consoles: " + response.getConsoles());
+    }
+
+
+    @Test
+    void getAllVideoGamesTest() {
+        // GIVEN
+        List<VideoGameRecord> records = new ArrayList<>();
+        for (int i = 1; i <= 50; i++) {
+            VideoGameRecord record = new VideoGameRecord();
+            record.setName("Game " + i);
+            record.setDescription("Description " + i);
+            record.setConsoles(Collections.singleton("Console " + i));
+            records.add(record);
         }
-//        @Test
-//        public void getCustomerReferralSummary_noReferralsTest() {
-//            String customerId = "CUST-001";
-//            CustomerReferrals result = videoGameService.getCustomerReferralSummary(customerId);
-//            assertEquals(0, result.getNumFirstLevelReferrals());
-//            assertEquals(0, result.getNumSecondLevelReferrals());
-//            assertEquals(0, result.getNumThirdLevelReferrals());
-//        }
-//        @Test
-//        void deleteReferralsTest() {
-//            // GIVEN
-//            ReferralService referralService = new ReferralService(referralDao);
-//            List<String> customerIds = Arrays.asList("customerId1", "customerId2");
-//            ReferralRecord record1 = new ReferralRecord();
-//            record1.setCustomerId("customerId1");
-//            ReferralRecord record2 = new ReferralRecord();
-//            record2.setCustomerId("customerId2");
-//            ArgumentCaptor<ReferralRecord> argumentCaptor = ArgumentCaptor.forClass(ReferralRecord.class);
-//            // WHEN
-//            when(referralDao.deleteReferral(argumentCaptor.capture())).thenReturn(true);
-//            boolean result = referralService.deleteReferrals(customerIds);
-//            // THEN
-//            assertTrue(result);
-//            List<ReferralRecord> capturedRecords = argumentCaptor.getAllValues();
-//            assertEquals(2, capturedRecords.size());
-//            assertEquals("customerId1", capturedRecords.get(0).getCustomerId());
-//            assertEquals("customerId2", capturedRecords.get(1).getCustomerId());
-//            verify(referralDao, times(2)).deleteReferral(any());
-//            // GIVEN
-//            when(referralDao.deleteReferral(any())).thenReturn(false);
-//            // WHEN
-//            result = referralService.deleteReferrals(customerIds);
-//            // THEN
-//            assertFalse(result);
-//            verify(referralDao, times(4)).deleteReferral(any());
-//        }
-//        @Test
-//        void condenseListsTest() throws ExecutionException, InterruptedException {
-//            // GIVEN
-//            List<Future<LeaderboardEntry>> futures = new ArrayList<>();
-//            futures.add(mock(Future.class));
-//            futures.add(mock(Future.class));
-//            LeaderboardEntry entry1 = new LeaderboardEntry(5, "user1");
-//            LeaderboardEntry entry2 = new LeaderboardEntry(3, "user2");
-//            // Set up mock future behavior to return leaderboard entries
-//            when(futures.get(0).get()).thenReturn(entry1);
-//            when(futures.get(1).get()).thenReturn(entry2);
-//            // Call the method being tested
-//            List<LeaderboardEntry> result = videoGameService.condenseLists(futures);
-//            // Verify that the expected entries are in the result
-//            assertTrue(result.contains(entry1));
-//            assertTrue(result.contains(entry2));
-//            // Verify that the result is sorted by number of referrals
-//            assertEquals(result.get(0), entry1);
-//            assertEquals(result.get(1), entry2);
-//        }
-//        @Test
-//        void addVideoGameTest() {
-//         //   ArgumentCaptor<VideoGameRecord> referralCaptor = ArgumentCaptor.forClass(VideoGameRecord.class);
-//            // GIVEN
-//            String gameName = "Contra";
-//            String description = "Contra is a run-and-gun action platformer, notorious for its high difficulty. " +
-//                    "The player character comes armed with a gun that can shoot infinitely. " +
-//                    "Different weapons with new abilities and that shoot different types of projectiles can be acquired" +
-//                    " as the player progresses through the levels.";
-//            VideoGame game = new VideoGame(gameName,description, Consoles.DS,Consoles.GC,Consoles.GBA,Consoles.NS,Consoles.WII,Consoles.WIIU);
-//            VideoGameRequest request = new VideoGameRequest();
-//            request.setName(game.getName());
-//            request.setConsoles(game.getConsoles());
-//            request.setDescription(game.getDescription());
-//            request.setUpwardVote(request.getUpwardVote());
-//            request.setDownwardVote(request.getDownwardVote());
-//            request.setVotingPercentage(request.getVotingPercentage());
-//            // WHEN
-//            VideoGameResponse response = this.videoGameService.addVideoGame(request);
-//            // THEN
-//
-//          //  verify(this.videoGameDao, times(1)).addVideoGame(referralCaptor.capture());
-//            VideoGameRecord record = new VideoGameRecord();
-//            record.setName(response.getName());
-//            record.setConsoles(response.getConsoles());
-//            record.setDescription(response.getDescription());
-//            record.setDownwardVote(response.getDownwardVote());
-//            record.setVotingPercentage(response.getTotalVote());
-//            record.setUpwardVote(response.getUpwardVote());
-//            assertNotNull(record, "The record is valid");
-//          //  assertEquals(gameName, record.getName(), "The record name should match");
-//            assertEquals(description, record.getDescription(), "The record description should match");
-//            assertNotNull(record.getConsoles(), "The record consoles exist");
-//            assertNotNull(response, "A response is returned");
-//            assertEquals(customerId, response.getCustomerId(), "The response customerId should match");
-//            assertEquals(referrerId, response.getReferrerId(), "The response referrerId should match");
-//            assertNotNull(response.getReferralDate(), "The response referral date exists");
+
+        when(videoGameDao.getAllGames()).thenReturn(records);
+
+        // WHEN
+        List<VideoGameResponse> response = videoGameService.getAllVideoGames();
+
+        // THEN
+        assertNotNull(response, "The response is valid");
+        assertEquals(50, response.size(), "There are 50 games in the database");
+
+        System.out.println("All video games:");
+        for (int i = 1; i <= 50; i++) {
+            VideoGameResponse game = response.get(i - 1);
+            System.out.println("Name: " + game.getName());
+            System.out.println("Description: " + game.getDescription());
+            System.out.println("Consoles: " + game.getConsoles());
+            System.out.println("------------------------");
+
+            assertEquals("Game " + i, game.getName(), "The video game name matches");
+            assertEquals("Description " + i, game.getDescription(), "The video game description matches");
+            assertEquals(Collections.singleton("Console " + i), game.getConsoles(), "The video game consoles match");
         }
-//        @Test
-//        void addReferralTest_no_customer_id() {
-//            // GIVEN
-//            String customerId = "";
-//            String referrerId = "";
-//            ReferralRequest request = new ReferralRequest();
-//            request.setCustomerId(customerId);
-//            request.setReferrerId(referrerId);
-//            // WHEN / THEN
-//            assertThrows(InvalidDataException.class, () -> this.videoGameService.addReferral(request));
-//        }
-//        @Test
-//        void getDirectReferralsTest() {
-//            // GIVEN
-//            String customerId = "fakecustomerid";
-//            List<ReferralRecord> recordList = new ArrayList<>();
-//            ReferralRecord record1 = new ReferralRecord();
-//            record1.setCustomerId("customer1");
-//            record1.setReferrerId(customerId);
-//            record1.setDateReferred(ZonedDateTime.now());
-//            recordList.add(record1);
-//            ReferralRecord record2 = new ReferralRecord();
-//            record2.setCustomerId("customer2");
-//            record2.setReferrerId(customerId);
-//            record2.setDateReferred(ZonedDateTime.now());
-//            recordList.add(record2);
-//            when(referralDao.findByReferrerId(customerId)).thenReturn(recordList);
-//            // WHEN
-//            List<Referral> referrals = this.videoGameService.getDirectReferrals(customerId);
-//            // THEN
-//            verify(referralDao, times(1)).findByReferrerId(customerId);
-//            assertNotNull(referrals, "The returned referral list is valid");
-//            assertEquals(2, referrals.size(), "The referral list has 2 items");
-//            for (Referral referral : referrals) {
-//                if (record1.getCustomerId().equals(referral.getCustomerId())) {
-//                    assertEquals(record1.getReferrerId(), customerId);
-//                    assertEquals(new ZonedDateTimeConverter().convert(record1.getDateReferred()), referral.getReferralDate());
-//                } else if (record2.getCustomerId().equals(referral.getCustomerId())) {
-//                    assertEquals(record2.getReferrerId(), customerId);
-//                    assertEquals(new ZonedDateTimeConverter().convert(record2.getDateReferred()), referral.getReferralDate());
-//                } else {
-//                    fail("A Referral was returned that does not match record 1 or 2.");
-//                }
-//            }
-//        }
-//        @Test
-//        void getReferralLeaderboardTest() {
-//            // GIVEN
-//            List<ReferralRecord> records = List.of();
-//            ReferralDao referralDao = mock(ReferralDao.class);
-//            when(referralDao.findUsersWithoutReferrerId()).thenReturn(records);
-//            ReferralService referralService = new ReferralService(referralDao);
-//            // WHEN
-//            List<LeaderboardEntry> leaderboard = referralService.getReferralLeaderboard();
-//            // THEN
-//            assertNotNull(leaderboard, "The returned leaderboard should not be null");
-//            assertEquals(0, leaderboard.size(), "The leaderboard should be empty");
-//        }
-//    //}
-//}
+    }
+}

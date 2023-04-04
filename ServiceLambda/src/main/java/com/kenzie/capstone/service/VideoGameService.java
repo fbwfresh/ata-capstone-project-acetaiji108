@@ -107,16 +107,25 @@ public class VideoGameService {
 //    }
 
     public boolean deleteVideoGame(String videoGameName){
+        if (videoGameName == null || videoGameName.trim().isEmpty()) {
+            throw new InvalidGameException("Request must contain a valid video game name");
+        }
         VideoGameRecord record = videoGameDao.findByName(videoGameName);
-            if(record == null){
-                throw new InvalidGameException("Request must contain a valid video game name");
-         }
-            boolean deleted = videoGameDao.deleteVideoGame(record);
-
-                if(!deleted){
-                   return false;
-              }
+        if(record == null) {
+            throw new InvalidGameException("The video game does not exist on any console");
+        } else if (record.getConsoles() == null || record.getConsoles().isEmpty()){
+            throw new InvalidGameException("The video game does not exist on any console");
+        }
+        boolean deleted = videoGameDao.deleteVideoGame(record);
+        if(!deleted){
+            return false;
+        }
         return deleted;
     }
+
+
+
+
+
 
 }
