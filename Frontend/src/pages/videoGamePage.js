@@ -80,7 +80,7 @@ class VideoGamePage extends BaseClass {
                   downvoteButton.innerHTML = "&#8595;";
 
                   const gameName = document.createElement('h3');
-                  gameName.textContent = count + '. Game Name: ' + game.name;
+                  gameName.textContent = count + '. ' + game.name;
 
                   const gameDescription = document.createElement('p');
                   gameDescription.textContent = 'Description: ' + game.Description;
