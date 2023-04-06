@@ -38,29 +38,24 @@ class VideoGamePage extends BaseClass {
                                                               `
     }
     async renderVideoGames(){
-        console.log("before datastore");
+        console.log("dataStore getting all games");
         const allGames = this.dataStore.get("allVideoGames");
         console.log(allGames);
        let GamesHtml =  ""
         if(allGames){
-//                const game = allGames[0];
               const gamesContainer = document.createElement('div');
               gamesContainer.classList.add('games-container');
-             // let count = 1;
                 for (const game of allGames) {
 
                   const gameContainer = document.createElement('div');
-                  gameContainer.classList.add('game-container');
+                  gameContainer.classList.add('rounded');
 
-//                  const gameCountElement = document.createElement('div'); // Add a separate element for the game count
-//                  gameCountElement.classList.add('game-count');
-//                  gameCountElement.textContent = count;
 
                   const gameImage = document.createElement('img');
-                  gameImage.classList.add('rounded');
+                  gameImage.classList.add('roundedCenter');
                   gameImage.src = game.image;
-                  gameImage.width = 150;
-                  gameImage.height = 150;
+                   gameImage.width = 250;
+                   gameImage.height = 250;
 
                   const gameInfoContainer = document.createElement('div');
                   gameInfoContainer.classList.add('game-info-container');
@@ -71,6 +66,7 @@ class VideoGamePage extends BaseClass {
                   const buttonContainer = document.createElement('div');
                   buttonContainer.classList.add('border');
 
+
                   const upvoteButton = document.createElement('button');
                   upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
                   upvoteButton.innerHTML = "&#8593;";
@@ -79,11 +75,12 @@ class VideoGamePage extends BaseClass {
                   downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
                   downvoteButton.innerHTML = "&#8595;";
 
+
                   const gameName = document.createElement('h3');
-                  gameName.textContent = " " + game.name;
+                  gameName.textContent = game.name;
 
                   const gameDescription = document.createElement('p');
-                  gameDescription.textContent = 'Description: ' + game.Description;
+                  gameDescription.textContent = game.Description;
 
                   const gameConsoles = document.createElement('h5');
                   gameConsoles.textContent = 'Consoles: ' + game.Consoles;
@@ -94,20 +91,22 @@ class VideoGamePage extends BaseClass {
                   buttonContainer.appendChild(downvoteButton);
 
 //                  gameContainer.appendChild(gameCountElement);
-                  gameContainer.appendChild(gameImage);
+                    gameContainer.appendChild(gameImage);
+                    gameContainer.appendChild(buttonContainer);
                   gameContainer.appendChild(gameInfoContainer);
                   gameInfoContainer.appendChild(gameHeaderContainer);
-                  gameHeaderContainer.appendChild(buttonContainer);
                   gameHeaderContainer.appendChild(gameName);
                   gameInfoContainer.appendChild(gameDescription);
                   gameInfoContainer.appendChild(gameConsoles);
 
                   gamesContainer.appendChild(gameContainer);
 
+
                 document.body.appendChild(gamesContainer);
 
                 const style = document.createElement('style');
                   style.textContent = `
+                
                     .games-container {
                       display: flex;
                       flex-wrap: wrap;

@@ -6,17 +6,84 @@ import ExampleClient from "../api/exampleClient";
 class Top5Page extends BaseClass {
     constructor() {
         super();
-        this.bindClassMethods(['getTop5', 'renderTop5','renderHighToLow','renderLowToHigh','getHighToLow','getLowToHigh'], this);
+        this.bindClassMethods(['getSuggestion','onFindByName','getTop5', 'renderTop5','renderHighToLow','renderLowToHigh','getHighToLow','getLowToHigh','renderByVideoGameName'], this);
         this.dataStore = new DataStore();
     }
 
     async mount() {
         this.client = new VideoGameClient();
       //  this.dataStore.addChangeListener(this.renderTop5);
+        document.getElementById('searchButton').addEventListener('click', this.onFindByName);
         document.getElementById("H2L").addEventListener('click',this.getHighToLow);
         document.getElementById("L2H").addEventListener('click',this.getLowToHigh);
         document.getElementById("top5").addEventListener('click',this.getTop5);
+        document.getElementById("suggest").addEventListener('click',this.getSuggestion);
+
         this.getTop5();
+    }
+    async onFindByName(event){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        let gameName = document.getElementById("searchBarId").value;
+        const foundGame = await this.client.getVideoGame(gameName,this.errorHandler);
+        this.dataStore.set("VideoGame",foundGame);
+        console.log(foundGame);
+        if(foundGame){
+            this.showMessage("Found Game!")
+            this.renderByVideoGameName();
+        } else{
+            this.errorHandler("Error creating! Try again... ");
+        }
+    }
+    async renderByVideoGameName(){
+        const videoGameResultArea = document.getElementById("searchResult");
+        const game = this.dataStore.get("VideoGame");
+        console.log(game);
+        let upvote = game.UpwardVote;
+        let downvote = game.DownwardVote;
+        let totalVote = game.TotalVote;
+        let votingPercentage = upvote/totalVote * 100;
+
+
+        videoGameResultArea.innerHTML = `    <div class="centerResults2"><h3>Search Engine Results:</h3></div>
+                                                        <div class="centerResults"><img class="rounded" src=${game.image} height="400" width="400"></div>                                                      
+                                                          <div><h3>Rating: ${votingPercentage.toFixed(2)}% </h3></div>
+                                                          <div><h3> Description: </h3></div>
+                                                          <p>${game.Description}</p>
+                                                          <div class="centerResults"><h5>Consoles: ${game.Consoles}</h5></div> 
+                                                          <div class="game"></div>                                                                                                  
+                                                              `
+    }
+
+    async renderSuggestion(){
+        const leaderboardTable = document.getElementById("leaderboardTable");
+        const suggestion = this.dataStore.get("suggestion");
+        leaderboardTable.innerHTML = "";
+        leaderboardTable.innerHTML = `  <thead>
+        <tr>
+           <th class="rank">#</th>
+            <th class="leaderboardName">Name</th>
+            <th class="leaderboardUpvote">Up</th>
+            <th class="leaderboardDownvote">Down</th>
+            <th class="leaderboardPercentage">%</th>
+        </tr>
+        </thead>`
+        if (suggestion) {
+                let upVote = suggestion.UpwardVote;
+                let totalVote = suggestion.TotalVote;
+                let downVote = suggestion.DownwardVote;
+                let votingPercentage = upVote / totalVote * 100;
+                votingPercentage = votingPercentage.toFixed(2);
+                // slides[i].innerHTML = `<img src=${game.image}>`
+                //i++;
+                leaderboardTable.innerHTML += `<td>1</td>
+                                               <td>${suggestion.name}</td>
+                                                <td>${upVote}</td>
+                                                <td>${downVote}</td>
+                                                 <td>${votingPercentage}%</td>`
+
+        }
+
     }
 
     async renderTop5() {
@@ -184,6 +251,17 @@ class Top5Page extends BaseClass {
         this.dataStore.set("top5",result);
         console.log(result);
             this.renderTop5();
+
+    }
+
+    async getSuggestion(event) {
+        // Prevent the page from refreshing on form submit
+        //event.preventDefault();
+        this.dataStore.set("suggestion",null);
+        let result = await this.client.getSuggestion(this.errorHandler);
+        this.dataStore.set("suggestion",result);
+        console.log(result);
+        this.renderSuggestion();
 
     }
 

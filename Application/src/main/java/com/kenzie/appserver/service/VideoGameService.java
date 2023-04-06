@@ -253,8 +253,8 @@ try {
 
     public VideoGameResponse gamingSuggestion(){
         Random random = new Random();
-       List<VideoGameResponse> top5 =  top5RatingLeaderboard();
-       return top5.get(random.nextInt(5));
+       List<VideoGameResponse> highestToLowest =  allGamesHighestToLowest();
+       return highestToLowest.get(random.nextInt(15));
     }
 
     private VideoGameResponse toVideoGameResponse(VideoGameRecord record){
