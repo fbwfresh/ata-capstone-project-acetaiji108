@@ -108,17 +108,24 @@ class RecommendPage extends BaseClass {
             return;
         }
 
+        const sortedGames = gamesWithConsoleType.sort((a, b) => b.UpwardVote - a.UpwardVote);
+        console.log("sortedGames");
+        console.log(sortedGames);
+
         const letter = document.getElementById('fname').value.charAt(0).toUpperCase();
-        let gamesStartingWithLetter = gamesWithConsoleType.sort((a,b) => {
-            const aDist = Math.abs(a.name.charCodeAt(0) - letter.charCodeAt(0));
-            const bDist = Math.abs(b.name.charCodeAt(0) - letter.charCodeAt(0));
-            return aDist - bDist;
-        });
+        let gamesStartingWithLetter = sortedGames.filter(game => game.name.charAt(0) === letter);
 
-        const sortedGames = gamesStartingWithLetter.sort((a, b) => b.upwardVote - a.upwardVote);
-        const recommendedGame = sortedGames[0];
+        if (gamesStartingWithLetter.length === 0) {
+            gamesStartingWithLetter = sortedGames.sort((a,b) => {
+                const aDist = Math.abs(a.name.charCodeAt(0) - letter.charCodeAt(0));
+                const bDist = Math.abs(b.name.charCodeAt(0) - letter.charCodeAt(0));
+                return aDist - bDist;
+            });
+        }
+        console.log('gamesStartingWithLetter');
+        console.log(gamesStartingWithLetter);
+        const recommendedGame = gamesStartingWithLetter[0];
 
-//        const recommendedGame = gamesWithConsoleType[0];
         this.dataStore.set("VideoGame", recommendedGame);
         this.renderByVideoGameNameRecommended();
 
