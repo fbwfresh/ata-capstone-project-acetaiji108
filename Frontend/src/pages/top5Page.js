@@ -12,7 +12,7 @@ class Top5Page extends BaseClass {
 
     async mount() {
         this.client = new VideoGameClient();
-      //  this.dataStore.addChangeListener(this.renderTop5);
+        //  this.dataStore.addChangeListener(this.renderTop5);
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
         document.getElementById("H2L").addEventListener('click',this.getHighToLow);
         document.getElementById("L2H").addEventListener('click',this.getLowToHigh);
@@ -69,14 +69,14 @@ class Top5Page extends BaseClass {
         </tr>
         </thead>`
         if (suggestion) {
-                let upVote = suggestion.UpwardVote;
-                let totalVote = suggestion.TotalVote;
-                let downVote = suggestion.DownwardVote;
-                let votingPercentage = upVote / totalVote * 100;
-                votingPercentage = votingPercentage.toFixed(2);
-                // slides[i].innerHTML = `<img src=${game.image}>`
-                //i++;
-                leaderboardTable.innerHTML += `<td>1</td>
+            let upVote = suggestion.UpwardVote;
+            let totalVote = suggestion.TotalVote;
+            let downVote = suggestion.DownwardVote;
+            let votingPercentage = upVote / totalVote * 100;
+            votingPercentage = votingPercentage.toFixed(2);
+            // slides[i].innerHTML = `<img src=${game.image}>`
+            //i++;
+            leaderboardTable.innerHTML += `<td>1</td>
                                                <td>${suggestion.name}</td>
                                                 <td>${upVote}</td>
                                                 <td>${downVote}</td>
@@ -97,7 +97,7 @@ class Top5Page extends BaseClass {
         const leaderboardTable = document.getElementById("leaderboardTable");
         //const slides = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide];
         const top5 = this.dataStore.get("top5");
-       // let i = 0;
+        // let i = 0;
         let x = 1;
         leaderboardTable.innerHTML = "";
         leaderboardTable.innerHTML = `  <thead>
@@ -115,8 +115,8 @@ class Top5Page extends BaseClass {
                 let totalVote = game.TotalVote;
                 let downVote = game.DownwardVote;
                 let votingPercentage = upVote / totalVote * 100;
-               votingPercentage = votingPercentage.toFixed(2);
-               // slides[i].innerHTML = `<img src=${game.image}>`
+                votingPercentage = votingPercentage.toFixed(2);
+                // slides[i].innerHTML = `<img src=${game.image}>`
                 //i++;
                 leaderboardTable.innerHTML += `<td>${x}</td>
                                                <td>${game.name}</td>
@@ -128,14 +128,14 @@ class Top5Page extends BaseClass {
         }
     }
     async renderHighToLow() {
-       // let top5 = await this.client.getTop5(this.errorHandler);
-       //  let firstSlide = document.getElementById("firstSlide");
-       //  let secondSlide = document.getElementById("secondSlide");
-       //  let thirdSlide = document.getElementById("thirdSlide");
-       //  let fourthSlide = document.getElementById("fourthSlide");
-       //  let fifthSlide = document.getElementById("fifthSlide");
-       //  const slides = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide];
-       //  let i = 0;
+        // let top5 = await this.client.getTop5(this.errorHandler);
+        //  let firstSlide = document.getElementById("firstSlide");
+        //  let secondSlide = document.getElementById("secondSlide");
+        //  let thirdSlide = document.getElementById("thirdSlide");
+        //  let fourthSlide = document.getElementById("fourthSlide");
+        //  let fifthSlide = document.getElementById("fifthSlide");
+        //  const slides = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide];
+        //  let i = 0;
         let x = 1;
         // if (top5) {
         //     for (const game of top5) {
@@ -147,7 +147,7 @@ class Top5Page extends BaseClass {
         //         slides[i].innerHTML = `<img src=${game.image}>`
         //         i++;
         //     }
-       // }
+        // }
 
         const leaderboardTable = document.getElementById("leaderboardTable");
         const highToLow = this.dataStore.get("H2L");
@@ -197,7 +197,7 @@ class Top5Page extends BaseClass {
         //         slides[i].innerHTML = `<img src=${game.image}>`
         //         i++;
         //     }
-       // }
+        // }
 
         const leaderboardTable = document.getElementById("leaderboardTable");
         const lowToHigh = this.dataStore.get("L2H");
@@ -235,11 +235,11 @@ class Top5Page extends BaseClass {
         this.renderHighToLow();
     }
     async getLowToHigh(event){
-    this.dataStore.set("L2H",null);
-    let result = await this.client.getLowToHigh(this.errorHandler);
-    this.dataStore.set("L2H",result);
-    console.log(result);
-    this.renderLowToHigh();
+        this.dataStore.set("L2H",null);
+        let result = await this.client.getLowToHigh(this.errorHandler);
+        this.dataStore.set("L2H",result);
+        console.log(result);
+        this.renderLowToHigh();
     }
 
 
@@ -250,7 +250,7 @@ class Top5Page extends BaseClass {
         let result = await this.client.getTop5(this.errorHandler);
         this.dataStore.set("top5",result);
         console.log(result);
-            this.renderTop5();
+        this.renderTop5();
 
     }
 
