@@ -244,7 +244,10 @@ try {
                     @Override
                     public int compare(VideoGameResponse o1, VideoGameResponse o2) {
                         if (o1.getUpwardVote() == o2.getUpwardVote()){
-                            return o2.getName().compareTo(o1.getName());
+                            if (o1.getDownwardVote() == o2.getDownwardVote()){
+                                return o2.getName().compareTo(o1.getName());
+                            }
+                           return Integer.compare(o2.getDownwardVote(),o1.getDownwardVote());
                         }
                         return Integer.compare(o1.getUpwardVote(), o2.getUpwardVote());
                     }
@@ -259,9 +262,14 @@ try {
                     @Override
                     public int compare(VideoGameResponse o1, VideoGameResponse o2) {
                         if (o1.getUpwardVote() == o2.getUpwardVote()){
-                            return o1.getName().compareTo(o2.getName());
+                            if(o1.getDownwardVote() == o2.getDownwardVote()){
+                                return o1.getName().compareTo(o2.getName());
+                            }
+                            return Integer.compare(o2.getDownwardVote(),o1.getDownwardVote());
+
                         }
                         return Integer.compare(o1.getUpwardVote(), o2.getUpwardVote());
+
                     }
                 })
                 .collect(Collectors.toList());
