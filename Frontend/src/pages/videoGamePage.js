@@ -37,76 +37,173 @@ class VideoGamePage extends BaseClass {
                                                           <div class="game"></div>                                                                                                  
                                                               `
     }
+//     async renderVideoGames(){
+//         console.log("dataStore getting all games");
+//         const allGames = this.dataStore.get("allVideoGames");
+//         console.log(allGames);
+//        let GamesHtml =  ""
+//         if(allGames){
+//               const gamesContainer = document.createElement('div');
+//               gamesContainer.classList.add('games-container');
+//                 for (const game of allGames) {
+//
+//                   const gameContainer = document.createElement('div');
+//                   gameContainer.classList.add('rounded');
+//
+//
+//                   const gameImage = document.createElement('img');
+//                   gameImage.classList.add('roundedCenter');
+//                   gameImage.src = game.image;
+//                    gameImage.width = 250;
+//                    gameImage.height = 250;
+//
+//                   const gameInfoContainer = document.createElement('div');
+//                   gameInfoContainer.classList.add('game-info-container');
+//
+//                   const gameHeaderContainer = document.createElement('div');
+//                   gameHeaderContainer.classList.add('game-header-container');
+//
+//                   const buttonContainer = document.createElement('div');
+//                   buttonContainer.classList.add('border');
+//
+//
+//                   const upvoteButton = document.createElement('button');
+//                   upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+//                   upvoteButton.innerHTML = "&#8593;";
+//
+//                   const downvoteButton = document.createElement('button');
+//                   downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+//                   downvoteButton.innerHTML = "&#8595;";
+//
+//
+//                   const gameName = document.createElement('h3');
+//                   gameName.textContent = game.name;
+//
+//                   const gameDescription = document.createElement('p');
+//                   gameDescription.textContent = game.Description;
+//
+//                   const gameConsoles = document.createElement('h5');
+//                   gameConsoles.textContent = 'Consoles: ' + game.Consoles;
+//
+//                   // count++;
+//
+//                   buttonContainer.appendChild(upvoteButton);
+//                   buttonContainer.appendChild(downvoteButton);
+//
+// //                  gameContainer.appendChild(gameCountElement);
+//                     gameContainer.appendChild(gameImage);
+//                     gameContainer.appendChild(buttonContainer);
+//                   gameContainer.appendChild(gameInfoContainer);
+//                   gameInfoContainer.appendChild(gameHeaderContainer);
+//                   gameHeaderContainer.appendChild(gameName);
+//                   gameInfoContainer.appendChild(gameDescription);
+//                   gameInfoContainer.appendChild(gameConsoles);
+//
+//                   gamesContainer.appendChild(gameContainer);
+//
+//
+//                 document.body.appendChild(gamesContainer);
+//
+//                 const style = document.createElement('style');
+//                   style.textContent = `
+//
+//                     .games-container {
+//                       display: flex;
+//                       flex-wrap: wrap;
+//                     }
+//
+//                     .game-container {
+//                       display: flex;
+//                       flex-direction: row;
+//                       align-items: center;
+//                       margin: 10px;
+//                     }
+//
+//                     .game-header-container {
+//
+//                       flex-direction: row;
+//                     }
+//
+//                     .game-info-container {
+//                       margin: 10px;
+//                     }
+//                     h3{
+//                     margin: 10px;
+//                     }
+//
+//
+//                   `;
+//
+//                   document.head.appendChild(style);
+// }
     async renderVideoGames(){
-        console.log("dataStore getting all games");
+        console.log("before datastore");
         const allGames = this.dataStore.get("allVideoGames");
         console.log(allGames);
-       let GamesHtml =  ""
+        let GamesHtml =  ""
         if(allGames){
-              const gamesContainer = document.createElement('div');
-              gamesContainer.classList.add('games-container');
-                for (const game of allGames) {
+            const gamesContainer = document.createElement('div');
+            gamesContainer.classList.add('games-container');
 
-                  const gameContainer = document.createElement('div');
-                  gameContainer.classList.add('rounded');
+            for (const game of allGames) {
 
+                const gameContainer = document.createElement('div');
+                gameContainer.classList.add('game-container');
 
-                  const gameImage = document.createElement('img');
-                  gameImage.classList.add('roundedCenter');
-                  gameImage.src = game.image;
-                   gameImage.width = 250;
-                   gameImage.height = 250;
+                 const gameCountElement = document.createElement('div'); // Add a separate element for the game count
+                 gameCountElement.classList.add('game-count');
+                const gameImage = document.createElement('img');
+                gameImage.classList.add('rounded');
 
-                  const gameInfoContainer = document.createElement('div');
-                  gameInfoContainer.classList.add('game-info-container');
-
-                  const gameHeaderContainer = document.createElement('div');
-                  gameHeaderContainer.classList.add('game-header-container');
-
-                  const buttonContainer = document.createElement('div');
-                  buttonContainer.classList.add('border');
+                gameImage.src = game.image;
+                gameImage.width = 250;
+                gameImage.height = 250;
 
 
-                  const upvoteButton = document.createElement('button');
-                  upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
-                  upvoteButton.innerHTML = "&#8593;";
+                const gameInfoContainer = document.createElement('div');
+                gameInfoContainer.classList.add('game-info-container');
 
-                  const downvoteButton = document.createElement('button');
-                  downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
-                  downvoteButton.innerHTML = "&#8595;";
+                const gameHeaderContainer = document.createElement('div');
+                gameHeaderContainer.classList.add('game-header-container');
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('border');
+
+                const upvoteButton = document.createElement('button');
+                upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+                upvoteButton.innerHTML = "&#8593;";
+
+                const downvoteButton = document.createElement('button');
+                downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+                downvoteButton.innerHTML = "&#8595;";
+
+                const gameName = document.createElement('h3');
+                gameName.textContent =  game.name;
+
+                const gameDescription = document.createElement('p');
+                gameDescription.textContent =  game.Description;
+
+                const gameConsoles = document.createElement('h5');
+                gameConsoles.textContent = 'Consoles: ' + game.Consoles;
 
 
-                  const gameName = document.createElement('h3');
-                  gameName.textContent = game.name;
+                buttonContainer.appendChild(upvoteButton);
+                buttonContainer.appendChild(downvoteButton);
 
-                  const gameDescription = document.createElement('p');
-                  gameDescription.textContent = game.Description;
+                gameContainer.appendChild(gameImage);
+                gameContainer.appendChild(gameInfoContainer);
+                gameInfoContainer.appendChild(gameHeaderContainer);
+                gameHeaderContainer.appendChild(buttonContainer);
+                gameHeaderContainer.appendChild(gameName);
+                gameInfoContainer.appendChild(gameDescription);
+                gameInfoContainer.appendChild(gameConsoles);
 
-                  const gameConsoles = document.createElement('h5');
-                  gameConsoles.textContent = 'Consoles: ' + game.Consoles;
-
-                  // count++;
-
-                  buttonContainer.appendChild(upvoteButton);
-                  buttonContainer.appendChild(downvoteButton);
-
-//                  gameContainer.appendChild(gameCountElement);
-                    gameContainer.appendChild(gameImage);
-                    gameContainer.appendChild(buttonContainer);
-                  gameContainer.appendChild(gameInfoContainer);
-                  gameInfoContainer.appendChild(gameHeaderContainer);
-                  gameHeaderContainer.appendChild(gameName);
-                  gameInfoContainer.appendChild(gameDescription);
-                  gameInfoContainer.appendChild(gameConsoles);
-
-                  gamesContainer.appendChild(gameContainer);
-
+                gamesContainer.appendChild(gameContainer);
 
                 document.body.appendChild(gamesContainer);
 
                 const style = document.createElement('style');
-                  style.textContent = `
-                
+                style.textContent = `
                     .games-container {
                       display: flex;
                       flex-wrap: wrap;
@@ -116,26 +213,21 @@ class VideoGamePage extends BaseClass {
                       display: flex;
                       flex-direction: row;
                       align-items: center;
-                      margin: 10px;
+                      margin: 10px; 
                     }
 
-                    .game-header-container {
-                        display: flex;
+                    .game-header-container {                     
                       flex-direction: row;
                     }
 
                     .game-info-container {
                       margin: 10px;
                     }
-                    h3{
-                    margin: 10px;
-                    }
-
 
                   `;
 
-                  document.head.appendChild(style);
-}
+                document.head.appendChild(style);
+            }
     }else{
             GamesHtml =`Loading Games...`;
         }
