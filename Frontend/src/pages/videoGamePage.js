@@ -12,7 +12,7 @@ class VideoGamePage extends BaseClass {
     mount() {
         console.log("start of mount");
         this.client = new VideoGameClient();
-        this.dataStore.addChangeListener(this.renderVideoGames);
+        //this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
@@ -37,6 +37,7 @@ class VideoGamePage extends BaseClass {
                                                           <div class="game"></div>                                                                                                  
                                                               `
     }
+
 async renderVideoGames(){
     console.log("before datastore");
     const allGames = this.dataStore.get("allVideoGames");
@@ -167,6 +168,7 @@ async renderVideoGames(){
 
             document.head.appendChild(style);
         }
+
 }
     else{
             GamesHtml =`Loading Games...`;
@@ -209,6 +211,7 @@ async renderVideoGames(){
           this.dataStore.set("allVideoGames",null);
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
+          this.renderVideoGames();
       }
  
     async onFindByName(event){

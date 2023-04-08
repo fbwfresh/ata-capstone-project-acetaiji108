@@ -168,26 +168,6 @@ try {
     }
 
 
-//    public VideoGameResponse updateVideoGameConsoles(String name,Consoles... consoles) {
-//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
-//        if (!gameExists.isPresent()){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-//        }
-//        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),gameExists.get().getImage(),consoles);
-//        gameExists.get().setConsoles(game.getConsoles());
-//        videoGameRepository.save(gameExists.get());
-//        return toVideoGameResponse(gameExists.get());
-//    }
-//    public VideoGameResponse updateVideoGameConsoles(String name,List<String> consoles) {
-//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
-//        if (!gameExists.isPresent()){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-//        }
-//        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),consoles);
-//        gameExists.get().setConsoles(game.getConsoles());
-//        videoGameRepository.save(gameExists.get());
-//        return toVideoGameResponse(gameExists.get());
-//    }
     public VideoGameResponse updateVideoGame(String name,UpdateRequest videoGameUpdateRequest) {
       com.kenzie.capstone.service.model.VideoGameResponse response = videoGameServiceClient.getVideoGame(name);
         if (response != null) {
@@ -225,44 +205,6 @@ try {
         }else
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
     }
-//    Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(name);
-//        if (gameRecord.isPresent()) {
-//            VideoGameRecord videoGameRecord = gameRecord.get();
-//            videoGameRecord.setName(videoGameUpdateRequest.getVideoGameName());
-//            videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
-//            videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
-//            videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
-//            videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-//            videoGameRecord.setTotalVote(videoGameUpdateRequest.getTotalVote());
-//            videoGameRecord.setImage(videoGameUpdateRequest.getImage());
-//            videoGameRepository.save(videoGameRecord);
-//
-//            return toVideoGameResponse(videoGameRecord);
-//        }
-
-//    public VideoGameResponse updateVideoGameUpvote(UpdateRequest videoGameUpdateRequest) {
-//        Optional<VideoGameRecord> gameRecord = videoGameRepository.findById(videoGameUpdateRequest.getVideoGameName());
-//        if (gameRecord.isPresent()) {
-//            VideoGameRecord videoGameRecord = gameRecord.get();
-//            videoGameRecord.setName(videoGameUpdateRequest.getVideoGameName());
-//            videoGameRecord.setDescription(videoGameUpdateRequest.getDescription());
-//            videoGameRecord.setConsoles(videoGameUpdateRequest.getConsoles());
-//            videoGameRecord.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
-//            videoGameRecord.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-//            videoGameRecord.setVotingPercentage(videoGameUpdateRequest.getVotingPercentage());
-//            videoGameRepository.save(videoGameRecord);
-//            return toVideoGameResponse(videoGameRecord);
-//        }
-//        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
-//    }
-//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(name);
-//        if (!gameExists.isPresent()){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-//        }
-//        VideoGame game = new VideoGame(name,gameExists.get().getDescription(),consoles);
-//        gameExists.get().setConsoles(game.getConsoles());
-//        videoGameRepository.save(gameExists.get());
-//        return toVideoGameResponse(gameExists.get());
 
 
 
@@ -330,14 +272,5 @@ try {
         return videoGameResponse;
     }
 
-//    public VideoGameResponse updateVideoGameDescription(UpdateRequest videoGameUpdateRequest) {
-//        Optional<VideoGameRecord> gameExists = videoGameRepository.findById(videoGameUpdateRequest.getName());
-//        if (!gameExists.isPresent()){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game Not Found");
-//        }
-//        gameExists.get().setDescription(videoGameUpdateRequest.getDescription());
-//        videoGameRepository.save(gameExists.get());
-//        return toVideoGameResponse(gameExists.get());
-//    }
 
 }
