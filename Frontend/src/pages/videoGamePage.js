@@ -38,6 +38,7 @@ class VideoGamePage extends BaseClass {
                                                               `
     }
 
+
 async renderVideoGames(){
     console.log("before datastore");
     const allGames = this.dataStore.get("allVideoGames");
@@ -171,6 +172,7 @@ async renderVideoGames(){
 
 }
     else{
+
             GamesHtml =`Loading Games...`;
         }
         document.getElementById("allGames").innerHTML  = GamesHtml;

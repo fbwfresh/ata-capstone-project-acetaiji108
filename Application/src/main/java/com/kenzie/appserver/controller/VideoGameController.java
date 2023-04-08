@@ -1,5 +1,6 @@
 package com.kenzie.appserver.controller;
 
+import com.amazonaws.Response;
 import com.kenzie.appserver.controller.model.CreateVideoGameRequest;
 import com.kenzie.appserver.controller.model.UpdateRequest;
 import com.kenzie.appserver.controller.model.VideoGameResponse;
@@ -104,6 +105,14 @@ public class VideoGameController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(videoGameList);
+    }
+    @GetMapping("/suggestion")
+    public ResponseEntity<VideoGameResponse> getSuggestion(){
+       VideoGameResponse response = videoGameService.gamingSuggestion();
+       if (response == null){
+           return ResponseEntity.noContent().build();
+       }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/leaderboard/lowToHigh")
