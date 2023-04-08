@@ -37,107 +37,140 @@ class VideoGamePage extends BaseClass {
                                                           <div class="game"></div>                                                                                                  
                                                               `
     }
-    async renderVideoGames(){
-        console.log("before datastore");
-        const allGames = this.dataStore.get("allVideoGames");
-        console.log(allGames);
-       let GamesHtml =  ""
-        if(allGames){
-//                const game = allGames[0];
-              const gamesContainer = document.createElement('div');
-              gamesContainer.classList.add('games-container');
-             // let count = 1;
-                for (const game of allGames) {
 
-                  const gameContainer = document.createElement('div');
-                  gameContainer.classList.add('game-container');
+async renderVideoGames(){
+    console.log("before datastore");
+    const allGames = this.dataStore.get("allVideoGames");
+    console.log(allGames);
+    let GamesHtml =  ""
+    if(allGames){
+        const gamesContainer = document.createElement('div');
+        gamesContainer.classList.add('games-container');
 
-//                  const gameCountElement = document.createElement('div'); // Add a separate element for the game count
-//                  gameCountElement.classList.add('game-count');
-//                  gameCountElement.textContent = count;
+        for (const game of allGames) {
 
-                  const gameImage = document.createElement('img');
-                  gameImage.classList.add('rounded');
-                  gameImage.src = game.image;
-                  gameImage.width = 150;
-                  gameImage.height = 150;
+            const gameContainer = document.createElement('div');
+            gameContainer.classList.add('game-container');
 
-                  const gameInfoContainer = document.createElement('div');
-                  gameInfoContainer.classList.add('game-info-container');
+            const gameImage = document.createElement('img');
+            gameImage.classList.add('roundedCenter');
+            gameImage.src = game.image;
+//            const aspectRatio = gameImage.width / gameImage.height;
+//            gameImage.width = 250;
+//            gameImage.height = 250;
+//            gameImage.style.height = '250px';
+//            gameImage.style.width = 'auto';
+//gameImage.onload = () => {
+//            const height = 250;
+//            const width = height * aspectRatio;
+//            const aspectRatio = gameImage.width / gameImage.height;
+//            const width = 250 * aspectRatio;
+//            gameImage.style.width = `${width}px`;
+//            gameImage.width = width;
+//            gameImage.height = height;
+//            gameImage.style.objectFit = 'cover';
+//};
 
-                  const gameHeaderContainer = document.createElement('div');
-                  gameHeaderContainer.classList.add('game-header-container');
+            const gameInfoContainer = document.createElement('div');
+            gameInfoContainer.classList.add('game-info-container');
 
-                  const buttonContainer = document.createElement('div');
-                  buttonContainer.classList.add('border');
+            const gameHeaderContainer = document.createElement('div');
+            gameHeaderContainer.classList.add('game-header-container');
 
-                  const upvoteButton = document.createElement('button');
-                  upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
-                  upvoteButton.innerHTML = "&#8593;";
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('border');
 
-                  const downvoteButton = document.createElement('button');
-                  downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
-                  downvoteButton.innerHTML = "&#8595;";
+            const upvoteButton = document.createElement('button');
+            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+            upvoteButton.innerHTML = "&#8593;";
+            upvoteButton.width = 50;
+            upvoteButton.height = 50;
 
-                  const gameName = document.createElement('h3');
-                  gameName.textContent = " " + game.name;
+            const downvoteButton = document.createElement('button');
+            downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+            downvoteButton.innerHTML = "&#8595;";
+            downvoteButton.width = 50;
+            downvoteButton.height = 50;
 
-                  const gameDescription = document.createElement('p');
-                  gameDescription.textContent = 'Description: ' + game.Description;
+            const gameName = document.createElement('h3');
+            gameName.textContent =  game.name;
 
-                  const gameConsoles = document.createElement('h5');
-                  gameConsoles.textContent = 'Consoles: ' + game.Consoles;
+            const gameDescription = document.createElement('p');
+            gameDescription.textContent =  game.Description;
 
-                  // count++;
-
-                  buttonContainer.appendChild(upvoteButton);
-                  buttonContainer.appendChild(downvoteButton);
-
-//                  gameContainer.appendChild(gameCountElement);
-                  gameContainer.appendChild(gameImage);
-                  gameContainer.appendChild(gameInfoContainer);
-                  gameInfoContainer.appendChild(gameHeaderContainer);
-                  gameHeaderContainer.appendChild(buttonContainer);
-                  gameHeaderContainer.appendChild(gameName);
-                  gameInfoContainer.appendChild(gameDescription);
-                  gameInfoContainer.appendChild(gameConsoles);
-
-                  gamesContainer.appendChild(gameContainer);
-
-                document.body.appendChild(gamesContainer);
-
-                const style = document.createElement('style');
-                  style.textContent = `
-                    .games-container {
-                      display: flex;
-                      flex-wrap: wrap;
-                    }
-
-                    .game-container {
-                      display: flex;
-                      flex-direction: row;
-                      align-items: center;
-                      margin: 10px;
-                    }
-
-                    .game-header-container {
-                        display: flex;
-                      flex-direction: row;
-                    }
-
-                    .game-info-container {
-                      margin: 10px;
-                    }
-                    h3{
-                    margin: 10px;
-                    }
+            const gameConsoles = document.createElement('h5');
+            gameConsoles.textContent = 'Consoles: ' + game.Consoles;
 
 
-                  `;
+            buttonContainer.appendChild(upvoteButton);
+            buttonContainer.appendChild(downvoteButton);
 
-                  document.head.appendChild(style);
+            gameContainer.appendChild(gameImage);
+            gameContainer.appendChild(gameInfoContainer);
+            gameInfoContainer.appendChild(buttonContainer)
+            gameInfoContainer.appendChild(gameName)
+//            gameInfoContainer.appendChild(gameHeaderContainer);
+//            gameHeaderContainer.appendChild(buttonContainer);
+//            gameHeaderContainer.appendChild(gameName);
+            gameInfoContainer.appendChild(gameDescription);
+            gameInfoContainer.appendChild(gameConsoles);
+
+            gamesContainer.appendChild(gameContainer);
+
+            document.body.appendChild(gamesContainer);
+
+            const style = document.createElement('style');
+            style.textContent = `
+                .games-container {
+                  display: flex;
+                  flex-wrap: wrap;
+                }
+
+                .game-container {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  margin: 10px;
+                }
+
+                img {
+                  width: 250px;
+                  height: 250px;
+                }
+
+                .game-header-container {
+                  flex-direction: row;
+                }
+
+                .game-info-container {
+                  margin: 10px;
+                }
+
+//                .rounded {
+//                    border-radius: 20px;
+//                    /*border: 2px solid black;*/
+//                    margin-bottom: 20px;
+//                }
+                .roundedCenter {
+                    border-radius: 20px;
+                    margin-bottom: 20px;
+                    position: relative;
+                }
+
+                .game-image {
+                  max-width: 100%;
+                  max-height: 100%;
+//                  object-fit: cover;
+//                  object-position: center;
+                }
+
+              `;
+
+            document.head.appendChild(style);
+        }
+
 }
-    }else{
+    else{
             GamesHtml =`Loading Games...`;
         }
         document.getElementById("allGames").innerHTML  = GamesHtml;

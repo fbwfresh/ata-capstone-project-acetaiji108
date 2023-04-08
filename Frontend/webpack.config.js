@@ -9,6 +9,7 @@ module.exports = {
   },
   entry: {
     videoGamePage: path.resolve(__dirname, 'src', 'pages', 'videoGamePage.js'),
+    recommendPage: path.resolve(__dirname, 'src', 'pages', 'recommendPage.js'),
     top5Page: path.resolve(__dirname,'src','pages','top5Page.js'),
   },
   output: {
@@ -19,7 +20,7 @@ module.exports = {
     https: false,
     port: 8080,
     open: true,
-    openPage: 'http://localhost:8080/VideoGameMainPage.html',
+    openPage: 'http://localhost:8080/recommendMainPage.html',
     // diableHostChecks, otherwise we get an error about headers and the page won't render
     disableHostCheck: true,
     contentBase: 'packaging_additional_published_artifacts',
@@ -39,6 +40,11 @@ module.exports = {
       template: './src/VideoGameMainPage.html',
       filename: 'VideoGameMainPage.html',
       inject: false
+    }),
+    new HtmlWebpackPlugin({
+        template: './src/recommendMainPage.html',
+        filename: 'recommendMainPage.html',
+        inject: false
     }),
       new HtmlWebpackPlugin({
         template: './src/Top5Page.html',
