@@ -232,6 +232,8 @@ async renderVideoGames(){
         event.preventDefault();
         event.stopImmediatePropagation();
         let gameName = document.getElementById("searchBarId").value;
+        const loadingElement = document.getElementById("loading2");
+        loadingElement.style.display = "block";
         const foundGame = await this.client.getVideoGame(gameName,this.errorHandler);
         this.dataStore.set("VideoGame",foundGame);
         console.log(foundGame);
@@ -243,6 +245,7 @@ async renderVideoGames(){
         } else{
             this.errorHandler("Error creating! Try again... ");
         }
+        loadingElement.style.display = "none";
     }
 
 

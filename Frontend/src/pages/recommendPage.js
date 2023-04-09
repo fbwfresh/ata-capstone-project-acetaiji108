@@ -135,7 +135,7 @@ class RecommendPage extends BaseClass {
         event.preventDefault();
         event.stopImmediatePropagation();
         let gameName = document.getElementById("searchBarId").value;
-        const loadingElement = document.getElementById("loading");
+        const loadingElement = document.getElementById("loading2");
         loadingElement.style.display = "block";
         const foundGame = await this.client.getVideoGame(gameName,this.errorHandler);
         this.dataStore.set("VideoGame",foundGame);
