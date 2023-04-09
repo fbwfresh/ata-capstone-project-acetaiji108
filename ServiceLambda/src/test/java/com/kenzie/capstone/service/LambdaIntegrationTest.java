@@ -84,7 +84,7 @@ class LambdaIntegrationTest {
     }
 
     @Test
-    void addVideoGameTestWithInvalidData() {
+    void addVideoGameTest_WithInvalidData() {
         // GIVEN
         String gameName = "Halo";
         String description = "Halo is a first-person shooter game.";
@@ -124,7 +124,7 @@ class LambdaIntegrationTest {
         }
 
     @Test
-    void getVideoGameWithInvalidNameTest() {
+    void getVideoGame_WithInvalidNameTest() {
         // GIVEN
         String invalidGameName = "Invalid Game Name";
 
@@ -194,11 +194,6 @@ class LambdaIntegrationTest {
         System.out.println("No video games found");
     }
 
-
-
-
-
-
     @Test
     void deleteVideoGameTest() {
         // GIVEN
@@ -237,7 +232,7 @@ class LambdaIntegrationTest {
     }
 
     @Test
-    void deleteNonExistentVideoGameTest() {
+    void deleteVideoGame_NonExistentGameTest() {
         // GIVEN
         String nonExistentGameName = "Non-existent Game";
 
@@ -302,7 +297,7 @@ class LambdaIntegrationTest {
     }
 
     @Test
-    void updateNonExistentVideoGameTest() {
+    void updateVideoGame_NonExistentGameTest() {
         // GIVEN
         String nonExistentGameName = "Non-existent Game";
         VideoGameRequest request = new VideoGameRequest();
