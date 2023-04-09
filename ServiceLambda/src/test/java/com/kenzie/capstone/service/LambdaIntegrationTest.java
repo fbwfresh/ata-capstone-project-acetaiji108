@@ -1,5 +1,6 @@
 package com.kenzie.capstone.service;
 
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
 import com.kenzie.capstone.service.dao.VideoGameDao;
 import com.kenzie.capstone.service.dependency.DaoModule;
@@ -10,10 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +28,7 @@ class LambdaIntegrationTest {
         this.videoGameDao = new NonCachingVideoGameDao(module.provideDynamoDBMapper());
         this.videoGameService = new VideoGameService(videoGameDao);
     }
+
 
     @Test
     void addVideoGameTest() {
@@ -77,7 +76,34 @@ class LambdaIntegrationTest {
         System.out.println("Upward Vote: " + response.getUpwardVote());
         System.out.println("Downward Vote: " + response.getDownwardVote());
         System.out.println("Total Vote: " + response.getTotalVote());
+
+        // Delete the game
+        boolean result = this.videoGameService.deleteVideoGame(gameName);
+        assertTrue(result, "The game was successfully deleted");
+
     }
+
+    @Test
+    void addVideoGameTestWithInvalidData() {
+        // GIVEN
+        String gameName = "Halo";
+        String description = "Halo is a first-person shooter game.";
+        String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
+        VideoGameRequest request = new VideoGameRequest();
+        request.setName(gameName);
+        request.setDescription(description);
+        request.setImage(image);
+        request.setConsoles(new HashSet<>());
+
+        // WHEN
+        AmazonDynamoDBException exception = assertThrows(AmazonDynamoDBException.class, () -> videoGameService.addVideoGame(request));
+        System.out.println("Exception message: " + exception.getMessage());
+
+        // THEN
+        assertTrue(exception.getMessage().contains("An string set  may not be empty"), "The error message should contain the substring");
+        System.out.println("Game is invalid");
+    }
+
 
 
 
@@ -95,16 +121,25 @@ class LambdaIntegrationTest {
         // THEN
         assertNotNull(response, "The response is valid");
         assertEquals("Monster Hunter Rise", response.getName(), "The video game name matches");
-
         }
 
+    @Test
+    void getVideoGameWithInvalidNameTest() {
+        // GIVEN
+        String invalidGameName = "Invalid Game Name";
 
+        // WHEN
+        System.out.println("Attempting to get an invalid video game...");
+        InvalidGameException exception = assertThrows(InvalidGameException.class, () -> videoGameService.getVideoGame(invalidGameName));
+
+        // THEN
+        assertEquals("Request must contain a valid video game name", exception.getMessage(), "The error message should match");
+        System.out.println("Invalid game");
+    }
 
     @Test
     void GetAllVideoGamesTest() {
         // GIVEN
-        String gameName = "Contra";
-        assertTrue(videoGameService.deleteVideoGame(gameName));
         List<VideoGameResponse> response = videoGameService.getAllVideoGames();
 
         // WHEN
@@ -119,6 +154,49 @@ class LambdaIntegrationTest {
         assertNotNull(response, "The response is valid");
         assertEquals(50, response.size(), "There are 50 games in the database");
     }
+
+    @Test
+    void getAllVideoGamesTest_noGamesFound() {
+        // GIVEN
+        List<VideoGameRecord> emptyRecords = Collections.emptyList();
+        VideoGameDao videoGameDao = new VideoGameDao() {
+            @Override
+            public VideoGameRecord addVideoGame(VideoGameRecord record) {
+                return null;
+            }
+
+            @Override
+            public boolean deleteVideoGame(VideoGameRecord record) {
+                return false;
+            }
+            @Override
+            public VideoGameRecord findByName(String name) {
+                return null;
+            }
+            @Override
+            public List<VideoGameRecord> getAllGames() {
+                return emptyRecords;
+            }
+            @Override
+            public VideoGameRecord updateVideoGame(VideoGameRecord record) {
+                return null;
+            }
+        };
+        VideoGameService videoGameService = new VideoGameService(videoGameDao);
+
+        // WHEN
+        List<VideoGameResponse> responseList = videoGameService.getAllVideoGames();
+
+        // THEN
+        assertNotNull(responseList, "The response list should not be null");
+        assertTrue(responseList.isEmpty(), "The response list should be empty");
+
+        System.out.println("No video games found");
+    }
+
+
+
+
 
 
     @Test
@@ -156,6 +234,20 @@ class LambdaIntegrationTest {
             return;
         }
         fail("The game should not exist in the database anymore");
+    }
+
+    @Test
+    void deleteNonExistentVideoGameTest() {
+        // GIVEN
+        String nonExistentGameName = "Non-existent Game";
+
+        // WHEN
+        InvalidGameException exception = assertThrows(InvalidGameException.class, () -> videoGameService.deleteVideoGame(nonExistentGameName));
+
+        // THEN
+        assertNotNull(exception, "An exception should be thrown");
+        assertEquals("The video game does not exist on any console", exception.getMessage(), "The error message should match");
+        System.out.println("Could not delete invalid game: " + nonExistentGameName);
     }
 
 
@@ -209,5 +301,19 @@ class LambdaIntegrationTest {
         assertNull(videoGameDao.findByName(gameName));
     }
 
+    @Test
+    void updateNonExistentVideoGameTest() {
+        // GIVEN
+        String nonExistentGameName = "Non-existent Game";
+        VideoGameRequest request = new VideoGameRequest();
+        request.setName(nonExistentGameName);
+
+        // WHEN
+        InvalidGameException exception = assertThrows(InvalidGameException.class, () -> videoGameService.updateVideoGame(request));
+
+        // THEN
+        assertTrue(exception.getMessage().contains("Game with name " + nonExistentGameName + " not found"), "The error message should contain the substring");
+        System.out.println("Could not update invalid game: " + nonExistentGameName);
+    }
 }
 
