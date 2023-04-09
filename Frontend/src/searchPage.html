@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script type="text/javascript" src="searchPage.js"></script>
+    <meta charset="UTF-8">
+    <title>GameRanker</title>
+    <style>
+        * {margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .body {
+            background-image: url(https://wallpapercave.com/dwp1x/wp9758145.jpg);
+
+        }
+        .rounded {
+            border-radius: 20px;
+            border: 2px solid black;
+            margin-bottom: 20px;
+        }
+        .game {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+            border-bottom: 2px solid black;
+        }
+
+
+        /*<!--image slider start-->*/
+        section {
+            position: relative;
+        }
+            .container {
+                padding: 2rem;
+            }
+
+        .slider {
+            border-radius: 10px;
+            width: 1100px;
+            height: 500px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .slides {
+            width: 500%;
+            height: 500px;
+            display: flex;
+        }
+
+        .slides input{
+            display: none;
+        }
+
+        .slide {
+            width: 20%;
+            transition: 2s;
+        }
+
+        .slide img {
+            width: 1100px;
+            height: 500px;
+            border-radius: 10px;
+            border: 2px solid white;
+            margin-bottom: 10px;
+        }
+
+        /*<!--Manual slider-->*/
+        .navigation-manual {
+            position: absolute;
+            width: 1100px;
+            bottom: 38px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .manual-btn {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 1s;
+        }
+
+        .manual-btn:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        .manual-btn:hover {
+            background: #40D3DC;
+        }
+
+        #radio1:checked ~ .first {
+            margin-left: 0;
+        }
+
+        #radio2:checked ~ .first {
+            margin-left: -20%;
+        }
+
+        #radio3:checked ~ .first {
+            margin-left: -40%;
+        }
+
+        #radio4:checked ~ .first {
+            margin-left: -60%;
+        }
+
+        #radio5:checked ~ .first {
+            margin-left: -80%;
+        }
+
+        /*<!--Auto slider-->*/
+        .navigation-auto {
+            position: absolute;
+            display: flex;
+            width: 1100px;
+            justify-content: center;
+            margin-top: 480px;
+        }
+
+        .navigation-auto div {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            transition: 1s;
+        }
+
+        .navigation-auto div:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        #radio1:checked ~ .navigation-auto .auto-btn1 {
+            background: #40D3DC;
+        }
+
+        #radio2:checked ~ .navigation-auto .auto-btn2 {
+            background: #40D3DC;
+        }
+
+        #radio3:checked ~ .navigation-auto .auto-btn3 {
+            background: #40D3DC;
+        }
+
+        #radio4:checked ~ .navigation-auto .auto-btn4 {
+            background: #40D3DC;
+        }
+
+        #radio5:checked ~ .navigation-auto .auto-btn5 {
+            background: #40D3DC;
+        }
+        /*<!--image slider CSS end-->*/
+
+        /*Banner-Image*/
+        .banner-image {
+            justify-content: center;
+            text-align: center;
+            background-color: #121946;
+            height: 100px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 100%;
+        }
+        .centerResults {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .centerResults2 {
+            background-color: gray;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*<!--navBar-->*/
+        .site-header {
+            background-image: linear-gradient(rgba(0,8,100,0.9),rgba(0,8,51,0.9)), url(banner2.jpg);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar {
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: #131921;
+            border-radius: 1px;
+        }
+
+        .navbar img {
+            margin-right: 20px;
+            margin-top: 9px;
+        }
+
+        .search-bar {
+            margin-right: 50px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 300px;
+
+        }
+
+        .search-bar button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #fff;
+            color: #292929;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: SansSerif, Serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .buttonPadding a:hover {
+            background-color: white;
+            color: purple;
+            padding-bottom: 10px;
+        }
+
+
+    </style>
+
+    <head>
+        <div class="banner-image">
+            <img class="banner" src="https://i.imgur.com/95jh4Ql.png" alt="GameRanker Banner" width="800" height="80" />
+
+        </div>
+<body class="body">
+
+<header class="header">
+    <div class="site-header">
+        <div class="navbar">
+            <img src="https://i.imgur.com/Qcl62ld.png" alt="GameRanker" width="180" height="60"/>
+            <form action="" class="search-bar">
+                <input type="text" placeholder="Search Game Titles" id="searchBarId">
+                <button id="searchButton">Search</button>
+            </form>
+            <nav>
+                <ul>
+                    <li><a href="recommendMainPage.html">Home</a></li>
+                    <li><a href="VideoGameMainPage.html">Games</a></li>
+                    <li><a href="Top5Page.html">Ranking</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+
+<!--Image Slider Start-->
+<!--Image Slider End-->
+<div id="searchResult">
+</div>
+
+<!--<div id="result">Recommend Game:</div>-->
+
+
+</body>
+</html>
