@@ -125,33 +125,44 @@ async renderVideoGames(){
                 .games-container {
                   display: flex;
                   flex-wrap: wrap;
-                }
-
-                .game-container {
-                  display: flex;
-                  flex-direction: row;
+                  justify-content: flex-start;
                   align-items: center;
                   margin: 10px;
+                }
+                
+                #searchResult {
+                text-align: center;
+                }
+                
+                .centerResults2 {
+                display: inline-block;
                 }
 
                 img {
                   width: 250px;
                   height: 250px;
+                  object-fit: cover;
                 }
 
                 .game-header-container {
-                  flex-direction: row;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
                 }
 
                 .game-info-container {
                   margin: 10px;
                 }
+                .game-image-container {
+                  margin-right: 20px;
+                }
+                
+               .rounded {
+                   border-radius: 20px;
+                   /*border: 2px solid black;*/
+                   margin-bottom: 20px;
+               }
 
-//                .rounded {
-//                    border-radius: 20px;
-//                    /*border: 2px solid black;*/
-//                    margin-bottom: 20px;
-//                }
                 .roundedCenter {
                     border-radius: 20px;
                     margin-bottom: 20px;
@@ -161,8 +172,8 @@ async renderVideoGames(){
                 .game-image {
                   max-width: 100%;
                   max-height: 100%;
-//                  object-fit: cover;
-//                  object-position: center;
+                 object-fit: cover;
+                 object-position: center;
                 }
 
               `;
