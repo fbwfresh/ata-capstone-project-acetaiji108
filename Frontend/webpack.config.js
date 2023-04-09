@@ -12,6 +12,8 @@ module.exports = {
     recommendPage: path.resolve(__dirname, 'src', 'pages', 'recommendPage.js'),
     top5Page: path.resolve(__dirname,'src','pages','top5Page.js'),
     searchPage: path.resolve(__dirname, 'src', 'pages', 'searchPage.js'),
+    examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,7 +23,7 @@ module.exports = {
     https: false,
     port: 8080,
     open: true,
-    openPage: 'http://localhost:8080/recommendMainPage.html',
+    openPage: 'http://localhost:8080/enterWebsite.html',
     // diableHostChecks, otherwise we get an error about headers and the page won't render
     disableHostCheck: true,
     contentBase: 'packaging_additional_published_artifacts',
@@ -57,6 +59,11 @@ module.exports = {
               filename: 'searchPage.html',
               inject: false
       }),
+    new HtmlWebpackPlugin({
+      template: './src/enterWebsite.html',
+      filename: 'enterWebsite.html',
+      inject: false
+    }),
     new CopyPlugin({
       patterns: [
         {
