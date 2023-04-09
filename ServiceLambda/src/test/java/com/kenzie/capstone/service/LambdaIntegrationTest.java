@@ -205,7 +205,7 @@ class LambdaIntegrationTest {
         assertEquals(request.getDownwardVote(), updatedRecord.getDownwardVote());
         assertEquals(request.getTotalVote(), updatedRecord.getTotalVote());
 
-        videoGameService.deleteVideoGame(gameName);
+        videoGameDao.deleteVideoGame(updatedRecord);
         assertNull(videoGameDao.findByName(gameName));
     }
 

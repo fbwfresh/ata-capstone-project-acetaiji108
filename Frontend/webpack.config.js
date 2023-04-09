@@ -11,6 +11,7 @@ module.exports = {
     videoGamePage: path.resolve(__dirname, 'src', 'pages', 'videoGamePage.js'),
     recommendPage: path.resolve(__dirname, 'src', 'pages', 'recommendPage.js'),
     top5Page: path.resolve(__dirname,'src','pages','top5Page.js'),
+    searchPage: path.resolve(__dirname, 'src', 'pages', 'searchPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -50,6 +51,11 @@ module.exports = {
         template: './src/Top5Page.html',
         filename: 'Top5Page.html',
         inject: false
+      }),
+      new HtmlWebpackPlugin({
+              template: './src/searchPage.html',
+              filename: 'searchPage.html',
+              inject: false
       }),
     new CopyPlugin({
       patterns: [

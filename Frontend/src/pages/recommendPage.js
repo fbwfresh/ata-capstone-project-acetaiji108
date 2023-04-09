@@ -15,7 +15,6 @@ class RecommendPage extends BaseClass {
 //        this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
-        document.getElementById('recommendButton').addEventListener('click', this.recommendGame);
         document.getElementById('recommendButtonName').addEventListener('click', this.recommendGameName);
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
         this.getTop5();
@@ -95,8 +94,7 @@ class RecommendPage extends BaseClass {
     async recommendGameName() {
         const consoleType = document.getElementById('console').value;
         if (consoleType === "Console" || consoleType === "" || consoleType === null) {
-            window.alert('Please select a console type');
-            return;
+          return this.recommendGame();
         }
         const loadingElement = document.getElementById("loading");
         loadingElement.style.display = "block";
@@ -144,7 +142,10 @@ class RecommendPage extends BaseClass {
         console.log(foundGame);
         if(foundGame){
             this.showMessage("Found Game!")
-            this.renderByVideoGameName();
+            localStorage.setItem('foundGame', JSON.stringify(foundGame));
+            const game = JSON.parse(localStorage.getItem('foundGame'));
+            window.location.href = "searchPage.html";
+//            this.renderByVideoGameName();
         } else{
             this.errorHandler("Error creating! Try again... ");
         }

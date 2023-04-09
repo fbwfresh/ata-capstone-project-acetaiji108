@@ -236,7 +236,9 @@ async renderVideoGames(){
         console.log(foundGame);
         if(foundGame){
             this.showMessage("Found Game!")
-            this.renderByVideoGameName();
+            localStorage.setItem('foundGame', JSON.stringify(foundGame));
+            const game = JSON.parse(localStorage.getItem('foundGame'));
+            window.location.href = "searchPage.html";
         } else{
             this.errorHandler("Error creating! Try again... ");
         }

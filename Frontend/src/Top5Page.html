@@ -44,6 +44,20 @@
             position: center;
         }
 
+        /*.slider{*/
+        /*    position: absolute;*/
+        /*    right: 0rem;*/
+        /*}*/
+        /*.slides{*/
+        /*    position: absolute;*/
+        /*    right: 0rem;*/
+        /*}*/
+        /*.imageContainer{*/
+        /*    position: relative;*/
+        /*    overflow: hidden;*/
+        /*    max-width: 100%;*/
+        /*}*/
+
         .leaderboardHeader{
             background-color: black;
             /*background-color: aliceblue;*/
@@ -85,6 +99,19 @@
             right: -1.5%;
             width: 45%;
         }
+
+        /*#onePieceImage{*/
+        /*    height: 15rem;*/
+        /*    width: 20rem;*/
+        /*    position: absolute;*/
+        /*    bottom: -0.3rem;*/
+        /*    right: 8rem;*/
+        /*}*/
+        .leaderboardHeader img{
+                  object-fit: fill;
+                  height: auto;
+                  width: auto;
+              }
 
         #leaderboardImage{
             height: 105%;
@@ -275,12 +302,13 @@
 <div id="searchResult">
 </div>
 <div class="leaderboard">
+    <div class="imageContainer">
     <div class="leaderboardHeader">
         <h1>Leader Board</h1>
-        <img id="leaderboardImage" src="https://i.imgur.com/Z3NMcwv.png" alt="Goku Ultra Instinct">
-        <img id="gtaImage" src="https://i.imgur.com/sWy6aev.png">
-        <img id="tokyoGhoulImage" src="https://i.imgur.com/xWV9dIq.png">
-        <img id="cowboyBebop" src="https://i.imgur.com/ds3IsDD.png">
+        <img class="non3d" id="leaderboardImage" src="https://i.imgur.com/Z3NMcwv.png" alt="Goku Ultra Instinct">
+        <img class=non3d id="gtaImage" src="https://i.imgur.com/sWy6aev.png">
+        <img class="non3d" id="tokyoGhoulImage" src="https://i.imgur.com/xWV9dIq.png">
+        <img class="non3d" id="cowboyBebop" src="https://i.imgur.com/ds3IsDD.png">
         <!--        <img id="zoroImage" src="https://i.imgur.com/jqBJlyT.png">-->
         <img id="scorpionImage" src="https://i.imgur.com/zdJiMKb.png">
 
@@ -291,7 +319,7 @@
 
 
     </div>
-
+    </div>
     <table id="leaderboardTable" class="table">
         <thead>
         <tr>

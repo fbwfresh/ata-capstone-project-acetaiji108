@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-    <script type="text/javascript" src="recommendPage.js"></script>
+    <script type="text/javascript" src="searchPage.js"></script>
     <meta charset="UTF-8">
     <title>GameRanker</title>
     <style>
@@ -12,7 +12,7 @@
         }
         .body {
             background-image: url(https://wallpapercave.com/dwp1x/wp9758145.jpg);
-            /*overflow: hidden;*/
+
         }
         .rounded {
             border-radius: 20px;
@@ -178,12 +178,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
         }
 
         /*<!--navBar-->*/
         .site-header {
-            background-image: linear-gradient(rgba(0,8,100,0.9),rgba(0,8,51,0.9)), url(https://i.imgur.com/pGgaKEt.jpg);
+            background-image: linear-gradient(rgba(0,8,100,0.9),rgba(0,8,51,0.9)), url(banner2.jpg);
             color: #fff;
             margin: 0;
             padding: 0;
@@ -203,7 +202,7 @@
         }
 
         .navbar img {
-            margin-right: 60px;
+            margin-right: 20px;
             margin-top: 9px;
         }
 
@@ -256,7 +255,7 @@
 
     </style>
 
-    </head>
+    <head>
         <div class="banner-image">
             <img class="banner" src="https://i.imgur.com/95jh4Ql.png" alt="GameRanker Banner" width="800" height="80" />
 
@@ -284,99 +283,12 @@
 
 
 <!--Image Slider Start-->
-<section class="container">
-    <div class="slider">
-        <div class="slides">
-
-            <!-------Radio Buttons Start------->
-            <input type="radio" name="radio-btn" id="radio1">
-            <input type="radio" name="radio-btn" id="radio2">
-            <input type="radio" name="radio-btn" id="radio3">
-            <input type="radio" name="radio-btn" id="radio4">
-            <input type="radio" name="radio-btn" id="radio5">
-
-            <!----------------Slides----------------->
-            <div class="slide first"><img src="https://wallpapercave.com/wp/wp11641246.jpg" alt="COD Modern Warfare 2 wallpaper" /></div>
-            <div class="slide"><img src="https://wallpapercave.com/wp/wp5463083.jpg" alt="Final Fantasy VII Remake" /></div>
-            <div class="slide"><img src="https://wallpapercave.com/wp/wp2910455.jpg" alt="Mario and peach wallpaper" /></div>
-            <div class="slide"><img src="https://wallpapercave.com/wp/wp11654635.jpg" alt="Minecraft cartoon wallpaper" /></div>
-            <div class="slide"><img src="https://wallpapercave.com/wp/wp11351405.jpg" alt="NBA 2k Devin Booker 4K Wallpaper Edition" /></div>
-
-            <!-------Auto Navigation------->
-            <div class="navigation-auto">
-                <div class="auto-btn1"></div>
-                <div class="auto-btn2"></div>
-                <div class="auto-btn3"></div>
-                <div class="auto-btn4"></div>
-                <div class="auto-btn5"></div>
-            </div>
-
-            -----Manual Navigation-----
-            <div class="navigation-manual">
-                <label for="radio1" class="manual-btn"></label>
-                <label for="radio2" class="manual-btn"></label>
-                <label for="radio3" class="manual-btn"></label>
-                <label for="radio4" class="manual-btn"></label>
-                <label for="radio5" class="manual-btn"></label>
-            </div>
-        </div>
-    </div>
-
-    <!--Slider JavaScript-->
-    <script type="text/javascript">
-        let counter = 1;
-        setInterval(function(){
-            document.getElementById('radio' + counter).checked = true;
-            counter++;
-            if(counter > 5) {
-                counter = 1;
-            }
-        }, 5500);
-    </script>
-</section>
 <!--Image Slider End-->
-
-<!--<div id="result">Recommend Game:</div>-->
-<div style="display: flex; flex-direction: column; align-items: center">
-    <br><br>
-    <h3>Game Recommender</h3>
-    <br>
-    <div>
-        <!--        <label for="console">Console</label><br>-->
-        <select id="console" name="console">
-            <option>Console</option>
-            <option value="X360">Xbox 360</option>
-            <option value="PC">Personal Computer</option>
-            <option value="PS3">PlayStation 3</option>
-            <option value="XONE">Xbox One</option>
-            <option value="PS4">PlayStation 4</option>
-            <option value="NS">Nintendo Switch</option>
-            <option value="XBSX">Xbox Series X</option>
-            <option value="PS5">PlayStation 5</option>
-            <option value="VITA">PlayStation Vita</option>
-            <option value="WIIU">Wii U</option>
-            <option value="STA">Stadia</option>
-            <option value="MAC">Macintosh</option>
-            <option value="DS">Nintendo DS</option>
-            <option value="GC">GameCube</option>
-            <option value="GBA">Game Boy Advance</option>
-            <option value="WII">Wii</option>
-            <option value="PS2">PlayStation 2</option>
-            <option value="AND">Android</option>
-            <option value="IOS">iOS</option>
-        </select>
-    </div>
-    <br>
-    <input type="text" id="fname" name="fname" placeholder="Input name" required><br>
-
-    <button id="recommendButtonName">Recommend me a game</button>
-    <br>
-    <p id="loading" style="display:none">Loading...</p>
-
-    <!--    <input type="submit" id="recommendButtonName" value="Submit">-->
-</div>
 <div id="searchResult">
 </div>
+
+<!--<div id="result">Recommend Game:</div>-->
+
 
 </body>
 </html>
