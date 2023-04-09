@@ -54,6 +54,7 @@ async renderVideoGames(){
             gameContainer.classList.add('game-container');
 
             const gameImage = document.createElement('img');
+            gameImage.classList.add('game-image');
             gameImage.classList.add('roundedCenter');
             gameImage.src = game.image;
 //            const aspectRatio = gameImage.width / gameImage.height;
@@ -138,7 +139,7 @@ async renderVideoGames(){
                 display: inline-block;
                 }
 
-                img {
+                .game-image {
                   width: 250px;
                   height: 250px;
                   object-fit: cover;
