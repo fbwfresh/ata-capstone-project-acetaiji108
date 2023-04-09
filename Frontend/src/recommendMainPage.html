@@ -178,6 +178,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
         }
 
         /*<!--navBar-->*/
@@ -334,17 +335,12 @@
     </script>
 </section>
 <!--Image Slider End-->
-<p id="loading" style="display:none">Loading...</p>
-<div id="searchResult">
-</div>
 
 <!--<div id="result">Recommend Game:</div>-->
 <div style="display: flex; flex-direction: column; align-items: center">
     <br><br>
-    <h3>Game Recommender #1</h3>
-    <button id="recommendButton">Recommend me a game</button>
-    <br><br>
-    <h3>Game Recommender #2</h3>
+    <h3>Game Recommender</h3>
+    <br>
     <div>
         <!--        <label for="console">Console</label><br>-->
         <select id="console" name="console">
@@ -374,8 +370,12 @@
     <input type="text" id="fname" name="fname" placeholder="Input name" required><br>
 
     <button id="recommendButtonName">Recommend me a game</button>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <br>
+    <p id="loading" style="display:none">Loading...</p>
+
     <!--    <input type="submit" id="recommendButtonName" value="Submit">-->
+</div>
+<div id="searchResult">
 </div>
 
 </body>
