@@ -71,7 +71,24 @@ public class VideoGameLambdaServiceTest {
         });
     }
 
+    @Test
+    void addVideoGameTest_nullRequest_assertEquals() {
+        // GIVEN
+        VideoGameRequest request = null;
 
+        // WHEN + THEN
+        System.out.println("Expected InvalidGameException to be thrown due to null request.");
+        InvalidGameException exception = assertThrows(InvalidGameException.class, () -> {
+            this.videoGameService.addVideoGame(request);
+        });
+
+        System.out.println("Expected exception message: Request must contain a valid information");
+        assertThrows(InvalidGameException.class, () -> {
+            this.videoGameService.addVideoGame(null);
+        }, "Request must contain a valid information");
+
+        verifyNoMoreInteractions(videoGameDao);
+    }
 
     @Test
     void deleteVideoGameTest() {

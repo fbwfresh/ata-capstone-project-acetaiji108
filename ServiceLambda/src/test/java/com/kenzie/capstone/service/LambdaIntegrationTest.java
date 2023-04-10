@@ -380,7 +380,6 @@ class LambdaIntegrationTest {
 
         videoGameDao.deleteVideoGame(updatedRecord);
         assertNull(videoGameDao.findByName(gameName));
-
         System.out.println("Video game updated: " + result);
     }
 }
