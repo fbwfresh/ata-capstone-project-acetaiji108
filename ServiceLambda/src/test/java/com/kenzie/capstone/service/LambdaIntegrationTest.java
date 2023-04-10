@@ -39,7 +39,7 @@ class LambdaIntegrationTest {
                 "Different weapons with new abilities and that shoot different types of projectiles can be acquired" +
                 " as the player progresses through the levels.";
         String image = "https://assets.2k.com/1a6ngf98576c/2RNTmC7iLr6YVlxBSmE4M3/11177cffa2bdbedb226b089c4108726a/NBA23-WEBSITE-PRE_ORDER-HOMPAGE-MODULE2-RETAIL_CAROUSEL-CROSSGEN_EDITION-425x535.jpg";
-        VideoGame game = new VideoGame(gameName, description,image, Consoles.DS, Consoles.GC, Consoles.GBA, Consoles.NS, Consoles.WII, Consoles.WIIU);
+        VideoGame game = new VideoGame(gameName, description, image, Consoles.DS, Consoles.GC, Consoles.GBA, Consoles.NS, Consoles.WII, Consoles.WIIU);
         VideoGameRequest request = new VideoGameRequest();
         request.setName(game.getName());
         request.setConsoles(game.getConsoles());
@@ -105,8 +105,6 @@ class LambdaIntegrationTest {
     }
 
 
-
-
     @Test
     void getVideoGameTest() throws InvalidGameException {
         // GIVEN
@@ -121,7 +119,7 @@ class LambdaIntegrationTest {
         // THEN
         assertNotNull(response, "The response is valid");
         assertEquals("Monster Hunter Rise", response.getName(), "The video game name matches");
-        }
+    }
 
     @Test
     void getVideoGame_WithInvalidNameTest() {
@@ -169,14 +167,17 @@ class LambdaIntegrationTest {
             public boolean deleteVideoGame(VideoGameRecord record) {
                 return false;
             }
+
             @Override
             public VideoGameRecord findByName(String name) {
                 return null;
             }
+
             @Override
             public List<VideoGameRecord> getAllGames() {
                 return emptyRecords;
             }
+
             @Override
             public VideoGameRecord updateVideoGame(VideoGameRecord record) {
                 return null;
@@ -310,5 +311,78 @@ class LambdaIntegrationTest {
         assertTrue(exception.getMessage().contains("Game with name " + nonExistentGameName + " not found"), "The error message should contain the substring");
         System.out.println("Could not update invalid game: " + nonExistentGameName);
     }
+
+    @Test
+    void videoGameRecord_EqualityTest() {
+        Set<String> consoles = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("Console 1")));
+        VideoGameRecord record1 = new VideoGameRecord();
+        record1.setName("Game 1");
+        record1.setDescription("Description 1");
+        record1.setImage("Image 1");
+        record1.setConsoles(consoles);
+
+        VideoGameRecord record2 = new VideoGameRecord();
+        record2.setName("Game 1");
+        record2.setDescription("Description 1");
+        record2.setImage("Image 1");
+        record2.setConsoles(consoles);
+
+        assertEquals(record1, record2, "Two VideoGameRecords with the same properties should be equal");
+        assertEquals(record1.hashCode(), record2.hashCode(), "Two VideoGameRecords with the same properties should have the same hashCode");
+        System.out.println("VideoGameRecord equality test passed");
+    }
+
+    @Test
+    void updateVideoGameTest_existingGame() throws InvalidGameException {
+        // GIVEN
+        String gameName = "Test Game";
+        String description = "Test Description";
+        String console = "Test Console";
+        String image = "test-image";
+        VideoGameRecord record = new VideoGameRecord();
+        record.setName(gameName);
+        record.setDescription(description);
+        record.setConsoles(Collections.singleton(console));
+        record.setImage(image);
+        videoGameDao.addVideoGame(record);
+
+        VideoGameRequest request = new VideoGameRequest();
+        request.setName(gameName);
+        request.setDescription("Updated Test Description");
+        request.setConsoles(new HashSet<>(Arrays.asList("Test Console 1", "Test Console 2")));
+        request.setImage("test-image-url");
+        request.setUpwardVote(100);
+        request.setDownwardVote(50);
+        request.setTotalVote(150);
+
+        // WHEN
+        VideoGameResponse result = videoGameService.updateVideoGame(request);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(request.getName(), result.getName());
+        assertEquals(request.getDescription(), result.getDescription());
+        assertEquals(request.getConsoles(), result.getConsoles());
+        assertEquals(request.getImage(), result.getImage());
+        assertEquals(request.getUpwardVote(), result.getUpwardVote());
+        assertEquals(request.getDownwardVote(), result.getDownwardVote());
+        assertEquals(request.getTotalVote(), result.getTotalVote());
+
+        VideoGameRecord updatedRecord = videoGameDao.findByName(gameName);
+        assertNotNull(updatedRecord);
+        assertEquals(request.getName(), updatedRecord.getName());
+        assertEquals(request.getDescription(), updatedRecord.getDescription());
+        assertEquals(request.getConsoles(), updatedRecord.getConsoles());
+        assertEquals(request.getImage(), updatedRecord.getImage());
+        assertEquals(request.getUpwardVote(), updatedRecord.getUpwardVote());
+        assertEquals(request.getDownwardVote(), updatedRecord.getDownwardVote());
+        assertEquals(request.getTotalVote(), updatedRecord.getTotalVote());
+
+        videoGameDao.deleteVideoGame(updatedRecord);
+        assertNull(videoGameDao.findByName(gameName));
+
+        System.out.println("Video game updated: " + result);
+    }
 }
+
 
