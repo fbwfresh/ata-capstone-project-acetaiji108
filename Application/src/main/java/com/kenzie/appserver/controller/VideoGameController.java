@@ -30,23 +30,6 @@ public class VideoGameController {
         this.videoGameService = videoGameService;
     }
 
-//    @PostMapping("/{name}/upvote")
-//    public ResponseEntity<VideoGameResponse> addUpvote(@PathVariable String name){
-//       VideoGameResponse response = videoGameService.addUpvote(name);
-//       if(response == null){
-//           return ResponseEntity.badRequest().build();
-//       }
-//       return ResponseEntity.ok(response);
-//    }
-//    @PostMapping("/{name}/downvote")
-//    public ResponseEntity<VideoGameResponse> addDownvote(@PathVariable String name){
-//        VideoGameResponse response = videoGameService.addDownVote(name);
-//        if(response == null){
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.ok(response);
-//    }
-
     @GetMapping("/{name}")
     public ResponseEntity<VideoGameResponse> getGameByName(@PathVariable String name) {
 
