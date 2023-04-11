@@ -146,17 +146,5 @@ public class VideoGameController {
         return videoGameResponse;
     }
 
-//    private String encodeUri(String name){
-//        if(name.contains(" ")){
-//            name.replaceAll(" ","-");
-//        }
-//        return name;
-//    }
-//    private String decodeUri(String name){
-//        if(name.contains("-")){
-//            name.replaceAll("-"," ");
-//        }
-//        return name;
-//    }
 
 }
