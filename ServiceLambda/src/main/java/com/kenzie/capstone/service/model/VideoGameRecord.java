@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 
+import java.util.Objects;
 import java.util.Set;
 
 @DynamoDBTable(tableName = "VideoGames")
@@ -70,6 +71,22 @@ public class VideoGameRecord {
         this.consoles = consoles;
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VideoGameRecord that = (VideoGameRecord) o;
+        return Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDescription(), that.getDescription()) &&
+                Objects.equals(getImage(), that.getImage()) &&
+                Objects.equals(getConsoles(), that.getConsoles());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDescription(), getImage(), getConsoles());
+    }
+
 
 //    public void setConsoles(Consoles[] consoles) {
 //        this.consoles = new HashSet<>();
