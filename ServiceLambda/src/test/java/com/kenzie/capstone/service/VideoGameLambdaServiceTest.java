@@ -53,6 +53,10 @@ public class VideoGameLambdaServiceTest {
         assertNotNull(response, "A response is returned");
         assertEquals(gameName, response.getName(), "The response game name should match");
         assertEquals(gameDescription, response.getDescription(), "The response game description should match");
+
+        System.out.println("Added Video Game:");
+        System.out.println("Name: " + response.getName());
+        System.out.println("Description: " + response.getDescription());
     }
 
     @Test
@@ -61,11 +65,30 @@ public class VideoGameLambdaServiceTest {
         VideoGameRequest request = null;
 
         // WHEN + THEN
+        System.out.println("Expected InvalidGameException to be thrown due to null request.");
         assertThrows(InvalidGameException.class, () -> {
             this.videoGameService.addVideoGame(request);
         });
     }
 
+    @Test
+    void addVideoGameTest_nullRequest_assertEquals() {
+        // GIVEN
+        VideoGameRequest request = null;
+
+        // WHEN + THEN
+        System.out.println("Expected InvalidGameException to be thrown due to null request.");
+        InvalidGameException exception = assertThrows(InvalidGameException.class, () -> {
+            this.videoGameService.addVideoGame(request);
+        });
+
+        System.out.println("Expected exception message: Request must contain a valid information");
+        assertThrows(InvalidGameException.class, () -> {
+            this.videoGameService.addVideoGame(null);
+        }, "Request must contain a valid information");
+
+        verifyNoMoreInteractions(videoGameDao);
+    }
 
     @Test
     void deleteVideoGameTest() {
@@ -89,7 +112,12 @@ public class VideoGameLambdaServiceTest {
         assertEquals(videoGameName, capturedRecord.getName());
         verify(videoGameDao, times(1)).deleteVideoGame(eq(record));
         verify(videoGameDao, times(1)).findByName(eq(videoGameName));
+
+        System.out.println("Deleted Video Game:");
+        System.out.println("Name: " + capturedRecord.getName());
+        System.out.println("Consoles: " + capturedRecord.getConsoles());
     }
+
 
     @Test
     void deleteVideoGameTest_videoGameDoesNotExist() {
@@ -98,6 +126,7 @@ public class VideoGameLambdaServiceTest {
         when(videoGameDao.findByName(eq(videoGameName))).thenReturn(null);
 
         // WHEN + THEN
+        System.out.println("Deleting Video Game: " + videoGameName);
         assertThrows(InvalidGameException.class, () -> {
             this.videoGameService.deleteVideoGame(videoGameName);
         });
@@ -153,9 +182,20 @@ public class VideoGameLambdaServiceTest {
         assertEquals(request.getDownwardVote(), capturedRecord.getDownwardVote());
         assertEquals(request.getTotalVote(), capturedRecord.getTotalVote());
 
+        // Print out updated video game information
+        System.out.println("Updated Video Game:");
+        System.out.println("Name: " + capturedRecord.getName());
+        System.out.println("Description: " + capturedRecord.getDescription());
+        System.out.println("Consoles: " + capturedRecord.getConsoles());
+        System.out.println("Image: " + capturedRecord.getImage());
+        System.out.println("Upward Vote: " + capturedRecord.getUpwardVote());
+        System.out.println("Downward Vote: " + capturedRecord.getDownwardVote());
+        System.out.println("Total Vote: " + capturedRecord.getTotalVote());
+
         verify(videoGameDao, times(1)).findByName(eq(request.getName()));
         verify(videoGameDao, times(1)).updateVideoGame(eq(existingRecord));
     }
+
 
     @Test
     void updateVideoGameTest_videoGameDoesNotExist() {
@@ -168,6 +208,7 @@ public class VideoGameLambdaServiceTest {
         when(videoGameDao.findByName(eq(videoGameName))).thenReturn(null);
 
         // WHEN + THEN
+        System.out.println("Updating video game with name: " + request.getName() + " and description: " + request.getDescription());
         assertThrows(InvalidGameException.class, () -> {
             this.videoGameService.updateVideoGame(request);
         });
@@ -177,7 +218,6 @@ public class VideoGameLambdaServiceTest {
     void getVideoGameTest() {
         // GIVEN
         VideoGameRecord record = new VideoGameRecord();
-
         record.setName("Monster Hunter Rise");
         record.setDescription("Action RPG");
         record.setConsoles(Collections.singleton("Nintendo Switch"));
@@ -192,11 +232,11 @@ public class VideoGameLambdaServiceTest {
         assertEquals("Action RPG", response.getDescription(), "The video game description matches");
         assertEquals(Collections.singleton("Nintendo Switch"), response.getConsoles(), "The video game consoles match");
 
-        // Print out the response for easier debugging
-        System.out.println("Name: " + response.getName());
-        System.out.println("Description: " + response.getDescription());
-        System.out.println("Consoles: " + response.getConsoles());
+        System.out.println("Video Game Name: " + response.getName());
+        System.out.println("Video Game Description: " + response.getDescription());
+        System.out.println("Video Game Consoles: " + response.getConsoles());
     }
+
 
     @Test
     void getVideoGameTest_videoGameDoesNotExist() {
@@ -208,8 +248,8 @@ public class VideoGameLambdaServiceTest {
         assertThrows(InvalidGameException.class, () -> {
             this.videoGameService.getVideoGame(videoGameName);
         });
+        System.out.println("Video game not found: " + videoGameName);
     }
-
     @Test
     void getAllVideoGamesTest() {
         // GIVEN
@@ -255,5 +295,7 @@ public class VideoGameLambdaServiceTest {
         // THEN
         assertNotNull(responseList);
         assertTrue(responseList.isEmpty());
+
+        System.out.println("No video games found");
     }
 }

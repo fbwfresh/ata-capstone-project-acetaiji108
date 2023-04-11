@@ -53,25 +53,13 @@ async renderVideoGames(){
             const gameContainer = document.createElement('div');
             gameContainer.classList.add('game-container');
 
+            const gameContainerUpvote = document.createElement('div');
+            gameContainer.classList.add('game-container-upvote');
+
             const gameImage = document.createElement('img');
             gameImage.classList.add('game-image');
             gameImage.classList.add('roundedCenter');
             gameImage.src = game.image;
-//            const aspectRatio = gameImage.width / gameImage.height;
-//            gameImage.width = 250;
-//            gameImage.height = 250;
-//            gameImage.style.height = '250px';
-//            gameImage.style.width = 'auto';
-//gameImage.onload = () => {
-//            const height = 250;
-//            const width = height * aspectRatio;
-//            const aspectRatio = gameImage.width / gameImage.height;
-//            const width = 250 * aspectRatio;
-//            gameImage.style.width = `${width}px`;
-//            gameImage.width = width;
-//            gameImage.height = height;
-//            gameImage.style.objectFit = 'cover';
-//};
 
             const gameInfoContainer = document.createElement('div');
             gameInfoContainer.classList.add('game-info-container');
@@ -83,6 +71,7 @@ async renderVideoGames(){
             buttonContainer.classList.add('border');
 
             const upvoteButton = document.createElement('button');
+
             upvoteButton.textContent = "upvote";
 //            upvoteButton.background-color = #4CAF50;
 //            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
@@ -99,6 +88,7 @@ async renderVideoGames(){
             downvoteButton.width = 50;
             downvoteButton.height = 50;
 
+
             const gameName = document.createElement('h3');
             gameName.textContent =  game.name;
 
@@ -112,7 +102,11 @@ async renderVideoGames(){
             buttonContainer.appendChild(upvoteButton);
             buttonContainer.appendChild(downvoteButton);
 
-            gameContainer.appendChild(gameImage);
+
+//            gameContainer.appendChild(gameImage);
+            gameContainer.appendChild(gameContainerUpvote);
+            gameContainerUpvote.appendChild(gameImage);
+//            gameContainerUpvote.appendChild(buttonContainer);
             gameContainer.appendChild(gameInfoContainer);
             gameInfoContainer.appendChild(buttonContainer)
             gameInfoContainer.appendChild(gameName)
@@ -131,24 +125,20 @@ async renderVideoGames(){
                 .games-container {
                   display: flex;
                   flex-wrap: wrap;
-                  justify-content: flex-start;
+                }
+                .game-container-upvote {
+                  display: flex;
+                  flex-direction: row;
                   align-items: center;
                   margin: 10px;
                 }
-                
-                #searchResult {
-                text-align: center;
-                }
-                
-                .centerResults2 {
-                display: inline-block;
+                .game-container {
+//                  display: flex;
+//                  flex-direction: row;
+                  align-items: center;
+                  margin: 10px;
                 }
 
-                .game-image {
-                  width: 250px;
-                  height: 250px;
-                  object-fit: cover;
-                }
 
                 button {
                   background-color: #4CAF50;
@@ -159,19 +149,21 @@ async renderVideoGames(){
                   background-color: #f44336;
                 }
 
-                .game-header-container {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                }
 
+                .game-header-container {
+                    display: flex;
+                  flex-direction: row;
+                }
                 .game-info-container {
                   margin: 10px;
                 }
-                .game-image-container {
-                  margin-right: 20px;
+
+                .game-image {
+                  width: 200px;
+                  height: 200px;
+                  object-fit: cover;
                 }
-                
+
                .rounded {
                    border-radius: 20px;
                    /*border: 2px solid black;*/
@@ -182,13 +174,6 @@ async renderVideoGames(){
                     border-radius: 20px;
                     margin-bottom: 20px;
                     position: relative;
-                }
-
-                .game-image {
-                  max-width: 100%;
-                  max-height: 100%;
-                 object-fit: cover;
-                 object-position: center;
                 }
 
               `;
@@ -237,9 +222,12 @@ async renderVideoGames(){
 
       async getAllGames(event){
           this.dataStore.set("allVideoGames",null);
+          const loadingElement = document.getElementById("loading");
+          loadingElement.style.display = "block";
           let result = await this.client.getAllVideoGames(this.errorHandler);
           this.dataStore.set("allVideoGames",result);
           this.renderVideoGames();
+          loadingElement.style.display = "none";
       }
  
     async onFindByName(event){
