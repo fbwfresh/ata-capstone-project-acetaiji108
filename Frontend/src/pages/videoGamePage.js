@@ -74,7 +74,7 @@ async renderVideoGames(){
 
             upvoteButton.textContent = "upvote";
 //            upvoteButton.background-color = #4CAF50;
-//            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
 //            upvoteButton.innerHTML = "&#8593;";
             upvoteButton.width = 50;
             upvoteButton.height = 50;
@@ -83,7 +83,7 @@ async renderVideoGames(){
             downvoteButton.classList.add('button2');
             downvoteButton.textContent = "downvote";
             downvoteButton.color = "red";
-//            downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+            downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
 //            downvoteButton.innerHTML = "&#8595;";
             downvoteButton.width = 50;
             downvoteButton.height = 50;
