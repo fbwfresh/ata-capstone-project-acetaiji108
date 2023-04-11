@@ -142,11 +142,13 @@ async renderVideoGames(){
 
                 button {
                   background-color: #4CAF50;
-                  margin: 1px;
+                  margin: .3374px;
+                  width: 65px;
                 }
 
                 .button2 {
                   background-color: #f44336;
+                  width: 65px;
                 }
 
 
