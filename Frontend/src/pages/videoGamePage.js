@@ -71,16 +71,23 @@ async renderVideoGames(){
             buttonContainer.classList.add('border');
 
             const upvoteButton = document.createElement('button');
-            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
-            upvoteButton.innerHTML = "&#8593;";
-//            upvoteButton.width = 50;
-//            upvoteButton.height = 50;
+
+            upvoteButton.textContent = "upvote";
+//            upvoteButton.background-color = #4CAF50;
+//            upvoteButton.id = await this.replaceSpace(game.name + 'upvote');
+//            upvoteButton.innerHTML = "&#8593;";
+            upvoteButton.width = 50;
+            upvoteButton.height = 50;
 
             const downvoteButton = document.createElement('button');
-            downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
-            downvoteButton.innerHTML = "&#8595;";
-//            downvoteButton.width = 50;
-//            downvoteButton.height = 50;
+            downvoteButton.classList.add('button2');
+            downvoteButton.textContent = "downvote";
+            downvoteButton.color = "red";
+//            downvoteButton.id = await this.replaceSpace(game.name + 'downvote');
+//            downvoteButton.innerHTML = "&#8595;";
+            downvoteButton.width = 50;
+            downvoteButton.height = 50;
+
 
             const gameName = document.createElement('h3');
             gameName.textContent =  game.name;
@@ -131,6 +138,18 @@ async renderVideoGames(){
                   align-items: center;
                   margin: 10px;
                 }
+
+
+                button {
+                  background-color: #4CAF50;
+                  margin: 1px;
+                }
+
+                .button2 {
+                  background-color: #f44336;
+                }
+
+
                 .game-header-container {
                     display: flex;
                   flex-direction: row;
