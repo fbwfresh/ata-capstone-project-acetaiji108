@@ -135,15 +135,20 @@ class RecommendPage extends BaseClass {
         event.preventDefault();
         event.stopImmediatePropagation();
         let gameName = document.getElementById("searchBarId").value;
+        const loadingElement = document.getElementById("loading2");
+        loadingElement.style.display = "block";
         const foundGame = await this.client.getVideoGame(gameName,this.errorHandler);
         this.dataStore.set("VideoGame",foundGame);
         console.log(foundGame);
         if(foundGame){
             this.showMessage("Found Game!")
-            this.renderByVideoGameName();
+            localStorage.setItem('foundGame', JSON.stringify(foundGame));
+            const game = JSON.parse(localStorage.getItem('foundGame'));
+            window.location.href = "searchPage.html";
         } else{
             this.errorHandler("Error creating! Try again... ");
         }
+        loadingElement.style.display = "none";
     }
 
 }
