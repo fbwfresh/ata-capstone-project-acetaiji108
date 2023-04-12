@@ -1,3 +1,4 @@
+
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Lambda application that calls the Lambda API.
@@ -6,13 +7,115 @@ Parameters:
     Type: String
     Default: dev
 Resources:
-  GetExampleDataFunction:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.192.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Ref EnvironmentName
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: Public
+  PublicRoute1:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for Example Replication Group
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 6379
+          ToPort: 6379
+          IpProtocol: tcp
+      VpcId: !Ref VPC
+  SubnetGroup:
+    Type: 'AWS::ElastiCache::SubnetGroup'
+    Properties:
+      Description: Subnet Group for Example Replication Group
+      SubnetIds:
+        - !Ref PublicSubnet
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.192.11.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+  PublicSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+  CacheParameterGroup:
+    Type: 'AWS::ElastiCache::ParameterGroup'
+    Properties:
+      CacheParameterGroupFamily: redis5.0
+      Description: !Ref 'AWS::StackName'
+  ReplicationGroup:
+    Type: 'AWS::ElastiCache::ReplicationGroup'
+    Properties:
+      ReplicationGroupDescription: redis cache cluster
+      AutomaticFailoverEnabled: false
+      CacheNodeType: cache.t4g.micro
+      CacheParameterGroupName: !Ref CacheParameterGroup
+      CacheSubnetGroupName: !Ref SubnetGroup
+      Engine: redis
+      EngineVersion: 5.0.6
+      PreferredMaintenanceWindow: 'sat:07:00-sat:08:00'
+      NumCacheClusters: 1
+      SecurityGroupIds: [ { "Fn::GetAtt": [ "SecurityGroup",  "GroupId" ] } ]
+  DynamoDBEndpoint:
+    Type: "AWS::EC2::VPCEndpoint"
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.dynamodb"
+      VpcId: !Ref VPC
+      RouteTableIds: [ { "Fn::GetAtt": [ "PublicRouteTable",  "RouteTableId" ] } ]
+      PolicyDocument: {
+        "Id": "Policy",
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "Statement",
+            "Action": "dynamodb:*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+          }
+        ]
+      }
+  AddVideoGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.GetExampleData
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.AddVideoGame
       Runtime: java11
-      Description: Get Example Data for given id
+      Description: Add a videogame
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -24,35 +127,113 @@ Resources:
         - AmazonS3FullAccess
         - AmazonDynamoDBFullAccess
       Tracing: Active
+      VpcConfig:
+        SecurityGroupIds: [ { "Fn::GetAtt": [ "SecurityGroup",  "GroupId" ] } ]
+        SubnetIds:
+          - !Ref PublicSubnet
+      Environment:
+        Variables:
+          JEDIS_URL: !GetAtt ReplicationGroup.PrimaryEndPoint.Address
       Events:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /example/{id}
-            Method: get
-  SetExampleDataFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.SetExampleData
-      Runtime: java11
-      Description: Set Example Data
-      MemorySize: 512
-      Timeout: 240
-      # Function's execution role
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AWSLambda_ReadOnlyAccess
-        - AWSXrayWriteOnlyAccess
-        - AWSLambdaVPCAccessExecutionRole
-        - AmazonS3FullAccess
-        - AmazonDynamoDBFullAccess
-      Tracing: Active
-      Events:
-        UpdateResource:
-          Type: Api
-          Properties:
-            Path: /example/
+            Path: /games
             Method: post
-
+  DeleteGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.DeleteVideoGame
+      Runtime: java11
+      Description: Deletes Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/{name}
+            Method: delete
+  GetGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.GetVideoGame
+      Runtime: java11
+      Description: Retrieves Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/{name}
+            Method: get
+  GetAllGamesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.GetAllVideoGames
+      Runtime: java11
+      Description: Retrieves All Videogames
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/all
+            Method: get
+  UpdateVideoGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://capstone-acetaiji108-artifacts/d9991a2085c3f9578dc37e5707893d1e
+      Handler: com.kenzie.capstone.service.lambda.UpdateVideoGame
+      Runtime: java11
+      Description: Updates A Videogame
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /games/upvote/{name}
+            Method: post
 

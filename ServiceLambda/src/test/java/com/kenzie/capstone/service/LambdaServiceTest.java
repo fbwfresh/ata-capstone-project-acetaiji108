@@ -1,8 +1,12 @@
 package com.kenzie.capstone.service;
 
 import com.kenzie.capstone.service.dao.ExampleDao;
-import com.kenzie.capstone.service.model.ExampleData;
-import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
+import com.kenzie.capstone.service.dao.VideoGameDao;
+import com.kenzie.capstone.service.dependency.DaoModule;
+import com.kenzie.capstone.service.model.*;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,8 +14,7 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -26,14 +29,22 @@ class LambdaServiceTest {
 
     private ExampleDao exampleDao;
     private LambdaService lambdaService;
+//    private VideoGameService videoGameService;
+//    private VideoGameDao videoGameDao;
 
     @BeforeAll
     void setup() {
+        DaoModule module = new DaoModule();
         this.exampleDao = mock(ExampleDao.class);
         this.lambdaService = new LambdaService(exampleDao);
     }
+//    @AfterAll
+//    void afterEach(){
+//        this.videoGameDao.deleteVideoGame()
+//    }
 
-    @Test
+
+        @Test
     void setDataTest() {
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> dataCaptor = ArgumentCaptor.forClass(String.class);

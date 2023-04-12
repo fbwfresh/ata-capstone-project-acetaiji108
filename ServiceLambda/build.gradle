@@ -21,6 +21,7 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
     implementation 'com.amazonaws:aws-lambda-java-events:3.6.0'
     implementation 'com.google.dagger:dagger:2.30'
+    testImplementation 'junit:junit:4.13.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.30'
 
 
@@ -33,6 +34,8 @@ dependencies {
     testImplementation 'net.andreinc:mockneat:0.4.7'
 
     implementation group: 'redis.clients', name: 'jedis', version: '3.0.1'
+
+    implementation 'com.google.guava:guava:31.1-jre'
 }
 
 task buildZip(type: Zip) {

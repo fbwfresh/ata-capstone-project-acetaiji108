@@ -1,4 +1,5 @@
 branch=main
+source ./setupEnvironment.sh
 if [ -z "$CAPSTONE_REPO_NAME" ] ; then
   echo "Your environment variables are not properly configured.  Make sure that you have filled out setupEnvironment.sh and that script is set to run as part of your PATH"
   exit 1

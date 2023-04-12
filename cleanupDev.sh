@@ -1,5 +1,7 @@
 #!/bin/bash
 set -eo pipefail
+source ./setupEnvironment.sh
+
 
 echo "Deleting Application $CAPSTONE_SERVICE_STACK_DEV"
 echo "This may take 20-30 minutes...  But if takes more than 1 hour, it may have failed. Check your CloudFormation Stack on the AWS UI for errors."
