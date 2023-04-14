@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="examplePage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <style>
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(rgba(0,8,100,0.4),rgba(0,10,51,1.0)), url(https://i.imgur.com/vYFPInV.gif);
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        #enter-website {
+            background-color: white;
+            border: 4px solid orange;
+            padding: 12px 24px;
+            border-radius: 80px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
+
+    </style>
+</head>
+<body>
+<button id="enter-website">Enter Website</button>
+<script>
+    const button = document.getElementById('enter-website');
+    button.addEventListener('click', function() {
+        window.location.href = 'recommendMainPage.html';
+    });
+</script>
+</body>
+</html>

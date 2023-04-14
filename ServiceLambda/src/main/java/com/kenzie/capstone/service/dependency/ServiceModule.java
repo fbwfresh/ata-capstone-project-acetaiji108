@@ -1,8 +1,11 @@
 package com.kenzie.capstone.service.dependency;
 
-import com.kenzie.capstone.service.LambdaService;
-import com.kenzie.capstone.service.dao.ExampleDao;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.kenzie.capstone.service.VideoGameService;
 
+import com.kenzie.capstone.service.dao.NonCachingVideoGameDao;
+import com.kenzie.capstone.service.dao.VideoGameDao;
+import com.kenzie.capstone.service.util.DynamoDbClientProvider;
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,8 +21,15 @@ public class ServiceModule {
     @Singleton
     @Provides
     @Inject
-    public LambdaService provideLambdaService(@Named("ExampleDao") ExampleDao exampleDao) {
-        return new LambdaService(exampleDao);
+    public VideoGameService provideVideoGameService(@Named("VideoGameDao") VideoGameDao videoGameDao) {
+        return new VideoGameService(videoGameDao);
     }
+
+//    @Provides
+//    @Named("VideoGameDao")
+//    public NonCachingVideoGameDao provideVideoGameDao() {
+//        return new NonCachingVideoGameDao(new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient()));
+//    }
+
 }
 

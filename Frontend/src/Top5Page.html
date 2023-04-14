@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script type="text/javascript" src="top5Page.js"></script>
+    <meta charset="UTF-8">
+    <title>GameRanker</title>
+    <style>
+        * {margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .centerResults {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .centerResults2 {
+            background-color: gray;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #top5{
+            position: absolute;
+            bottom: 0rem;
+            width: 5rem;
+            border-radius: 1rem;
+        }
+        #suggest{
+            position: absolute;
+            bottom: 0rem;
+            width: 5rem;
+            border-radius: 1rem;
+            left: 15rem;
+        }
+        #H2L{
+            position: absolute;
+            bottom: 0rem;
+            left: 10rem;
+            width: 5rem;
+            border-radius: 1rem;
+
+        }
+        #L2H{position: absolute;
+            left: 5rem;
+            bottom: 0rem;
+            width: 5rem;
+            border-radius: 1rem;
+
+        }
+        .leaderboard{
+            margin: 2rem auto;
+            max-width: 90%;
+            position: center;
+        }
+
+        /*.slider{*/
+        /*    position: absolute;*/
+        /*    right: 0rem;*/
+        /*}*/
+        /*.slides{*/
+        /*    position: absolute;*/
+        /*    right: 0rem;*/
+        /*}*/
+        /*.imageContainer{*/
+        /*    position: relative;*/
+        /*    overflow: hidden;*/
+        /*    max-width: 100%;*/
+        /*}*/
+
+        .leaderboardHeader{
+            background-color: black;
+            /*background-color: aliceblue;*/
+            color: white;
+            /*color: black;*/
+            text-transform: uppercase;
+            box-shadow: 2px 2px 16px 1px #aaa;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            height: 15rem;
+            position: relative;
+            font-family: "Academy Engraved LET";
+        }
+
+        h1{position: absolute;
+            font-size: 3rem;
+            line-height: 4rem;
+            top: 0%;
+            left: .5%;
+            margin-left: 0%;
+
+        }
+        #tokyoGhoulImage{
+            height: 115%;
+            position: absolute;
+            bottom: 0%;
+            right: 45%;
+        }
+        #scorpionImage{
+            height: 118%;
+            position: absolute;
+            bottom: 0%;
+            right: 8%;
+        }
+        #cowboyBebop{
+            height: 100%;
+            position: absolute;
+            bottom: 0%;
+            right: -1.5%;
+            width: 45%;
+        }
+
+        /*#onePieceImage{*/
+        /*    height: 15rem;*/
+        /*    width: 20rem;*/
+        /*    position: absolute;*/
+        /*    bottom: -0.3rem;*/
+        /*    right: 8rem;*/
+        /*}*/
+        .leaderboardHeader img{
+                  object-fit: fill;
+                  height: auto;
+                  width: auto;
+              }
+
+        #leaderboardImage{
+            height: 105%;
+            width: 15%;
+            position: absolute;
+            bottom: -13%;
+            left: -.3%;
+        }
+        #gtaImage{
+            position: absolute;
+            height: 100%;
+            left: 10%;
+            bottom: -6.6%;
+        }
+
+        a{
+            text-decoration: none;
+            color: inherit;
+        }
+        .table{
+            background-color: #16181e;
+            color: #999;
+            width: 100%;
+            text-transform: uppercase;
+            border-collapse: collapse;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            overflow: hidden;
+        }
+        thead{
+            font-size: 0.8rem;
+            color: #555;
+            text-transform: uppercase;
+        }
+        tbody .leaderboardName{
+            color: white;
+            font-weight: bold;
+        }
+        .leaderboardName{
+            text-align: left;
+        }
+        .rank .leaderboardDownvote,.leaderboardDownvote{
+            text-align: right;
+        }
+
+        tbody .leaderboardPercentage{
+            text-align: right;
+        }
+        .leaderboardPercentage{text-align: left;}
+
+        .leaderboardUpvote,.leaderboardDownvote{
+            width: 8ch;
+        }
+        .rank{
+            width: 3ch;
+        }
+        th{
+            padding: .5rem 1rem;
+
+        }
+        td{
+            padding: .5rem 1rem;
+        }
+        .body {
+            background-image: url(https://wallpapercave.com/dwp1x/wp9758145.jpg);
+
+        }
+
+        section {
+            position: relative;
+        }
+
+        /*Banner-Image*/
+        .banner-image {
+            justify-content: center;
+            text-align: center;
+            background-color: #121946;
+            height: 100px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*<!--navBar-->*/
+        .site-header {
+            background-image: linear-gradient(rgba(0,8,100,0.9),rgba(0,8,51,0.9)), url(https://i.imgur.com/pGgaKEt.jpg);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar {
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: #131921;
+            border-radius: 1px;
+        }
+
+        .navbar img {
+            margin-right: 20px;
+            margin-top: 9px;
+        }
+
+        .search-bar {
+            margin-right: 50px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 300px;
+
+        }
+
+        .search-bar button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #fff;
+            color: #292929;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: SansSerif, Serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .buttonPadding a:hover {
+            background-color: white;
+            color: purple;
+            padding-bottom: 10px;
+        }
+
+
+    </style>
+
+</head>
+<div class="banner-image">
+    <img class="banner" src="https://i.imgur.com/95jh4Ql.png" alt="GameRanker Banner" width="800" height="80" />
+</div>
+<body class="body">
+<header class="header">
+    <div class="site-header">
+        <div class="navbar">
+            <img src="https://i.imgur.com/Qcl62ld.png" alt="GameRanker" width="180" height="60"/>
+            <form action="" class="search-bar">
+                <input type="text" placeholder="Search Game Titles" id="searchBarId">
+                <button id="searchButton">Search</button>
+            </form>
+            <nav>
+                <ul>
+                    <li><a href="recommendMainPage.html">Home</a></li>
+                    <li><a href="VideoGameMainPage.html">Games</a></li>
+                    <li><a href="Top5Page.html">Ranking</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+<!--<iframe width="100%" height="75" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/349061718&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/catbusstop" title="Catbus Stop" target="_blank" style="color: #cccccc; text-decoration: none;">Catbus Stop</a> · <a href="https://soundcloud.com/catbusstop/ill-keep-you-safe-ft-shiloh-dynasty" title="i&#x27;ll keep you safe  ft. shiloh dynasty" target="_blank" style="color: #cccccc; text-decoration: none;">i&#x27;ll keep you safe  ft. shiloh dynasty</a></div>-->
+<!--<audio autoplay>-->
+<!--    <source src="Losing Interest.mp3" type="audio/mpeg">-->
+<!--</audio>-->
+<div id="searchResult">
+</div>
+<!--<p id="loading2" style="display:none">Loading...</p>-->
+<div class="leaderboard">
+    <div class="imageContainer">
+    <div class="leaderboardHeader">
+        <h1>Leader Board</h1>
+        <img class="non3d" id="leaderboardImage" src="https://i.imgur.com/Z3NMcwv.png" alt="Goku Ultra Instinct">
+        <img class=non3d id="gtaImage" src="https://i.imgur.com/sWy6aev.png">
+        <img class="non3d" id="tokyoGhoulImage" src="https://i.imgur.com/xWV9dIq.png">
+        <img class="non3d" id="cowboyBebop" src="https://i.imgur.com/ds3IsDD.png">
+        <!--        <img id="zoroImage" src="https://i.imgur.com/jqBJlyT.png">-->
+        <img id="scorpionImage" src="https://i.imgur.com/zdJiMKb.png">
+
+        <button id="L2H" class="sortButtons">lowest</button>
+        <button id="H2L" class="sortButtons">highest</button>
+        <button id="top5" class="sortButtons">top5</button>
+        <button id="suggest" class="sortButtons">suggestion</button>
+
+
+    </div>
+    </div>
+    <table id="leaderboardTable" class="table">
+        <thead>
+        <tr>
+            <th class="rank">#</th>
+            <th class="leaderboardName">Name</th>
+            <th class="leaderboardUpvote">Up</th>
+            <th class="leaderboardDownvote">Down</th>
+            <th class="leaderboardPercentage">Percentile</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="rank"></td>
+            <td class="leaderboardName"></td>
+            <td class="leaderboardUpvote"></td>
+            <td class="leaderboardDownvote"></td>
+            <td id=percentage class="leaderboardPercentage"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

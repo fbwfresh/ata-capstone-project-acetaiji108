@@ -8,7 +8,12 @@ module.exports = {
     usedExports: true
   },
   entry: {
+    videoGamePage: path.resolve(__dirname, 'src', 'pages', 'videoGamePage.js'),
+    recommendPage: path.resolve(__dirname, 'src', 'pages', 'recommendPage.js'),
+    top5Page: path.resolve(__dirname,'src','pages','top5Page.js'),
+    searchPage: path.resolve(__dirname, 'src', 'pages', 'searchPage.js'),
     examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -18,7 +23,7 @@ module.exports = {
     https: false,
     port: 8080,
     open: true,
-    openPage: 'http://localhost:8080',
+    openPage: 'http://localhost:8080/enterWebsite.html',
     // diableHostChecks, otherwise we get an error about headers and the page won't render
     disableHostCheck: true,
     contentBase: 'packaging_additional_published_artifacts',
@@ -27,7 +32,7 @@ module.exports = {
     proxy: [
       {
         context: [
-          '/example',
+          '/games',
         ],
         target: 'http://localhost:5001'
       }
@@ -35,8 +40,28 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html',
+      template: './src/VideoGameMainPage.html',
+      filename: 'VideoGameMainPage.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+        template: './src/recommendMainPage.html',
+        filename: 'recommendMainPage.html',
+        inject: false
+    }),
+      new HtmlWebpackPlugin({
+        template: './src/Top5Page.html',
+        filename: 'Top5Page.html',
+        inject: false
+      }),
+      new HtmlWebpackPlugin({
+              template: './src/searchPage.html',
+              filename: 'searchPage.html',
+              inject: false
+      }),
+    new HtmlWebpackPlugin({
+      template: './src/enterWebsite.html',
+      filename: 'enterWebsite.html',
       inject: false
     }),
     new CopyPlugin({
