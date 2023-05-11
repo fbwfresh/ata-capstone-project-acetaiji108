@@ -75,7 +75,7 @@ export default class VideoGameClient extends BaseClass {
         }
     }
 
-    async createVideoGame(name,description,image,consoles,upwardVote,downwardVote,totalVote, errorCallback) {
+    async createVideoGame(name,description,image,consoles, errorCallback) {
         try {
             const response = await this.client.post(`/games`, {
                 //I put it in lowercase for description and consoles but on dynamo they are upper case
@@ -83,16 +83,16 @@ export default class VideoGameClient extends BaseClass {
                 "Description": description,
                 "image": image,
                 "Consoles": consoles,
-                "UpwardVote" : upwardVote,
-                "DownwardVote" : downwardVote,
-                "TotalVote" : totalVote
+                "UpwardVote" : 0,
+                "DownwardVote" : 0,
+                "TotalVote" : 0
 
             });
             console.log(response.data);
             return response.data;
         } catch (error) {
 
-            this.handleError("updatedVideoGame", error, errorCallback);
+            this.handleError("createVideoGame", error, errorCallback);
         }
     }
     async updateVideoGame(name, description, image, consoles, upwardVote, downwardVote, totalVote, errorCallback) {

@@ -14,7 +14,7 @@ import java.util.Set;
 public class VideoGameRecord {
     private String name;
     private String description;
-    private Set<String> consoles;
+    private String consoles;
     private int upwardVote;
     private int downwardVote;
     private int totalVote;
@@ -29,7 +29,7 @@ public class VideoGameRecord {
         return description;
     }
     @DynamoDBAttribute(attributeName = "Consoles")
-    public Set<String> getConsoles() {
+    public String getConsoles() {
         return consoles;
     }
     @DynamoDBAttribute(attributeName = "DownwardVote")
@@ -68,16 +68,16 @@ public class VideoGameRecord {
         this.description = description;
     }
 
-    public void setConsoles(Set<String> consoles) {
+    public void setConsoles(String consoles) {
         this.consoles = consoles;
 
     }
 
-    public void setConsoles(Consoles[] consoles) {
-        this.consoles = new HashSet<>();
-        for (Consoles console : consoles) {
-            this.consoles.add(console.getName());
-        }
-
-    }
+//    public void setConsoles(Consoles[] consoles) {
+//        this.consoles = new HashSet<>();
+//        for (Consoles console : consoles) {
+//            this.consoles.add(console.getName());
+//        }
+//
+//    }
 }

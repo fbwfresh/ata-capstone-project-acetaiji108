@@ -66,24 +66,24 @@ public class VideoGameService {
     public VideoGameRecord findByName(String name) {
         // Example getting data from the local repository
 
-//        VideoGameRecord dataFromDynamo = videoGameRepository
-//                .findById(name).orElse(null);
-//        return dataFromDynamo;
-try {
-    com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
-    VideoGameRecord record = new VideoGameRecord();
-    record.setName(responseFromLambdaClient.getName());
-    record.setDescription(responseFromLambdaClient.getDescription());
-    record.setConsoles(responseFromLambdaClient.getConsoles());
-    record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
-    record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
-    record.setTotalVote(responseFromLambdaClient.getTotalVote());
-    record.setImage(responseFromLambdaClient.getImage());
-    return record;
-
-}catch (NullPointerException e){
-    return null;
-}
+        VideoGameRecord dataFromDynamo = videoGameRepository
+                .findById(name).orElse(null);
+        return dataFromDynamo;
+//try {
+//    com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.getVideoGame(name);
+//    VideoGameRecord record = new VideoGameRecord();
+//    record.setName(responseFromLambdaClient.getName());
+//    record.setDescription(responseFromLambdaClient.getDescription());
+//    record.setConsoles(responseFromLambdaClient.getConsoles());
+//    record.setUpwardVote(responseFromLambdaClient.getUpwardVote());
+//    record.setDownwardVote(responseFromLambdaClient.getDownwardVote());
+//    record.setTotalVote(responseFromLambdaClient.getTotalVote());
+//    record.setImage(responseFromLambdaClient.getImage());
+//    return record;
+//
+//}catch (NullPointerException e){
+//    return null;
+//}
     }
 
 
@@ -126,61 +126,78 @@ try {
         videoGameRecord.setImage(game.getImage());
        // System.out.println("before save");
         videoGameRepository.save(videoGameRecord);
-
-        VideoGameRequest videoGameRequest = new VideoGameRequest();
-        videoGameRequest.setConsoles(game.getConsoles());
-        videoGameRequest.setDescription(game.getDescription());
-        videoGameRequest.setName(game.getName());
-        videoGameRequest.setDownwardVote(game.getDownwardVote());
-        videoGameRequest.setUpwardVote(game.getUpwardVote());
-        videoGameRequest.setTotalVote(game.getTotalVote());
-        videoGameRequest.setImage(game.getImage());
-      com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.addVideoGame(videoGameRequest);
-
-        return toVideoGameResponse(videoGameRecord);
+        return toVideoGameResponse(videoGameRepository.findById(game.getName()).orElse(null));
+//        VideoGameRequest videoGameRequest = new VideoGameRequest();
+//        videoGameRequest.setConsoles(game.getConsoles());
+//        videoGameRequest.setDescription(game.getDescription());
+//        videoGameRequest.setName(game.getName());
+//        videoGameRequest.setDownwardVote(game.getDownwardVote());
+//        videoGameRequest.setUpwardVote(game.getUpwardVote());
+//        videoGameRequest.setTotalVote(game.getTotalVote());
+//        videoGameRequest.setImage(game.getImage());
+//      com.kenzie.capstone.service.model.VideoGameResponse responseFromLambdaClient = videoGameServiceClient.addVideoGame(videoGameRequest);
+//
+//        return toVideoGameResponse(videoGameRecord);
     }
 
 
     public List<VideoGameResponse> listAllVideoGames(){
-         List<com.kenzie.capstone.service.model.VideoGameResponse> videoGameResponsesList = videoGameServiceClient.getAllVideoGames();
-         List<VideoGameResponse> videoGameResponseList =  videoGameResponsesList.stream().map(response -> {
-           VideoGameResponse videoGameResponse = new VideoGameResponse();
+//         List<com.kenzie.capstone.service.model.VideoGameResponse> videoGameResponsesList = videoGameServiceClient.getAllVideoGames();
+//         List<VideoGameResponse> videoGameResponseList =  videoGameResponsesList.stream().map(response -> {
+//           VideoGameResponse videoGameResponse = new VideoGameResponse();
+//           videoGameResponse.setUpwardVote(response.getUpwardVote());
+//           videoGameResponse.setName(response.getName());
+//           videoGameResponse.setConsoles(response.getConsoles());
+//           videoGameResponse.setDescription(response.getDescription());
+//           videoGameResponse.setDownwardVote(response.getDownwardVote());
+//           videoGameResponse.setTotalVote(response.getTotalVote());
+//
+//           videoGameResponse.setImage(response.getImage());
+//             System.out.println(response.getImage());
+//
+//           return videoGameResponse;
+//       }).collect(Collectors.toList());
+     //   videoGameResponseList.sort(new Comparator<VideoGameResponse>() {
+            //             @Override
+//             public int compare(VideoGameResponse o1, VideoGameResponse o2) {
+//                 return o1.getName().compareTo(o2.getName());
+//             }
+//         });
+//
+//          return videoGameResponseList;
+      List<VideoGameRecord> videoGameRecordList = new ArrayList<>();
+              Iterator<VideoGameRecord> recordList = videoGameRepository.findAll().iterator();
+             while (recordList.hasNext()){
+                videoGameRecordList.add(recordList.next());
+             }
+              //recordList.forEach(record -> videoGameRecordList.add(record));
+           List<VideoGameResponse> responseList =  videoGameRecordList.stream().map(response -> {
+                  VideoGameResponse videoGameResponse = new VideoGameResponse();
            videoGameResponse.setUpwardVote(response.getUpwardVote());
            videoGameResponse.setName(response.getName());
            videoGameResponse.setConsoles(response.getConsoles());
            videoGameResponse.setDescription(response.getDescription());
            videoGameResponse.setDownwardVote(response.getDownwardVote());
            videoGameResponse.setTotalVote(response.getTotalVote());
-
            videoGameResponse.setImage(response.getImage());
-             System.out.println(response.getImage());
-
            return videoGameResponse;
-       }).collect(Collectors.toList());
-
-         videoGameResponseList.sort(new Comparator<VideoGameResponse>() {
-             @Override
-             public int compare(VideoGameResponse o1, VideoGameResponse o2) {
-                 return o1.getName().compareTo(o2.getName());
-             }
-         });
-
-          return videoGameResponseList;
+              }).collect(Collectors.toList());
+          return responseList;
     }
 
 
     public VideoGameResponse updateVideoGame(String name,UpdateRequest videoGameUpdateRequest) {
-      com.kenzie.capstone.service.model.VideoGameResponse response = videoGameServiceClient.getVideoGame(name);
-        if (response != null) {
-            VideoGameRequest videoGameRequest = new VideoGameRequest();
-            videoGameRequest.setName(name);
-            videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
-            videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
-            videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
-            videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
-            videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
-            videoGameRequest.setImage(videoGameUpdateRequest.getImage());
-            videoGameServiceClient.updateVideoGame(name,videoGameRequest);
+//      com.kenzie.capstone.service.model.VideoGameResponse response = videoGameServiceClient.getVideoGame(name);
+//        if (response != null) {
+//            VideoGameRequest videoGameRequest = new VideoGameRequest();
+//            videoGameRequest.setName(name);
+//            videoGameRequest.setConsoles(videoGameUpdateRequest.getConsoles());
+//            videoGameRequest.setDescription(videoGameUpdateRequest.getDescription());
+//            videoGameRequest.setUpwardVote(videoGameUpdateRequest.getUpwardVote());
+//            videoGameRequest.setTotalVote(videoGameUpdateRequest.getTotalVote());
+//            videoGameRequest.setDownwardVote(videoGameUpdateRequest.getDownwardVote());
+//            videoGameRequest.setImage(videoGameUpdateRequest.getImage());
+//            videoGameServiceClient.updateVideoGame(name,videoGameRequest);
             //videoGameServiceClient.addVideoGame(videoGameRequest);
 
             VideoGameRecord videoGameRecord = new VideoGameRecord();
@@ -193,19 +210,10 @@ try {
             videoGameRecord.setImage(videoGameUpdateRequest.getImage());
             videoGameRepository.save(videoGameRecord);
 
-
-            VideoGameResponse controllerResponse = new VideoGameResponse();
-            controllerResponse.setImage(videoGameRecord.getImage());
-            controllerResponse.setConsoles(videoGameRecord.getConsoles());
-            controllerResponse.setName(name);
-            controllerResponse.setTotalVote(videoGameRecord.getTotalVote());
-            controllerResponse.setUpwardVote(videoGameRecord.getUpwardVote());
-            controllerResponse.setDownwardVote(videoGameRecord.getDownwardVote());
-            controllerResponse.setDescription(videoGameRecord.getDescription());
+        VideoGameResponse controllerResponse = toVideoGameResponse(videoGameRecord);
             return controllerResponse;
-        }else
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldn't find the requested game.");
     }
+
 
 
 
@@ -220,11 +228,13 @@ try {
     }
 
     public boolean deleteVideoGame(String name) {
+        boolean deleted = false;
         if (videoGameRepository.findById(name).isPresent()) {
             videoGameRepository.delete((videoGameRepository.findById(name).get()));
-
+            deleted = true;
+            return deleted;
         }
-        boolean deleted = videoGameServiceClient.deleteVideoGame(name);
+//        boolean deleted = videoGameServiceClient.deleteVideoGame(name);
 
         return deleted;
     }

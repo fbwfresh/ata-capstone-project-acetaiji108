@@ -5,7 +5,7 @@ import VideoGameClient from "../api/videoGameClient";
 class RecommendPage extends BaseClass {
     constructor() {
         super();
-        this.bindClassMethods(['recommendGame', 'recommendGameName', 'getTop5', 'onFindByName', 'renderByVideoGameName', 'renderByVideoGameNameRecommended', 'getAllGames'], this);
+        this.bindClassMethods(['recommendGame', 'addGame', 'getTop5', 'onFindByName', 'renderByVideoGameName', 'renderByVideoGameNameRecommended', 'getAllGames'], this);
         this.dataStore = new DataStore();
     }
 
@@ -15,7 +15,7 @@ class RecommendPage extends BaseClass {
 //        this.dataStore.addChangeListener(this.renderVideoGames);
         // this.renderVideoGames();
         this.getAllGames();
-        document.getElementById('recommendButtonName').addEventListener('click', this.recommendGameName);
+        document.getElementById('recommendButtonName').addEventListener('click', this.addGame);
         document.getElementById('searchButton').addEventListener('click', this.onFindByName);
         this.getTop5();
     }
@@ -90,46 +90,54 @@ class RecommendPage extends BaseClass {
 
 //        window.alert(recommendedGame.name);
     }
-
-    async recommendGameName() {
-        const consoleType = document.getElementById('console').value;
-        if (consoleType === "Console" || consoleType === "" || consoleType === null) {
-          return this.recommendGame();
-        }
-        const loadingElement = document.getElementById("loading");
-        loadingElement.style.display = "block";
-        const allVideoGames = await this.client.getAllVideoGames(this.errorHandler);
-        this.dataStore.set("allVideoGames",allVideoGames);
-        let gamesWithConsoleType = allVideoGames.filter(game => Array.from(game.Consoles).map(c => c.includes(consoleType)).includes(true));
-        if (gamesWithConsoleType.length === 0) {
-            window.alert(`No games found with console type ${consoleType}`);
-            return;
-        }
-
-        const sortedGames = gamesWithConsoleType.sort((a, b) => b.UpwardVote - a.UpwardVote);
-        console.log("sortedGames");
-        console.log(sortedGames);
-
-        const letter = document.getElementById('fname').value.charAt(0).toUpperCase();
-        let gamesStartingWithLetter = sortedGames.filter(game => game.name.charAt(0) === letter);
-
-        if (gamesStartingWithLetter.length === 0) {
-            gamesStartingWithLetter = sortedGames.sort((a,b) => {
-                const aDist = Math.abs(a.name.charCodeAt(0) - letter.charCodeAt(0));
-                const bDist = Math.abs(b.name.charCodeAt(0) - letter.charCodeAt(0));
-                return aDist - bDist;
-            });
-        }
-        console.log('gamesStartingWithLetter');
-        console.log(gamesStartingWithLetter);
-        const recommendedGame = gamesStartingWithLetter[0];
-
-        this.dataStore.set("VideoGame", recommendedGame);
-        this.renderByVideoGameNameRecommended();
-
-        loadingElement.style.display = "none";
-//        window.alert(recommendedGame.name);
-    }
+async addGame(event){
+        let name = document.getElementById("name").value;
+        let description = document.getElementById("description").value;
+        let image = document.getElementById("image").value;
+        let consoles = document.getElementById("console").value;
+        const addedGame = await this.client.createVideoGame(name,description,image,consoles,this.errorHandler);
+        console.log(addedGame);
+        this.dataStore.set(name,addedGame);
+}
+//     async recommendGameName() {
+//         const consoleType = document.getElementById('console').value;
+//         if (consoleType === "Console" || consoleType === "" || consoleType === null) {
+//           return this.recommendGame();
+//         }
+//         const loadingElement = document.getElementById("loading");
+//         loadingElement.style.display = "block";
+//         const allVideoGames = await this.client.getAllVideoGames(this.errorHandler);
+//         this.dataStore.set("allVideoGames",allVideoGames);
+//         let gamesWithConsoleType = allVideoGames.filter(game => Array.from(game.Consoles).map(c => c.includes(consoleType)).includes(true));
+//         if (gamesWithConsoleType.length === 0) {
+//             window.alert(`No games found with console type ${consoleType}`);
+//             return;
+//         }
+//
+//         const sortedGames = gamesWithConsoleType.sort((a, b) => b.UpwardVote - a.UpwardVote);
+//         console.log("sortedGames");
+//         console.log(sortedGames);
+//
+//         const letter = document.getElementById('fname').value.charAt(0).toUpperCase();
+//         let gamesStartingWithLetter = sortedGames.filter(game => game.name.charAt(0) === letter);
+//
+//         if (gamesStartingWithLetter.length === 0) {
+//             gamesStartingWithLetter = sortedGames.sort((a,b) => {
+//                 const aDist = Math.abs(a.name.charCodeAt(0) - letter.charCodeAt(0));
+//                 const bDist = Math.abs(b.name.charCodeAt(0) - letter.charCodeAt(0));
+//                 return aDist - bDist;
+//             });
+//         }
+//         console.log('gamesStartingWithLetter');
+//         console.log(gamesStartingWithLetter);
+//         const recommendedGame = gamesStartingWithLetter[0];
+//
+//         this.dataStore.set("VideoGame", recommendedGame);
+//         this.renderByVideoGameNameRecommended();
+//
+//         loadingElement.style.display = "none";
+// //        window.alert(recommendedGame.name);
+//     }
 
     async onFindByName(event){
         event.preventDefault();

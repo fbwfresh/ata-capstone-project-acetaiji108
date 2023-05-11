@@ -5,7 +5,7 @@ import java.util.Set;
 public class VideoGameRequest {
     private String name;
     private String description;
-    private Set<String> consoles;
+    private String consoles;
     private int upwardVote;
     private int downwardVote;
     private int totalVote;
@@ -64,11 +64,11 @@ public class VideoGameRequest {
         this.description = description;
     }
 
-    public Set<String> getConsoles() {
+    public String getConsoles() {
         return consoles;
     }
 
-    public void setConsoles(Set<String> consoles) {
+    public void setConsoles(String consoles) {
         this.consoles = consoles;
     }
 }

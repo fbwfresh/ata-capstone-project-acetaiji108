@@ -9,23 +9,21 @@ import java.util.Set;
 public class VideoGame {
     private String name;
     private String description;
-    private Set<String> consoles  = new HashSet<>();
+    private String consoles;
     private int upwardVote;
     private int downwardVote;
     private int totalVote;
     private String image;
-    public VideoGame(String name, String description, String image,Consoles... listOfConsoles){
+    public VideoGame(String name, String description, String image,String listOfConsoles){
         this.name = name;
         this.description = description;
         this.image = image;
-        for (Consoles console : listOfConsoles){
-            this.consoles.add(console.getName());
-        }
+        this.consoles = listOfConsoles;
         this.upwardVote = 0;
         this.downwardVote = 0;
         this.totalVote = 0;
     }
-    public VideoGame(String name, String description, String image, Set<String> consoles, int upwardVote, int downwardVote, int totalVote){
+    public VideoGame(String name, String description, String image, String consoles, int upwardVote, int downwardVote, int totalVote){
         this.image = image;
         this.name = name;
         this.description = description;
@@ -83,11 +81,11 @@ public class VideoGame {
         this.description = description;
     }
 
-    public Set<String> getConsoles() {
+    public String getConsoles() {
         return consoles;
     }
 
-    public void setConsoles(Set<String> consoles) {
+    public void setConsoles(String consoles) {
         this.consoles = consoles;
     }
 //    public static void main(String[] args) {

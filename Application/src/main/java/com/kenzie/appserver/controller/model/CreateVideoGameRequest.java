@@ -15,7 +15,7 @@ public class CreateVideoGameRequest {
     private String description;
     @NotEmpty
     @JsonProperty("Consoles")
-    private Set<String> consoles = new HashSet<>();
+    private String consoles;
     //TODO map the JSON property and set up getters and setters
     @JsonProperty("UpwardVote")
     private int upwardVote;
@@ -23,17 +23,18 @@ public class CreateVideoGameRequest {
     private int downwardVote;
     @JsonProperty("TotalVote")
     private int totalVote;
+    @NotEmpty
     @JsonProperty("image")
     private String image;
     public CreateVideoGameRequest(){}
-    public CreateVideoGameRequest(String name, String description, String image,Set<String> consoles, int upwardVote, int downwardVote,int totalVote){
+    public CreateVideoGameRequest(String name, String description, String image,String consoles){
         this.name = name;
         this.description = description;
         this.image =image;
         this.consoles = consoles;
-        this.upwardVote = upwardVote;
-        this.downwardVote = downwardVote;
-        this.totalVote = totalVote;
+        this.upwardVote = 0;
+        this.downwardVote = 0;
+        this.totalVote = 0;
     }
     public void setImage(String image){this.image = image;}
     public String getImage(){return this.image;}
@@ -54,11 +55,11 @@ public class CreateVideoGameRequest {
         this.description = description;
     }
 
-    public Set<String> getConsoles(){
+    public String getConsoles(){
         return consoles;
     }
 
-    public void setConsoles(Set<String> listOfConsoles){
+    public void setConsoles(String listOfConsoles){
         this.consoles = listOfConsoles;
     }
 

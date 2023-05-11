@@ -11,7 +11,7 @@ public class VideoGameResponse {
     @JsonProperty("name")
     private String name;
     @JsonProperty("Consoles")
-    private Set<String> consoles;
+    private String consoles;
     @JsonProperty("Description")
     private String description;
     @JsonProperty("UpwardVote")
@@ -31,9 +31,9 @@ public class VideoGameResponse {
         this.image = image;
     }
 
-    public Set<String> getConsoles(){return consoles;}
+    public String getConsoles(){return consoles;}
 
-    public void setConsoles(Set<String> consoles){this.consoles = consoles;}
+    public void setConsoles(String consoles){this.consoles = consoles;}
     public String getDescription() {
         return description;
     }

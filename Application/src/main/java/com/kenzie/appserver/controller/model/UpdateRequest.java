@@ -15,7 +15,7 @@ public class UpdateRequest {
     private String description;
     @NotEmpty
     @JsonProperty("Consoles")
-    private Set<String> consoles = new HashSet<>();
+    private String consoles;
     @JsonProperty("UpwardVote")
     private int upwardVote;
     @JsonProperty("DownwardVote")
@@ -51,11 +51,11 @@ public class UpdateRequest {
         this.description = Description;
     }
 
-    public Set<String> getConsoles(){
+    public String getConsoles(){
         return consoles;
     }
 
-    public void setConsoles(Set<String> listOfConsoles){
+    public void setConsoles(String listOfConsoles){
         this.consoles = listOfConsoles;
     }
 
